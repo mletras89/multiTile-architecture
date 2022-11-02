@@ -1,3 +1,3 @@
 # multiTile-architecture
 
-![Target Architecture overview](targetArch.png)
+![Target Architecture overview](img/targetArch.png)
