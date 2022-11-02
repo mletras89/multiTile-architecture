@@ -1,0 +1,101 @@
+
+public class Transfer {
+  private double start_time;
+  private double due_time;
+  // in a transfer, an actor and a Fifo are involved
+  private Actor actor;
+  private Fifo fifo;
+  // depending on the type of the operation: {READ, WRITE}
+  private TRANSFER_TYPE type;
+  public static enum TRANSFER_TYPE {
+          READ,
+          WRITE
+  }
+  private boolean occupied;
+
+  public Transfer(Actor actor,Fifo fifo) {
+      this.setOccupied(false);
+      this.setStart_time(0.0);
+      this.setDue_time(0.0);
+      this.setType(TRANSFER_TYPE.WRITE);
+      this.fifo = fifo;
+      this.actor = actor;
+  }
+
+  public Transfer(Actor actor,Fifo fifo,Double startTime, TRANSFER_TYPE typeTransfer) {
+      this.setOccupied(false);
+      this.setStart_time(startTime);
+      this.setDue_time(0.0);
+      this.setType(typeTransfer);
+      this.fifo = fifo;
+      this.actor = actor;
+  }
+
+
+  public Transfer(Transfer other) {
+    this.setOccupied(other.isOccupied());
+    this.setStart_time(other.getStart_time());
+    this.setDue_time(other.getDue_time());
+    this.setActor(other.getActor());
+    this.setFifo(other.getFifo());
+    this.setType(other.getType());
+  }
+
+  public boolean isOccupied() {
+    return occupied;
+  }
+
+  public void setOccupied(boolean occupied) {
+    this.occupied = occupied;
+  }
+
+  public double getStart_time() {
+    return start_time;
+  }
+  
+  public void setStart_time(double start_time) {
+    this.start_time = start_time;
+  }
+
+  public double getDue_time() {
+    return due_time;
+  }
+  
+  public void setDue_time(double due_time) {
+    this.due_time = due_time;
+  }
+
+  public int getBytes() {
+    // here calculate the number of bytes in the transaction, depending on the type of operation
+    if (this.type == TRANSFER_TYPE.READ)
+      return fifo.getProdRate() * fifo.getTokenSize();
+    if (this.type == TRANSFER_TYPE.WRITE)
+      return fifo.getConsRate() * fifo.getTokenSize();
+    return 0;
+  }
+
+  public Actor getActor() {
+    return actor;
+  }
+  
+  public void setActor(Actor actor) {
+    this.actor = actor;
+  }
+
+  public Fifo getFifo() {
+    return fifo;
+  }
+  
+  public void setFifo(Fifo fifo) {
+    this.fifo = fifo;
+  }
+
+  public TRANSFER_TYPE getType() {
+    return type;
+  }
+  
+  public void setType(TRANSFER_TYPE type) {
+    this.type = type;
+  }
+    
+}
