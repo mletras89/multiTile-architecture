@@ -1,4 +1,3 @@
 # multiTile-architecture
 
-![Target Architecture overview](targetArch.pdf)
-<img src="targetArch.pdf" >
+![Target Architecture overview](targetArch.png)
