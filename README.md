@@ -1,5 +1,4 @@
 # multiTile-architecture
 
-
-[embed]targetArch.pdf[/embed]
+<embed src="targetArch.pdf" type="application/pdf">
 ![Target Architecture overview](targetArch.pdf)
