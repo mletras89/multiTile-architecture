@@ -58,6 +58,8 @@ public class Memory{
   private int capacity;
   private Map<Double,Double> memoryUtilization = new TreeMap<Double, Double>();
   private MEMORY_TYPE type;
+  private Processor embeddedToProcessor;
+
   public static enum MEMORY_TYPE {
     LOCAL_MEM,
     TILE_LOCAL_MEM,
@@ -138,6 +140,14 @@ public class Memory{
   
   public Map<Double,Double> getMemoryUtilization() {
     return this.memoryUtilization;
+  }
+
+  public Processor getEmbeddedToProcessor(){
+    return this.embeddedToProcessor;
+  }
+ 
+  public void setEmbeddedToProcessor(Processor embeddedToProcessor){
+    this.embeddedToProcessor = embeddedToProcessor;
   }
 
   // methods for memory managing

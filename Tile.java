@@ -37,6 +37,17 @@
         - tileLocalMemory: is the memory local to this tile
 --------------------------------------------------------------------------
 */
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.stream.Collectors;
+import java.util.Queue;
 
 public class Tile{
   private int id;
@@ -57,7 +68,8 @@ public class Tile{
       processors.add(processor);
       crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
     }
-    tileLolcaMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
+    tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
+    this.totalIterations = 1;
   }
 
   public Tile(int id,String name,int numberProcessors){
@@ -71,20 +83,37 @@ public class Tile{
       crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
     }
     tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
-    this.totalIterations = 2;
+    this.totalIterations = 1;
   }
 
-  public void runTile(List<Actor> actors, Map<Integer,Fifo> fifoMap,  int numberInterations){
+  public void runTile(List<Actor> actors, Map<Integer,Fifo> fifoMap){
     this.resetTile();
-    runIterations = 0;
-    while(runIterations < totalIterations()){
+    int runIterations = 0;
+    while(runIterations < this.totalIterations){
       for(int i =0 ; i < numberProcessors; i++){
-          
+         ((FCFS)processors.get(i).getScheduler()).getSchedulableActors(actors,fifoMap);
       } 
+      for(int i =0 ; i < numberProcessors; i++){
+        processors.get(i).getScheduler().commitActionsinQueue();
+      } 
+      for(int i =0 ; i < numberProcessors; i++){
+        processors.get(i).getScheduler().fireCommitedActions(fifoMap);
+      } 
+      runIterations = this.getRunIterations();
     }
+    
+  }
+  
+  public void setTotalIterations(int totalIterations){
+    this.totalIterations = totalIterations;
+  }
+  
+  public TileLocalMemory getTileLocalMemory(){
+    return this.tileLocalMemory;
+  }
 
-
-
+  public List<Processor> getProcessors(){
+    return this.processors;
   }
 
   public int getRunIterations(){

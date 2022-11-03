@@ -78,7 +78,7 @@ public class Processor {
     return this.localMemory;
   }
 
-  public voud setLocalMemory(LocalMemory localMemory){
+  public void setLocalMemory(LocalMemory localMemory){
     this.localMemory = localMemory;
   }
 
@@ -104,7 +104,7 @@ public class Processor {
   }
 
   public int getRunIterations(){
-    return scheduler.getRunIterations():
+    return scheduler.getRunIterations();
   }
 
   public Scheduler getScheduler(){

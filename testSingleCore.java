@@ -14,10 +14,9 @@ public class testSingleCore {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing Single Core Implementation!");
 
-      Memory memory1 = new Memory(1,"memory");
-      memory1.setType(Memory.MEMORY_TYPE.TILE_LOCAL_MEM);
-
-      Processor cpu1 = new Processor(1,"cpu1");
+      Tile t1 = new Tile(1,"Tile1",1);
+      Memory memory1 = t1.getTileLocalMemory();
+      Processor cpu1 = t1.getProcessors().get(0);
 
       Actor a1 = new Actor("a1");
       a1.setExecutionTime(10000);
@@ -96,13 +95,17 @@ public class testSingleCore {
       fifoMap.put(4,c4);
       fifoMap.put(5,c5);
 
-
       List<Actor> actors = Arrays.asList(a1,a2,a3,a4,a5);
-      cpu1.scheduler.setNumberIterations(10);
-      cpu1.scheduler.restartScheduler();
-      cpu1.scheduler.runSchedule(actors,fifoMap);
+      
+      //t1.setTotalIterations(10);
+      t1.runTile(actors,fifoMap);
+      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
 
-      cpu1.scheduler.saveScheduleStats(".");
+//      cpu1.scheduler.setNumberIterations(10);
+//      cpu1.scheduler.restartScheduler();
+//      cpu1.scheduler.runSchedule(actors,fifoMap);
+//
+//      cpu1.scheduler.saveScheduleStats(".");
 
       System.out.println("Finishing testing single corer!");
     }
