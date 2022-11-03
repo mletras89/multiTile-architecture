@@ -58,8 +58,8 @@ import java.util.Queue;
 class Scheduler{
   private LinkedList<Action> scheduledActions;
   private Queue<Action> queueActions;
-  private Map<Action,List<Transfer>> readTransfers;
-  private Map<Action,List<Transfer>> writeTransfers;
+  private Map<Actor,List<Transfer>> readTransfers;
+  private Map<Actor,List<Transfer>> writeTransfers;
 
   private double lastEventinProcessor;
   private int numberIterations;
@@ -122,7 +122,7 @@ class Scheduler{
     this.queueActions = queueActions;
   }
  
-  public Map<Action,List<Transfer>> getReadTransfers(){
+  public Map<Actor,List<Transfer>> getReadTransfers(){
     return this.readTransfers;
   } 
 
@@ -152,7 +152,7 @@ class Scheduler{
     return 0.0;
   }
 
-  public Map<Action,List<Transfer>> getWriteTransfers(){
+  public Map<Actor,List<Transfer>> getWriteTransfers(){
     return this.writeTransfers;
   } 
 
@@ -205,7 +205,7 @@ class Scheduler{
           }
         }
       }
-      readTransfers.put(commitAction,reads);
+      readTransfers.put(commitAction.getActor(),reads);
     }
   }
   
@@ -224,7 +224,7 @@ class Scheduler{
           }
         }
       }
-      writeTransfers.put(commitAction,writes);
+      writeTransfers.put(commitAction.getActor(),writes);
     }
   }
 

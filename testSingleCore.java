@@ -97,16 +97,10 @@ public class testSingleCore {
 
       List<Actor> actors = Arrays.asList(a1,a2,a3,a4,a5);
       
-      //t1.setTotalIterations(10);
+      t1.setTotalIterations(1);
       t1.runTile(actors,fifoMap);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-
-//      cpu1.scheduler.setNumberIterations(10);
-//      cpu1.scheduler.restartScheduler();
-//      cpu1.scheduler.runSchedule(actors,fifoMap);
-//
-//      cpu1.scheduler.saveScheduleStats(".");
-
+      t1.getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Finishing testing single corer!");
     }
 }

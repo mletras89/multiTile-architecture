@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.Queue;
@@ -58,6 +59,8 @@ public class Crossbar{
   private String name;
   private Queue<Transfer> queueTransfers;
   private List<LinkedList<Transfer>> scheduledActions;
+  private Map<Actor,List<Transfer>> scheduledReadTransfers;
+  private Map<Actor,List<Transfer>> scheduledWriteTransfers;
   private List<Double> timeEachChannel;
   private int numberofParallelChannels;
   private double bandwidth;  // each crossbar has a bandwidht in Gbps
@@ -73,6 +76,8 @@ public class Crossbar{
     this.scheduledActions = new ArrayList<>();
     this.timeEachChannel  = new ArrayList<>();
     LinkedList<Transfer> schedActions =  new LinkedList<Transfer>();
+    this.scheduledReadTransfers = new HashMap<>();
+    this.scheduledWriteTransfers = new HashMap<>();
     this.scheduledActions.add(schedActions);
     this.timeEachChannel.add(0.0);
     this.setBandwidth(16);
@@ -84,6 +89,8 @@ public class Crossbar{
     this.queueTransfers = new LinkedList<>(other.getQueueTransfers());
     this.scheduledActions = new ArrayList<>(other.getScheduledActions());
     this.setBandwidth(other.getBandwidth());
+    this.scheduledReadTransfers = new HashMap<>();
+    this.scheduledWriteTransfers = new HashMap<>();
   }
   // creating memory from given parameters
   public Crossbar(int id, String name, double bandwidth, int numberofParallelChannels){
@@ -99,6 +106,8 @@ public class Crossbar{
       this.timeEachChannel.add(0.0);
     }
     this.bandwidth= bandwidth;
+    this.scheduledReadTransfers = new HashMap<>();
+    this.scheduledWriteTransfers = new HashMap<>();
   }
 
   public void restartCrossbar(){
@@ -110,6 +119,8 @@ public class Crossbar{
       this.scheduledActions.add(schedActions);
       this.timeEachChannel.add(0.0);
     }
+    this.scheduledReadTransfers.clear();
+    this.scheduledWriteTransfers.clear();
   }
 
   public int getId() {
@@ -134,6 +145,12 @@ public class Crossbar{
 
   public void setQueueTransfers(Queue<Transfer> queueTransfers ){
     this.queueTransfers = queueTransfers;
+  }
+  
+  public void cleanQueueTransfers(){
+    this.queueTransfers.clear();
+    this.scheduledReadTransfers.clear();
+    this.scheduledWriteTransfers.clear();
   }
 
   public List<LinkedList<Transfer>> getScheduledActions(){
@@ -173,10 +190,44 @@ public class Crossbar{
     return ToGiga;
   }
 
+  public Map<Actor,List<Transfer>> getScheduledReadTransfers(){
+    return scheduledReadTransfers;
+  }
+
+  public Map<Actor,List<Transfer>> getScheduledWriteTransfers(){
+    return this.scheduledWriteTransfers;
+  }
+
 // methods for managing the crossbar, the insertion in each channel
 
   public void insertTransfer(Transfer transfer) {
     queueTransfers.add(transfer);
+  }
+
+  public void insertTransfers(List<Transfer> transfers) {
+    queueTransfers.addAll(transfers);
+  }
+
+  public void addScheduledTransfer(Transfer transfer){
+    if(transfer.getType()==Transfer.TRANSFER_TYPE.READ){
+      List<Transfer> transfers;
+      if (scheduledReadTransfers.containsKey(transfer.getActor())){
+        transfers = scheduledReadTransfers.get(transfer.getActor());
+      }else{
+        transfers = new ArrayList<>();
+      } 
+      transfers.add(transfer);
+      scheduledReadTransfers.put(transfer.getActor(),transfers);
+    }else{
+      List<Transfer> transfers;
+      if (scheduledWriteTransfers.containsKey(transfer.getActor())){
+        transfers = scheduledWriteTransfers.get(transfer.getActor());
+      }else{
+        transfers = new ArrayList<>();
+      } 
+      transfers.add(transfer);
+      scheduledWriteTransfers.put(transfer.getActor(),transfers);
+    }
   }
 
   public void commitTransfersinQueue(){
@@ -198,6 +249,7 @@ public class Crossbar{
       this.timeEachChannel.set(availChannelIndex,endTime);
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
+      this.addScheduledTransfer(commitTransfer); 
     }
   }
   

@@ -86,13 +86,32 @@ public class Tile{
     this.totalIterations = 1;
   }
 
+  public Crossbar getCrossbar(){
+    return this.crossbar;
+  }
+
   public void runTile(List<Actor> actors, Map<Integer,Fifo> fifoMap){
     this.resetTile();
     int runIterations = 0;
     while(runIterations < this.totalIterations){
+      // first collect all the schedulable actors in each processor
       for(int i =0 ; i < numberProcessors; i++){
          ((FCFS)processors.get(i).getScheduler()).getSchedulableActors(actors,fifoMap);
       } 
+      // then proceed to schedule the read transfers of each processor in the Tile
+      for(int i =0 ; i < numberProcessors; i++){
+        ((FCFS)processors.get(i).getScheduler()).commitReadsToCrossbar();
+      } 
+      crossbar.cleanQueueTransfers();
+      for(int i=0; i< this.numberProcessors; i++){
+        // get read actions from the scheduler
+        Map<Actor,List<Transfer>> readTransfers = processors.get(i).getScheduler().getReadTransfers();
+        for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
+          crossbar.insertTransfers(entry.getValue());
+        }
+      }
+      //commit the read transfers
+      crossbar.commitTransfersinQueue();
       for(int i =0 ; i < numberProcessors; i++){
         processors.get(i).getScheduler().commitActionsinQueue();
       } 
