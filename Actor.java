@@ -122,6 +122,10 @@ public class Actor {
     this.outputFifos = new Vector<Fifo>();    
   }
 
+  public boolean equals(Actor actor){
+    return this.getId() == actor.getId() && this.getName().equals(actor.getName());
+  }
+
   // method for checking if an actor can FIRE
   public boolean canFire(Map<Integer,Fifo> fifos){
     //System.out.println("Can fire "+this.name+" ?");

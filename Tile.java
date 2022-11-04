@@ -86,6 +86,10 @@ public class Tile{
     this.totalIterations = 1;
   }
 
+  public boolean equals(Tile tile){
+    return this.getId() == tile.getId() && this.getName().equals(tile.getName());
+  }
+
   public Crossbar getCrossbar(){
     return this.crossbar;
   }
@@ -113,6 +117,15 @@ public class Tile{
       //commit the read transfers
       crossbar.commitTransfersinQueue();
       for(int i =0 ; i < numberProcessors; i++){
+        // update the read transfers of each processor with the correct due time
+	Map<Actor,List<Transfer>> processorReadTransfers = crossbar.getScheduledReadTransfers(processors.get(i));
+	// debbuging
+	for(Map.Entry<Actor,List<Transfer>> entry : processorReadTransfers.entrySet() ){
+          for(Transfer t : entry.getValue()){
+            System.out.println("Scheduling reading from "+t.getFifo().getName()+" to "+t.getActor().getName()+" start time "+t.getStart_time()+" due time "+t.getDue_time());
+          }
+	}
+	processors.get(i).getScheduler().setReadTransfers(processorReadTransfers);
         processors.get(i).getScheduler().commitActionsinQueue();
       } 
       for(int i =0 ; i < numberProcessors; i++){
@@ -153,6 +166,22 @@ public class Tile{
     tileLocalMemory.resetMemoryUtilization();
     // restart the crossbar
     crossbar.restartCrossbar();
+  }
+  
+  public String getName(){
+    return this.name;
+  }
+
+  public void setName(String name){
+    this.name = name;
+  }
+
+  public int getId(){
+    return this.id;
+  }
+
+  public void setId(int id){
+    this.id = id;
   }
 
 }

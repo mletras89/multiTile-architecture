@@ -131,7 +131,11 @@ public class Fifo{
     this.setNumberOfReadsTimeProduced(another.getNumberOfReadsTimeProduced());
     this.numberOfReads = 0;
   }
- 
+
+  public boolean equals(Fifo fifo){
+    return this.getId()==fifo.getId() && this.getName().equals(fifo.getName());
+  }
+
   public boolean fifoCanBeWritten(){
     if(this.get_capacity() < this.get_tokens() + this.getProdRate())
       return false;

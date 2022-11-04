@@ -57,7 +57,6 @@ public class Processor {
   // each processors has a local memory
   private LocalMemory localMemory;
 
-
   public Processor(int id, String name) {
     this.setName(name);
     this.setId(id);
@@ -72,6 +71,10 @@ public class Processor {
     this.setName(other.getName());
     this.setId(other.getId());
     this.scheduler = other.scheduler;
+  }
+
+  public boolean equals(Processor processor){
+    return this.getId() == processor.getId() && this.getName().equals(processor.getName());
   }
 
   public LocalMemory getLocalMemory(){

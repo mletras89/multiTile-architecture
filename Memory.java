@@ -99,6 +99,10 @@ public class Memory{
     this.resetMemoryUtilization();
     this.capacity = Integer.MAX_VALUE;
   }
+  
+  public boolean equals(Memory memory){
+    return this.getId() == memory.getId() && this.getName().equals(memory.getName());
+  }
 
   public String getName() {
     return name;
