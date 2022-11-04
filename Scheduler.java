@@ -54,6 +54,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.Queue;
+import java.util.Arrays;
 
 class Scheduler{
   private LinkedList<Action> scheduledActions;
@@ -126,6 +127,10 @@ class Scheduler{
     return this.readTransfers;
   } 
 
+  public void setReadTransfers(Map<Actor,List<Transfer>> readTransfers){
+    this.readTransfers = readTransfers;
+  } 
+
   public double getTimeLastReadofActor(Actor actor){
     if(readTransfers.containsKey(actor)){
       double max = 0.0;
@@ -177,7 +182,7 @@ class Scheduler{
     for(Action commitAction : this.queueActions){
       // proceed to schedule the Action
       double ActionTime = commitAction.getProcessing_time();
-      double startTime = (commitAction.getStart_time() > this.lastEventinProcessor) ? commitAction.getStart_time() : this.lastEventinProcessor; 
+      double startTime = Collections.max(Arrays.asList(this.lastEventinProcessor,commitAction.getStart_time(),this.getTimeLastReadofActor(commitAction.getActor())));
       double endTime = startTime + ActionTime;
       // update now the commit Action
       commitAction.setStart_time(startTime);

@@ -193,9 +193,29 @@ public class Crossbar{
   public Map<Actor,List<Transfer>> getScheduledReadTransfers(){
     return scheduledReadTransfers;
   }
+  
+  public Map<Actor,List<Transfer>> getScheduledReadTransfers(Processor processor){
+    Map<Actor,List<Transfer>> processorTransfers = new HashMap<>();
+    for(Map.Entry<Actor,List<Transfer>> entry : this.scheduledReadTransfers.entrySet()){
+      if(entry.getKey().getMapping().equals(processor)){
+	processorTransfers.put(entry.getKey(),entry.getValue());
+      }
+    }
+    return processorTransfers;
+  }
 
   public Map<Actor,List<Transfer>> getScheduledWriteTransfers(){
     return this.scheduledWriteTransfers;
+  }
+
+  public Map<Actor,List<Transfer>> getScheduledWriteTransfers(Processor processor){
+    Map<Actor,List<Transfer>> processorTransfers = new HashMap<>();
+    for(Map.Entry<Actor,List<Transfer>> entry : this.scheduledWriteTransfers.entrySet()){
+      if(entry.getKey().getMapping().equals(processor)){
+	processorTransfers.put(entry.getKey(),entry.getValue());
+      }
+    }
+    return processorTransfers;
   }
 
 // methods for managing the crossbar, the insertion in each channel
@@ -249,7 +269,15 @@ public class Crossbar{
       this.timeEachChannel.set(availChannelIndex,endTime);
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
-      this.addScheduledTransfer(commitTransfer); 
+      // then add the scheduled transfers accordingly, with the scheduled due time
+      this.addScheduledTransfer(commitTransfer);
+      int lis= 0;
+      for(LinkedList<Transfer> l : scheduledActions){
+        System.out.println("lista "+(i++));
+        for(Transfer t : l){
+          System.out.println("\tCrossbar: scheduled from "+t.getFifo().getName()+" to "+t.getActor().getName()+" start time "+t.getStart_time()+" due time "+t.getDue_time());
+        }
+      }
     }
   }
   

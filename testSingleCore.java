@@ -138,7 +138,7 @@ public class testSingleCore {
       t1.runTile(actors,fifoMap);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
-      System.out.println("Finishing testing single corer!");
+      System.out.println("Testing Single Core Implementation done!");
     }
 }
 
