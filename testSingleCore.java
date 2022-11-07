@@ -81,7 +81,7 @@ public class testSingleCore {
 
       Actor a5 = new Actor("a5:sink");
       a5.setExecutionTime(10000);
-      a5.setInputs(1);
+      a5.setInputs(2);
       a5.setOutputs(0);
       a5.setMapping(cpu1);
 
