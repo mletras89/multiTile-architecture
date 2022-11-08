@@ -33,13 +33,19 @@ public class testProcessor {
 
       Processor cpu1 = new Processor(1,"cpu1");
       
-      cpu1.insertAction(a1);
-      cpu1.insertAction(a2);
-      cpu1.insertAction(a3);
-      cpu1.insertAction(a4);
+      cpu1.getScheduler().insertAction(a1);
+      cpu1.getScheduler().insertAction(a2);
+      cpu1.getScheduler().insertAction(a3);
+      cpu1.getScheduler().insertAction(a4);
 
-      cpu1.commitActionsinQueue();
-      cpu1.saveProcessorUtilizationStats(".");
+      a1.setStart_time(70000);
+      cpu1.getScheduler().insertAction(a1);
+      cpu1.getScheduler().insertAction(a2);
+      cpu1.getScheduler().insertAction(a3);
+      cpu1.getScheduler().insertAction(a4);
+
+      cpu1.getScheduler().commitActionsinQueue();
+      cpu1.getScheduler().saveScheduleStats(".");
 
       System.out.println("Finishing testing crossbar!");
     }

@@ -132,7 +132,8 @@ class Scheduler{
   } 
 
   public double getTimeLastReadofActor(Actor actor){
-    if(readTransfers.containsKey(actor)){
+    //if(readTransfers.containsKey(actor)){
+     if(MapManagement.isActorIdinMap(readTransfers.keySet(),actor.getId())){
       double max = 0.0;
       for(Transfer transfer : readTransfers.get(actor)){
         if (transfer.getDue_time() > max){
@@ -145,7 +146,8 @@ class Scheduler{
   }
 
   public double getTimeLastWriteofActor(Actor actor){
-    if(writeTransfers.containsKey(actor)){
+    //if(writeTransfers.containsKey(actor)){
+    if(MapManagement.isActorIdinMap(writeTransfers.keySet(),actor.getId())){
       double max = 0.0;
       for(Transfer transfer : writeTransfers.get(actor)){
         if (transfer.getDue_time() > max){
@@ -174,7 +176,7 @@ class Scheduler{
   }
 
   public void insertAction(Action a){
-    queueActions.add(a);
+    queueActions.add(new Action(a));
   }
 
   public void commitActionsinQueue(){
@@ -191,6 +193,7 @@ class Scheduler{
       this.lastEventinProcessor = endTime;
       // commit the Action
       this.scheduledActions.addLast(commitAction);
+      System.out.println("\tScheduling actor "+commitAction.getActor().getName()+ " start time "+commitAction.getStart_time()+" due time "+commitAction.getDue_time());
     }
   }
 
@@ -203,7 +206,7 @@ class Scheduler{
         for(int n = 0 ; n<cons;n++) {
           if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
             (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
-            fifo.getMapping().getEmbeddedToProcessor() != commitAction.getActor().getMapping())){
+            !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
             // then the read must be scheduled in the crossbar
             Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,this.lastEventinProcessor,Transfer.TRANSFER_TYPE.READ);
             reads.add(readTransfer);
@@ -222,7 +225,7 @@ class Scheduler{
         for(int n=0; n<prod; n++){
           if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
             (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
-            fifo.getMapping().getEmbeddedToProcessor() != commitAction.getActor().getMapping())){
+            !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
               // Then the write must be scheduled in the crossbar
               Transfer writeTransfer = new Transfer(commitAction.getActor(),fifo,this.lastEventinProcessor,Transfer.TRANSFER_TYPE.WRITE);
               writes.add(writeTransfer);
