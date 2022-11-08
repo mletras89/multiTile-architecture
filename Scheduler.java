@@ -131,6 +131,10 @@ class Scheduler{
     this.readTransfers = readTransfers;
   } 
 
+  public void setWriteTransfers(Map<Actor,List<Transfer>> writeTransfers){
+      this.writeTransfers = writeTransfers;
+  } 
+
   public double getTimeLastReadofActor(Actor actor){
     //if(readTransfers.containsKey(actor)){
      if(MapManagement.isActorIdinMap(readTransfers.keySet(),actor.getId())){
@@ -179,6 +183,17 @@ class Scheduler{
     queueActions.add(new Action(a));
   }
 
+  public void produceTokensinFifo(Map<Integer,Fifo> fifoMap){
+    for(Action commitAction : this.queueActions){
+      if(MapManagement.isActorIdinMap(writeTransfers.keySet(),commitAction.getActor().getId())){
+        List<Transfer> writes = writeTransfers.get(commitAction.getActor());
+        for(Transfer transfer: writes){
+          fifoMap.get(transfer.getFifo().getId()).insertTimeProducedToken(transfer.getDue_time());
+        }
+      }
+    }
+  }
+
   public void commitActionsinQueue(){
     // then commit all the schedulable Actions in the queue
     for(Action commitAction : this.queueActions){
@@ -193,22 +208,23 @@ class Scheduler{
       this.lastEventinProcessor = endTime;
       // commit the Action
       this.scheduledActions.addLast(commitAction);
-      System.out.println("\tScheduling actor "+commitAction.getActor().getName()+ " start time "+commitAction.getStart_time()+" due time "+commitAction.getDue_time());
+//      System.out.println("\tScheduling actor "+commitAction.getActor().getName()+ " start time "+commitAction.getStart_time()+" due time "+commitAction.getDue_time());
     }
   }
 
-  public void commitReadsToCrossbar(){
+  public void commitReadsToCrossbar(Map<Integer,Fifo> fifos){
     for(Action commitAction : this.queueActions){
       List<Transfer> reads = new ArrayList<>();
       for(Fifo fifo : commitAction.getActor().getInputFifos()){
         int cons      = fifo.getProdRate();
+        double timeLastReadToken = fifos.get(fifo.getId()).readTimeProducedToken(cons);
         // I scheduled read of data by token reads
         for(int n = 0 ; n<cons;n++) {
           if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
             (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
             !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
             // then the read must be scheduled in the crossbar
-            Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,this.lastEventinProcessor,Transfer.TRANSFER_TYPE.READ);
+            Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,Collections.max(Arrays.asList(this.lastEventinProcessor,timeLastReadToken)),Transfer.TRANSFER_TYPE.READ);
             reads.add(readTransfer);
           }
         }
