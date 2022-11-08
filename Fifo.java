@@ -151,7 +151,17 @@ public class Fifo{
   public void insertTimeProducedToken(double when) {
 	  this.TimeProducedToken.add(when);
   }
-  
+ 
+  public double readTimeProducedToken(int n){
+    // this method reads n tokens from the fifo and returns the one with
+    // the max delay
+    List<Double> reads = new ArrayList<>();
+    for(int i=0;i<n;i++){
+      reads.add(this.readTimeProducedToken());
+    }
+    return Collections.max(reads);
+  }
+
   public double readTimeProducedToken() {
     double status;
     this.numberOfReadsTimeProduced++;
