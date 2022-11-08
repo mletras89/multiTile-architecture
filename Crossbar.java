@@ -273,10 +273,6 @@ public class Crossbar{
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
       // then add the scheduled transfers accordingly, with the scheduled due time
       this.addScheduledTransfer(commitTransfer);
-      System.out.println("number of scheduled actions per channel");
-            for (int k=0; k<this.numberofParallelChannels;k++){
-                    System.out.println(scheduledActions.get(k).size());
-                          }
     }
   }
   
