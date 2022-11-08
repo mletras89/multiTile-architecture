@@ -1,4 +1,4 @@
-check_all: all run_all test01_check 
+check_all: all run_all crossbar_check 
 
 all: crossbar 
 
