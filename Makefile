@@ -1,6 +1,6 @@
 check_all: all run_all crossbar_check  
 
-all: crossbar 
+all: crossbar  
 
 run_all: crossbar_run
 
@@ -44,3 +44,15 @@ crossbar_clean:
 	echo "Cleaning crossbar"; ./clean.sh
 
 crossbar_distclean: crossbar_clean singleCore_clean
+
+testWriteReadTransfers:
+	javac testWriteReadTransfers.java
+
+testWriteReadTransfers_run:
+	java -ea testWriteReadTransfers
+
+testWriteReadTransfers_check:
+	diff golden-cases/processor-utilization-TileReadWrite_Processor0-golden.csv processor-utilization-TileReadWrite_Processor0.csv; diff golden-cases/crossbar-utilization-crossbar_TileReadWrite-golden.csv crossbar-utilization-crossbar_TileReadWrite.csv
+
+testWriteReadTransfers_clean:
+	echo "Cleaning testWriteReadTransfers"; ./clean.sh 
