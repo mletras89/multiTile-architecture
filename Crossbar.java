@@ -57,7 +57,7 @@ import java.util.Queue;
 public class Crossbar{
   private int id;
   private String name;
-  private Queue<Transfer> queueTransfers;
+  private List<Transfer> queueTransfers;
   private List<LinkedList<Transfer>> scheduledActions;
   private Map<Actor,List<Transfer>> scheduledReadTransfers;
   private Map<Actor,List<Transfer>> scheduledWriteTransfers;
@@ -71,7 +71,7 @@ public class Crossbar{
   public Crossbar() {
     this.id = 0;
     this.name = "bus";
-    this.queueTransfers = new LinkedList<>();
+    this.queueTransfers = new ArrayList<>();
     this.numberofParallelChannels = 1; // as a regular bus
     this.scheduledActions = new ArrayList<>();
     this.timeEachChannel  = new ArrayList<>();
@@ -86,7 +86,7 @@ public class Crossbar{
   public Crossbar(Crossbar other) {
     this.name = other.getName();
     this.id   = other.getId();
-    this.queueTransfers = new LinkedList<>(other.getQueueTransfers());
+    this.queueTransfers = new ArrayList<>(other.getQueueTransfers());
     this.scheduledActions = new ArrayList<>(other.getScheduledActions());
     this.setBandwidth(other.getBandwidth());
     this.scheduledReadTransfers = new HashMap<>();
@@ -97,7 +97,7 @@ public class Crossbar{
     this.name = name;
     this.id   = id;
     this.numberofParallelChannels = numberofParallelChannels;
-    this.queueTransfers = new LinkedList<>();
+    this.queueTransfers = new ArrayList<>();
     this.scheduledActions = new ArrayList<>();
     this.timeEachChannel  = new ArrayList<>();
     for(int i = 0; i<numberofParallelChannels;i++){
@@ -139,11 +139,11 @@ public class Crossbar{
     this.name = name;
   }
 
-  public Queue<Transfer> getQueueTransfers(){
+  public List<Transfer> getQueueTransfers(){
     return this.queueTransfers;
   }
 
-  public void setQueueTransfers(Queue<Transfer> queueTransfers ){
+  public void setQueueTransfers(List<Transfer> queueTransfers ){
     this.queueTransfers = queueTransfers;
   }
   
@@ -221,17 +221,18 @@ public class Crossbar{
 // methods for managing the crossbar, the insertion in each channel
 
   public void insertTransfer(Transfer transfer) {
-    queueTransfers.add(transfer);
+    queueTransfers.add(new Transfer(transfer));
   }
 
   public void insertTransfers(List<Transfer> transfers) {
-    queueTransfers.addAll(transfers);
+    for(Transfer  transfer : transfers)
+      queueTransfers.add(new Transfer(transfer));
   }
 
   public void addScheduledTransfer(Transfer transfer){
     if(transfer.getType()==Transfer.TRANSFER_TYPE.READ){
       List<Transfer> transfers;
-      if (scheduledReadTransfers.containsKey(transfer.getActor())){
+      if(MapManagement.isActorIdinMap(scheduledReadTransfers.keySet(),transfer.getActor().getId())){
         transfers = scheduledReadTransfers.get(transfer.getActor());
       }else{
         transfers = new ArrayList<>();
@@ -240,7 +241,7 @@ public class Crossbar{
       scheduledReadTransfers.put(transfer.getActor(),transfers);
     }else{
       List<Transfer> transfers;
-      if (scheduledWriteTransfers.containsKey(transfer.getActor())){
+      if(MapManagement.isActorIdinMap(scheduledWriteTransfers.keySet(),transfer.getActor().getId())){
         transfers = scheduledWriteTransfers.get(transfer.getActor());
       }else{
         transfers = new ArrayList<>();
@@ -255,9 +256,10 @@ public class Crossbar{
     int elementsinQueue = queueTransfers.size();
     
     for(int i=0;i<elementsinQueue;i++){
-      Transfer commitTransfer = queueTransfers.remove();
+      Transfer commitTransfer = queueTransfers.remove(0);
       // proceed to schedule the transfer
       int availChannelIndex = getAvailableChannel();
+      System.out.println("avail index "+availChannelIndex);
       double timeLastAction = this.timeEachChannel.get(availChannelIndex);
       double transferTime = this.calculateTransferTime(commitTransfer);
       double startTime = (commitTransfer.getStart_time() > timeLastAction) ? commitTransfer.getStart_time() : timeLastAction;
@@ -271,13 +273,10 @@ public class Crossbar{
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
       // then add the scheduled transfers accordingly, with the scheduled due time
       this.addScheduledTransfer(commitTransfer);
-      int lis= 0;
-      for(LinkedList<Transfer> l : scheduledActions){
-        System.out.println("lista "+(i++));
-        for(Transfer t : l){
-          System.out.println("\tCrossbar: scheduled from "+t.getFifo().getName()+" to "+t.getActor().getName()+" start time "+t.getStart_time()+" due time "+t.getDue_time());
-        }
-      }
+      System.out.println("number of scheduled actions per channel");
+            for (int k=0; k<this.numberofParallelChannels;k++){
+                    System.out.println(scheduledActions.get(k).size());
+                          }
     }
   }
   
