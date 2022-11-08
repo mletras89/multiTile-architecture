@@ -77,8 +77,9 @@ public class Tile{
     this.name = name;
     this.numberProcessors = numberProcessors;
     this.processors = new ArrayList<>();
+    //System.out.println("Here!");
     for(int i=0; i<this.numberProcessors;i++){
-      Processor processor = new Processor(i,"Processor"+i);
+      Processor processor = new Processor(i,this.name+"_Processor"+i);
       processors.add(processor);
       crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
     }
@@ -98,13 +99,14 @@ public class Tile{
     this.resetTile();
     int runIterations = 0;
     while(runIterations < this.totalIterations){
+      //System.out.println("ITERATION:");
       // first collect all the schedulable actors in each processor
       for(int i =0 ; i < numberProcessors; i++){
          ((FCFS)processors.get(i).getScheduler()).getSchedulableActors(actors,fifoMap);
       } 
       // then proceed to schedule the read transfers of each processor in the Tile
       for(int i =0 ; i < numberProcessors; i++){
-        ((FCFS)processors.get(i).getScheduler()).commitReadsToCrossbar();
+        ((FCFS)processors.get(i).getScheduler()).commitReadsToCrossbar(fifoMap);
       } 
       crossbar.cleanQueueTransfers();
       for(int i=0; i< this.numberProcessors; i++){
@@ -116,22 +118,51 @@ public class Tile{
       }
       //commit the read transfers
       crossbar.commitTransfersinQueue();
+      // scheduling reads and actions
       for(int i =0 ; i < numberProcessors; i++){
         // update the read transfers of each processor with the correct due time
 	Map<Actor,List<Transfer>> processorReadTransfers = crossbar.getScheduledReadTransfers(processors.get(i));
 	// debbuging
-	for(Map.Entry<Actor,List<Transfer>> entry : processorReadTransfers.entrySet() ){
+	/*for(Map.Entry<Actor,List<Transfer>> entry : processorReadTransfers.entrySet() ){
           for(Transfer t : entry.getValue()){
-            System.out.println("Scheduling reading from "+t.getFifo().getName()+" to "+t.getActor().getName()+" start time "+t.getStart_time()+" due time "+t.getDue_time());
+            System.out.println("\t\tScheduling reading from "+t.getFifo().getName()+" to "+t.getActor().getName()+" start time "+t.getStart_time()+" due time "+t.getDue_time());
           }
-	}
+	}*/
 	processors.get(i).getScheduler().setReadTransfers(processorReadTransfers);
         processors.get(i).getScheduler().commitActionsinQueue();
-      } 
+      }
+      // scheduling writing transferss
+      for(int i=0;i < numberProcessors; i++){
+        ((FCFS)processors.get(i).getScheduler()).commitWritesToCrossbar();
+      }
+      // put writing transfers to crossbar
+      for(int i=0; i<this.numberProcessors; i++){
+        // get write transfers from the scheduler
+        Map<Actor,List<Transfer>> writeTransfers = processors.get(i).getScheduler().getWriteTransfers();
+        for(Map.Entry<Actor,List<Transfer>> entry: writeTransfers.entrySet()){
+          crossbar.insertTransfers(entry.getValue());
+        }
+      }
+      // commit write transfers in the crossbar
+      crossbar.commitTransfersinQueue();
+      // commit the writes in each processor
+      for(int i=0;i<this.numberProcessors;i++){
+        // update the write transfers of each processor with the correct start and due time
+        Map<Actor,List<Transfer>> processorWriteTransfers = crossbar.getScheduledWriteTransfers(processors.get(i));
+        processors.get(i).getScheduler().setWriteTransfers(processorWriteTransfers);
+        processors.get(i).getScheduler().produceTokensinFifo(fifoMap);
+      }
+
+      // fire the actions, updating fifos
       for(int i =0 ; i < numberProcessors; i++){
         processors.get(i).getScheduler().fireCommitedActions(fifoMap);
       } 
       runIterations = this.getRunIterations();
+      for(int i=0; i< this.numberProcessors; i++){ 
+        // cleaning read and write transfer list in each processor
+        processors.get(i).getScheduler().getReadTransfers().clear();
+        processors.get(i).getScheduler().getWriteTransfers().clear();       
+      }
     }
     
   }
