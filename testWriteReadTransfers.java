@@ -51,7 +51,7 @@ public class testWriteReadTransfers {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing Single Core Implementation!");
 
-      Tile t1 = new Tile(1,"TileReadWrite",1);
+      Tile t1 = new Tile(1,"TileReadWrite",1,1.0,2);
       Memory memory1 = t1.getTileLocalMemory();
       Processor cpu1 = t1.getProcessors().get(0);
 
@@ -86,7 +86,7 @@ public class testWriteReadTransfers {
       List<Actor> actors = Arrays.asList(a1,a5);
 
       t1.setTotalIterations(10);
-      t1.runTile(actors,fifoMap);
+      t1.runTileActors(actors,fifoMap);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing Single Core Implementation done!");
