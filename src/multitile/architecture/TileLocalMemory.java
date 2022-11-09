@@ -31,56 +31,33 @@
   @date   02 November 2022
   @version 1.1
   @ brief
-     This class describes an action to be executed in a Processor
+     This class describes a TileLocalMemory
 --------------------------------------------------------------------------
 */
 
+package src.multitile.architecture;
 
+public class TileLocalMemory extends Memory{
 
-public class Action {
-  private double start_time;
-  private double due_time;
-  private Actor actor;
-  
-  public Action(Actor actor) {
-      this.setStart_time(0.0);
-      this.setDue_time(0.0);
-      this.actor = actor;
-  }
-  
-  public Action(Action other) {
-  	this.setStart_time(other.getStart_time());
-  	this.setDue_time(other.getDue_time());
-      this.setActor(other.getActor());
-  }
-  
-  public double getStart_time() {
-      return start_time;
-  }
-  
-  public void setStart_time(double start_time) {
-      this.start_time = start_time;
-  }
-  
-  public double getDue_time() {
-      return due_time;
-  }
-  
-  public void setDue_time(double due_time) {
-      this.due_time = due_time;
-  }
-  
-  
-  public double getProcessing_time() {
-      return actor.getExecutionTime();
+  public TileLocalMemory(){
+    super();
+    this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
   }
 
-  public Actor getActor(){
-    return this.actor;
-  }    
-
-  public void setActor(Actor actor){
-    this.actor = actor;
+  public TileLocalMemory(LocalMemory other){
+    super(other);
   }
-   
+
+  public TileLocalMemory(int id, String name, int capacity){
+    super(id,name,capacity);
+    this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
+    this.setEmbeddedToProcessor(null);
+  }
+
+  public TileLocalMemory(int id, String name){
+    super(id,name);
+    this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
+    this.setEmbeddedToProcessor(null);
+  }
+
 }

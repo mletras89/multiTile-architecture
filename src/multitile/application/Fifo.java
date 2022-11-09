@@ -35,8 +35,9 @@
      buffer. Channels communicate actors in an application graph.
 --------------------------------------------------------------------------
 */
+package src.multitile.application;
 
-
+import src.multitile.architecture.Memory;
 import java.util.*;
 
 public class Fifo{

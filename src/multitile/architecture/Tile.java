@@ -37,6 +37,15 @@
         - tileLocalMemory: is the memory local to this tile
 --------------------------------------------------------------------------
 */
+package src.multitile.architecture;
+
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
+
+import src.multitile.FCFS;
+import src.multitile.Action;
+import src.multitile.Transfer;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

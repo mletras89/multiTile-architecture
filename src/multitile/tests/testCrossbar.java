@@ -1,3 +1,11 @@
+package src.multitile.tests;
+
+import src.multitile.Transfer;
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
+import src.multitile.architecture.Memory;
+import src.multitile.architecture.Crossbar;
+
 import java.io.*;
 import java.math.*;
 import java.security.*;

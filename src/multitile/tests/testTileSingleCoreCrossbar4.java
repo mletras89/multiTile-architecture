@@ -34,6 +34,15 @@
      memory, crossbar and tile local memory
 --------------------------------------------------------------------------
 */
+package src.multitile.tests;
+
+import src.multitile.architecture.Tile;
+import src.multitile.architecture.Memory;
+import src.multitile.architecture.Processor;
+
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
+
 
 import java.io.*;
 import java.math.*;
@@ -47,11 +56,11 @@ import java.util.stream.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class testTileSingleCoreCrossbar2 {
+public class testTileSingleCoreCrossbar4{
     public static void main(String[] args) throws IOException {
-      System.out.println("Testing testTileSingleCoreCrossbar2 Implementation!");
+      System.out.println("Testing testTileSingleCoreCrossbar4 Implementation!");
 
-      Tile t1 = new Tile(1,"TileSingleCoreCrossbar2_1",1,1.0,2);
+      Tile t1 = new Tile(1,"TileSingleCoreCrossbar4_1",1,1.0,4);
       Memory memory1 = t1.getTileLocalMemory();
       Processor cpu1 = t1.getProcessors().get(0);
 
@@ -141,11 +150,11 @@ public class testTileSingleCoreCrossbar2 {
 
       List<Actor> actors = Arrays.asList(a1,a2,a3,a4,a5);
 
-      t1.setTotalIterations(10);
+      t1.setTotalIterations(5);
       t1.runTileActors(actors,fifoMap);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
-      System.out.println("Testing testTileSingleCoreCrossbar2 Implementation done!");
+      System.out.println("Testing testTileSingleCoreCrossbar4 Implementation done!");
     }
 }
 

@@ -38,8 +38,11 @@
      -scheduledActions scheduled transfers in the crossbar
 --------------------------------------------------------------------------
 */
+package src.multitile.architecture;
 
-
+import src.multitile.Transfer;
+import src.multitile.application.Actor;
+import src.multitile.MapManagement;
 
 import java.io.File;
 import java.io.FileWriter;

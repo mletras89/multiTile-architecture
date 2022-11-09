@@ -31,15 +31,24 @@
   @date   02 November 2022
   @version 1.1
   @ brief
-     Interface used to implement a scheduler
+	This class implements methods for map management
+ 
+ 
 --------------------------------------------------------------------------
 */
+package src.multitile;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import src.multitile.application.Actor;
 
-interface Schedule{
-  public void getSchedulableActors(List<Actor> actors,Map<Integer,Fifo> fifos);
-  public void runSchedule(List<Actor> actors,Map<Integer,Fifo> fifos);
-
+public class MapManagement{
+  public static boolean isActorIdinMap(Set<Actor> mapKeys, int id){
+    if (mapKeys.isEmpty())
+      return false;
+    for(Actor key: mapKeys){
+      if(key.getId() == id)
+        return true;
+    }
+    return false;
+  }
 }

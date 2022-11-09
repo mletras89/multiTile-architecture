@@ -38,6 +38,7 @@
         - GLOBAL_MEM
 --------------------------------------------------------------------------
 */
+package src.multitile.architecture;
 
 import java.io.File;
 import java.io.FileWriter;

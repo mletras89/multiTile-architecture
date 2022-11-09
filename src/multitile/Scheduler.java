@@ -41,6 +41,12 @@
         - writeTransfers write transfers executed in each simulation step
 --------------------------------------------------------------------------
 */
+package src.multitile;
+
+import src.multitile.architecture.Memory;
+
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
 
 import java.io.File;
 import java.io.FileWriter;

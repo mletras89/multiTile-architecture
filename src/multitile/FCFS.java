@@ -31,33 +31,44 @@
   @date   02 November 2022
   @version 1.1
   @ brief
-     This class describes the implementation of a local memory connected to 
-     each processor.
-      - embeddedToProccessor is the processor directly connected to this 
-        memory
+     This class describes an FCFS scheduler
 --------------------------------------------------------------------------
 */
+package src.multitile;
 
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
 
-public class LocalMemory extends Memory{
+import java.util.List;
+import java.util.Map;
 
-  public LocalMemory(){
-    super();
-    this.setType(MEMORY_TYPE.LOCAL_MEM);
+public class FCFS extends Scheduler implements Schedule{
+  
+  public FCFS(String name){
+    super(name);
+  }
+  
+  public void getSchedulableActors(List<Actor> actors,Map<Integer,Fifo> fifos){
+    // from the list of actors in Processor, check which of them can fire
+    this.cleanQueue();
+   
+    for(Actor actor: actors){
+      if(actor.canFire(fifos)){
+        //System.out.println("Fireable: "+actor.getName());
+        Action action = new Action(actor);
+        this.insertAction(action);
+      }
+    }
   }
 
-  public LocalMemory(LocalMemory other){
-    super(other);
-  }
-
-  public LocalMemory(int id, String name, int capacity){
-    super(id,name,capacity);
-    this.setType(MEMORY_TYPE.LOCAL_MEM);
-  }
-
-  public LocalMemory(int id, String name){
-    super(id,name);
-    this.setType(MEMORY_TYPE.LOCAL_MEM);
+  public void runSchedule(List<Actor> actors,Map<Integer,Fifo> fifos){
+    while(this.getRunIterations() < this.getNumberIterations()){
+    //for(int i=0;i<10;i++){
+      // First enqueue the fireable actors!
+      this.getSchedulableActors(actors,fifos);
+      this.commitActionsinQueue();
+      this.fireCommitedActions(fifos);
+    }
   }
 
 }

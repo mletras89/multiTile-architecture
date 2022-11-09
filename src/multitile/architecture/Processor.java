@@ -37,6 +37,10 @@
         - localMemory: the local memory of the processor
 --------------------------------------------------------------------------
 */
+package src.multitile.architecture;
+
+import src.multitile.Scheduler;
+import src.multitile.FCFS;
 
 import java.io.File;
 import java.io.FileWriter;

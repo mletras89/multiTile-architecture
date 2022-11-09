@@ -34,8 +34,9 @@
      Actor that can be mapped to any processor which is part of an application
 --------------------------------------------------------------------------
 */
+package src.multitile.application;
 
-
+import src.multitile.architecture.Processor;
 import java.util.*;
 
 public class Actor {

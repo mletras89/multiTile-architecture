@@ -41,7 +41,10 @@
      A transfer has an start_time and a due_time
 --------------------------------------------------------------------------
 */
+package src.multitile;
 
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
 
 public class Transfer {
   private double start_time;

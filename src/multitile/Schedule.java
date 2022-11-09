@@ -31,32 +31,20 @@
   @date   02 November 2022
   @version 1.1
   @ brief
-     This class describes a TileLocalMemory
+     Interface used to implement a scheduler
 --------------------------------------------------------------------------
 */
 
+package src.multitile;
 
-public class TileLocalMemory extends Memory{
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
 
-  public TileLocalMemory(){
-    super();
-    this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
-  }
+import java.util.List;
+import java.util.Map;
 
-  public TileLocalMemory(LocalMemory other){
-    super(other);
-  }
-
-  public TileLocalMemory(int id, String name, int capacity){
-    super(id,name,capacity);
-    this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
-    this.setEmbeddedToProcessor(null);
-  }
-
-  public TileLocalMemory(int id, String name){
-    super(id,name);
-    this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
-    this.setEmbeddedToProcessor(null);
-  }
+interface Schedule{
+  public void getSchedulableActors(List<Actor> actors,Map<Integer,Fifo> fifos);
+  public void runSchedule(List<Actor> actors,Map<Integer,Fifo> fifos);
 
 }
