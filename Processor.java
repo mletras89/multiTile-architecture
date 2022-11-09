@@ -64,7 +64,7 @@ public class Processor {
     scheduler = new FCFS(name);
     scheduler.setNumberIterations(1);
     
-    localMemory = new LocalMemory(1,"localMemory");
+    localMemory = new LocalMemory(1,this.name+"_localMemory");
   }
     
   public Processor(Processor other) {
@@ -113,14 +113,4 @@ public class Processor {
   public Scheduler getScheduler(){
     return this.scheduler;
   }
-
-
-
-
-
-
-
-
-
-
 }
