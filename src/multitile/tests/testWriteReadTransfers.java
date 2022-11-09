@@ -34,6 +34,14 @@
      memory, crossbar and tile local memory
 --------------------------------------------------------------------------
 */
+package src.multitile.tests;
+
+import src.multitile.architecture.Tile;
+import src.multitile.architecture.Memory;
+import src.multitile.architecture.Processor;
+
+import src.multitile.application.Actor;
+import src.multitile.application.Fifo;
 
 import java.io.*;
 import java.math.*;
