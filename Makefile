@@ -1,12 +1,38 @@
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run
 
-clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean
+clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean
 
 distclean_all: crossbar_distclean 
+
+singleCoreCrossbar4:
+	javac testTileSingleCoreCrossbar4.java
+
+singleCoreCrossbar4_run:
+	java -ea testTileSingleCoreCrossbar4;
+	./merge-csv-files.py processor-utilization-TileSingleCoreCrossbar4_1_Processor0.csv crossbar-utilization-crossbar_TileSingleCoreCrossbar4_1.csv -o testTileSingleCoreCrossbar4.csv
+
+singleCoreCrossbar4_check:
+	diff testTileSingleCoreCrossbar4.csv golden-cases/testTileSingleCoreCrossbar4-golden.csv;
+	
+singleCoreCrossbar4_clean:
+	echo "Cleaning testTileSingleCoreCrossbar4"; ./clean.sh
+
+singleCoreCrossbar2:
+	javac testTileSingleCoreCrossbar2.java
+
+singleCoreCrossbar2_run:
+	java -ea testTileSingleCoreCrossbar2;
+	./merge-csv-files.py processor-utilization-TileSingleCoreCrossbar2_1_Processor0.csv crossbar-utilization-crossbar_TileSingleCoreCrossbar2_1.csv -o testTileSingleCoreCrossbar2.csv
+
+singleCoreCrossbar2_check:
+	diff testTileSingleCoreCrossbar2.csv golden-cases/testTileSingleCoreCrossbar2-golden.csv;
+	
+singleCoreCrossbar2_clean:
+	echo "Cleaning testTileSingleCoreCrossbar2"; ./clean.sh
 
 singleCoreBus:
 	javac testTileSingleCoreBus.java
