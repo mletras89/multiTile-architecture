@@ -259,7 +259,7 @@ public class Crossbar{
       Transfer commitTransfer = queueTransfers.remove(0);
       // proceed to schedule the transfer
       int availChannelIndex = getAvailableChannel();
-      System.out.println("avail index "+availChannelIndex);
+      //System.out.println("avail index "+availChannelIndex);
       double timeLastAction = this.timeEachChannel.get(availChannelIndex);
       double transferTime = this.calculateTransferTime(commitTransfer);
       double startTime = (commitTransfer.getStart_time() > timeLastAction) ? commitTransfer.getStart_time() : timeLastAction;
