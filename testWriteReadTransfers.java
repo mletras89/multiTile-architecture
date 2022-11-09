@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.toList;
 
 public class testWriteReadTransfers {
     public static void main(String[] args) throws IOException {
-      System.out.println("Testing Single Core Implementation!");
+      System.out.println("Testing testWriteReadTransfers!");
 
       Tile t1 = new Tile(1,"TileReadWrite",1,1.0,2);
       Memory memory1 = t1.getTileLocalMemory();
@@ -89,7 +89,7 @@ public class testWriteReadTransfers {
       t1.runTileActors(actors,fifoMap);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
-      System.out.println("Testing Single Core Implementation done!");
+      System.out.println("Testing testWriteReadTransfers done!");
     }
 }
 
