@@ -1,10 +1,10 @@
-check_all: all run_all crossbar_check  
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check
 
-all: crossbar  
+all: crossbar  processor testWriteReadTransfers
 
-run_all: crossbar_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run
 
-clean_all: crossbar_clean 
+clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean
 
 distclean_all: crossbar_distclean 
 
