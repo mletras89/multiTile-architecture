@@ -239,7 +239,7 @@ public class Scheduler{
 
   public void commitReadsToCrossbar(Action commitAction,Map<Integer,Fifo> fifos){
     List<Transfer> reads = new ArrayList<>();
-    System.out.println("Actor "+commitAction.getActor().getName());
+    //System.out.println("Actor "+commitAction.getActor().getName());
     for(Fifo fifo : commitAction.getActor().getInputFifos()){
       int cons      = fifo.getProdRate();
       double timeLastReadToken = fifos.get(fifo.getId()).readTimeProducedToken(cons);
