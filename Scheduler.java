@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 import java.util.Queue;
 import java.util.Arrays;
 
-class Scheduler{
+public class Scheduler{
   private LinkedList<Action> scheduledActions;
   private Queue<Action> queueActions;
   private Map<Actor,List<Transfer>> readTransfers;
@@ -194,22 +194,68 @@ class Scheduler{
     }
   }
 
+  public void produceTokensinFifo(Action commitAction,Map<Integer,Fifo> fifoMap){
+    if(MapManagement.isActorIdinMap(writeTransfers.keySet(),commitAction.getActor().getId())){
+      List<Transfer> writes = writeTransfers.get(commitAction.getActor());
+      for(Transfer transfer: writes){
+        fifoMap.get(transfer.getFifo().getId()).insertTimeProducedToken(transfer.getDue_time());
+      }
+    }
+  }
+
+  public void commitSingleAction(Action commitAction){
+    // proceed to schedule the Action
+    double ActionTime = commitAction.getProcessing_time();
+    double startTime = Collections.max(Arrays.asList(this.lastEventinProcessor,commitAction.getStart_time(),this.getTimeLastReadofActor(commitAction.getActor())));
+    double endTime = startTime + ActionTime;
+    // update now the commit Action
+    commitAction.setStart_time(startTime);
+    commitAction.setDue_time(endTime);
+    // update the last event in processor
+    this.lastEventinProcessor = endTime;
+    // commit the Action
+    this.scheduledActions.addLast(commitAction);
+    //System.out.println("\tScheduling actor "+commitAction.getActor().getName()+ " start time "+commitAction.getStart_time()+" due time "+commitAction.getDue_time());
+  }
+
   public void commitActionsinQueue(){
     // then commit all the schedulable Actions in the queue
     for(Action commitAction : this.queueActions){
-      // proceed to schedule the Action
-      double ActionTime = commitAction.getProcessing_time();
-      double startTime = Collections.max(Arrays.asList(this.lastEventinProcessor,commitAction.getStart_time(),this.getTimeLastReadofActor(commitAction.getActor())));
-      double endTime = startTime + ActionTime;
-      // update now the commit Action
-      commitAction.setStart_time(startTime);
-      commitAction.setDue_time(endTime);
-      // update the last event in processor
-      this.lastEventinProcessor = endTime;
-      // commit the Action
-      this.scheduledActions.addLast(commitAction);
+        commitSingleAction(commitAction);
+//      // proceed to schedule the Action
+//      double ActionTime = commitAction.getProcessing_time();
+//      double startTime = Collections.max(Arrays.asList(this.lastEventinProcessor,commitAction.getStart_time(),this.getTimeLastReadofActor(commitAction.getActor())));
+//      double endTime = startTime + ActionTime;
+//      // update now the commit Action
+//      commitAction.setStart_time(startTime);
+//      commitAction.setDue_time(endTime);
+//      // update the last event in processor
+//      this.lastEventinProcessor = endTime;
+//      // commit the Action
+//      this.scheduledActions.addLast(commitAction);
 //      System.out.println("\tScheduling actor "+commitAction.getActor().getName()+ " start time "+commitAction.getStart_time()+" due time "+commitAction.getDue_time());
     }
+  }
+
+  public void commitReadsToCrossbar(Action commitAction,Map<Integer,Fifo> fifos){
+    List<Transfer> reads = new ArrayList<>();
+    System.out.println("Actor "+commitAction.getActor().getName());
+    for(Fifo fifo : commitAction.getActor().getInputFifos()){
+      int cons      = fifo.getProdRate();
+      double timeLastReadToken = fifos.get(fifo.getId()).readTimeProducedToken(cons);
+
+      // I scheduled read of data by token reads
+      for(int n = 0 ; n<cons;n++) {
+        if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+          (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
+          !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
+          // then the read must be scheduled in the crossbar
+          Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,Collections.max(Arrays.asList(this.lastEventinProcessor,timeLastReadToken)),Transfer.TRANSFER_TYPE.READ);
+          reads.add(readTransfer);
+        }
+      }
+    }
+    readTransfers.put(commitAction.getActor(),reads);
   }
 
   public void commitReadsToCrossbar(Map<Integer,Fifo> fifos){
@@ -250,6 +296,23 @@ class Scheduler{
       }
       writeTransfers.put(commitAction.getActor(),writes);
     }
+  }
+
+  public void commitWritesToCrossbar(Action commitAction){
+    List<Transfer> writes = new ArrayList<>();
+    for(Fifo fifo : commitAction.getActor().getOutputFifos()){
+      int prod    = fifo.getProdRate();
+      for(int n=0; n<prod; n++){
+        if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+          (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
+          !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
+          // Then the write must be scheduled in the crossbar
+          Transfer writeTransfer = new Transfer(commitAction.getActor(),fifo,this.lastEventinProcessor,Transfer.TRANSFER_TYPE.WRITE);
+          writes.add(writeTransfer);
+        }
+      }
+    }
+    writeTransfers.put(commitAction.getActor(),writes);
   }
 
   public void fireCommitedActions(Map<Integer,Fifo> fifos){
