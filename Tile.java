@@ -72,7 +72,7 @@ public class Tile{
     this.totalIterations = 1;
   }
 
-  public Tile(int id,String name,int numberProcessors){
+  public Tile(int id,String name,int numberProcessors,double crossbarBw,int crossbarChannels){
     this.id = id;
     this.name = name;
     this.numberProcessors = numberProcessors;
@@ -81,7 +81,7 @@ public class Tile{
     for(int i=0; i<this.numberProcessors;i++){
       Processor processor = new Processor(i,this.name+"_Processor"+i);
       processors.add(processor);
-      crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
+      crossbar = new Crossbar(1,"crossbar_"+this.name, crossbarBw,crossbarChannels);
     }
     tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
     this.totalIterations = 1;
@@ -93,6 +93,61 @@ public class Tile{
 
   public Crossbar getCrossbar(){
     return this.crossbar;
+  }
+
+  public void runTileActors(List<Actor> actors, Map<Integer,Fifo> fifoMap){ 
+    this.resetTile();
+    int runIterations = 0;
+    while(runIterations < this.totalIterations){
+      // first collect all the schedulable actors per processor
+      for(int i =0 ; i < this.numberProcessors; i++){
+        ((FCFS)processors.get(i).getScheduler()).getSchedulableActors(actors,fifoMap);
+      } 
+      // proceed to schedule each of the actions per processor
+      for(int i=0; i< this.numberProcessors; i++){
+        Queue<Action> actions = processors.get(i).getScheduler().getQueueActions();
+        for(Action action : actions){
+          // first schedule the reads
+          processors.get(i).getScheduler().commitReadsToCrossbar(action,fifoMap);
+          Map<Actor,List<Transfer>> readTransfers = processors.get(i).getScheduler().getReadTransfers();
+          crossbar.cleanQueueTransfers();
+          for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
+            crossbar.insertTransfers(entry.getValue());
+          }
+          //commit the read transfers
+          crossbar.commitTransfersinQueue();
+          // update the read transfers of each processor with the correct due time
+          Map<Actor,List<Transfer>> processorReadTransfers = crossbar.getScheduledReadTransfers(processors.get(i));
+
+          // commit the action in the processor
+          processors.get(i).getScheduler().setReadTransfers(processorReadTransfers);
+          processors.get(i).getScheduler().commitSingleAction(action); // modificar este
+          
+          // finally, schedule the write of tokens 
+          ((FCFS)processors.get(i).getScheduler()).commitWritesToCrossbar(action);
+          // put writing transfers to crossbar
+          // get write transfers from the scheduler
+          Map<Actor,List<Transfer>> writeTransfers = processors.get(i).getScheduler().getWriteTransfers();
+          for(Map.Entry<Actor,List<Transfer>> entry: writeTransfers.entrySet()){
+            crossbar.insertTransfers(entry.getValue());
+          }
+          // commit write transfers in the crossbar
+          crossbar.commitTransfersinQueue();
+          // update the write transfers of each processor with the correct start and due time
+          Map<Actor,List<Transfer>> processorWriteTransfers = crossbar.getScheduledWriteTransfers(processors.get(i));
+          processors.get(i).getScheduler().setWriteTransfers(processorWriteTransfers);
+          processors.get(i).getScheduler().produceTokensinFifo(action,fifoMap);
+
+          processors.get(i).getScheduler().getReadTransfers().clear();
+          processors.get(i).getScheduler().getWriteTransfers().clear();       
+        }
+      }
+      //fire the actions, updating fifos
+      for(int i =0 ; i < numberProcessors; i++){
+        processors.get(i).getScheduler().fireCommitedActions(fifoMap);
+      } 
+      runIterations = this.getRunIterations();
+    }
   }
 
   public void runTile(List<Actor> actors, Map<Integer,Fifo> fifoMap){
