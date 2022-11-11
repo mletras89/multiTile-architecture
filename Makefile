@@ -1,15 +1,29 @@
 DIR_SRC=./src/multitile/tests
 PACKAGE_TEST=src.multitile.tests
 
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run
 
-clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean
+clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean
 
 distclean_all: crossbar_distclean 
+
+
+testMemory:
+	javac $(DIR_SRC)/testMemory.java
+
+testMemory_run:
+	java -ea $(PACKAGE_TEST).testMemory;
+
+testMemory_check:
+	diff testMemory.csv golden-cases/testMemory-golden.csv
+	
+testMemory_clean:
+	echo "Cleaning Test Memory"; ./clean.sh
+
 
 singleCoreCrossbar4:
 	javac $(DIR_SRC)/testTileSingleCoreCrossbar4.java

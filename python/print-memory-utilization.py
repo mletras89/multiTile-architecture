@@ -43,17 +43,12 @@ for index, row in df.iterrows():
 
 df['Color'] = Colors
 
-print(df)
-
 [fig,axes] = plt.subplots(len(uniqueMemories),1)
 index=0
 
 if not isinstance(axes, (np.ndarray, np.generic)):
-	print("here")
 	for memoryElement in uniqueMemories:
 		currentMemoryData = df.loc[df['Memory']==memoryElement]
-		print("PLOTING "+memoryElement)
-		print(currentMemoryData)
 		axes.fill_between(currentMemoryData.When,currentMemoryData.Capacity,step="post",alpha=0.4,color=currentMemoryData.Color)
 		line,= axes.step(currentMemoryData.When,currentMemoryData.Capacity,where="post",lw=3)
 		#line, = axes.plot(currentMemoryData.When,currentMemoryData.Capacity,lw=3,drawstyle="steps")
@@ -61,11 +56,8 @@ if not isinstance(axes, (np.ndarray, np.generic)):
 		axes.set_title(memoryElement)   
 else:
 	axes = list(axes)
-	print("HERE")
 	for memoryElement in uniqueMemories:
 	    currentMemoryData = df.loc[df['Memory']==memoryElement]
-	    print("PLOTING "+memoryElement)
-	    print(currentMemoryData)
 	    axes[index].fill_between(currentMemoryData.When,currentMemoryData.Capacity,step="post",alpha=0.4,color=currentMemoryData.Color)
 	    line, = axes[index].step(currentMemoryData.When,currentMemoryData.Capacity,lw=3,where="post")
 	    line.set_color(dictColorMems[memoryElement])

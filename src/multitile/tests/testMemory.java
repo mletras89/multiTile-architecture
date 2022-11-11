@@ -1,3 +1,7 @@
+package src.multitile.tests;
+
+import src.multitile.architecture.Memory;
+
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -12,45 +16,42 @@ import static java.util.stream.Collectors.toList;
 
 public class testMemory {
     public static void main(String[] args) throws IOException {
-      System.out.println("Testing class!");
-      Memory memoryTest = new Memory(1,"Memory_1",100);
-      Memory memoryTest2 = new Memory(2,"Memory_2",200);
-      Memory memoryTest3 = new Memory(3,"Memory_3",100);
-
-      //memoryTest.writeDataInMemory(50,0);
-      //memoryTest.readDataInMemory(40,50);
-      //memoryTest.writeDataInMemory(50,100);
-      //memoryTest.readDataInMemory(23,200);
-      //
-      //if (memoryTest.canPutDataInMemory(100))
-      //  System.out.println("I can put 100 more");
-      //else
-      //  System.out.println("I can not put 100 more"); 
-
-      //if (memoryTest.canPutDataInMemory(63))
-      //  System.out.println("I can put 63 more");
-      //else
-      //  System.out.println("I can not put 63 more"); 
-
-      //memoryTest.writeDataInMemory(63,250);
+      System.out.println("Testing Memory class!");
+      Memory memoryTest = new Memory(1,"Memory_1",1000);
+      Memory memoryTest2 = new Memory(2,"Memory_2",2000);
+      Memory memoryTest3 = new Memory(3,"Memory_3",Double.POSITIVE_INFINITY);
+     
+      int load1 = 100;
+      int load2 = 200;
+      int load3 = 20;
       
-      memoryTest.writeDataInMemory(100,225);
-      memoryTest.readDataInMemory(100,300);
+      for(int i=0; i<20; i++){
+        if (memoryTest.canPutDataInMemory(load1))
+          memoryTest.writeDataInMemory(load1,i*10);
+        else
+          // put the data in the unbounded memory
+          memoryTest3.writeDataInMemory(load1,i*10);
 
-      memoryTest2.writeDataInMemory(200,150);
-      memoryTest2.readDataInMemory(200,300);
+        if (memoryTest2.canPutDataInMemory(load2))
+          memoryTest2.writeDataInMemory(load2,i*10);
+        else
+          // put the data in the undounded memory
+          memoryTest3.writeDataInMemory(load2,i*10);
 
-      memoryTest3.writeDataInMemory(100,150);
-      memoryTest3.readDataInMemory(100,300);
+        if (memoryTest3.canPutDataInMemory(load2))
+          memoryTest3.writeDataInMemory(load3*10,i*10);
+      }
 
-      //memoryTest.saveMemoryUtilizationStats(".");
+      memoryTest.readDataInMemory(memoryTest.getCurrentAmountofBytes(),200);
+      memoryTest2.readDataInMemory(memoryTest2.getCurrentAmountofBytes(),200);
+      memoryTest3.readDataInMemory(memoryTest3.getCurrentAmountofBytes(),200);
 
-      System.out.println("The memory 1 utilization was: "+memoryTest.getUtilization());
-      System.out.println("The memory 2 utilization was: "+memoryTest2.getUtilization());
-      System.out.println("The memory 3 utilization was: "+memoryTest3.getUtilization());
+      System.out.println("The memory 1 utilization over the execution was: "+memoryTest.getUtilization());
+      System.out.println("The memory 2 utilization over the execution was: "+memoryTest2.getUtilization());
+      System.out.println("The memory 3 utilization over the execution was: "+memoryTest3.getUtilization());
 
       try{
-          File memUtilStatics = new File("exampleUtil.csv");
+          File memUtilStatics = new File("testMemory.csv");
           if (memUtilStatics.createNewFile()) {
             System.out.println("File created: " + memUtilStatics.getName());
           } else {
@@ -62,7 +63,7 @@ public class testMemory {
           e.printStackTrace();
       }
 
-      FileWriter myWriter = new FileWriter("exampleUtil.csv"); 
+      FileWriter myWriter = new FileWriter("testMemory.csv"); 
       myWriter.write("Memory\tWhen\tCapacity\n");
 
       memoryTest.saveMemoryUtilizationStats(myWriter);
@@ -71,6 +72,7 @@ public class testMemory {
 
       myWriter.close();
 
+      System.out.println("End Testing Memory class!");
     }
 }
 

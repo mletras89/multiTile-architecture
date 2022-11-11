@@ -40,6 +40,8 @@
 */
 package src.multitile.architecture;
 
+import src.multitile.Transfer;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -56,7 +58,7 @@ import java.util.stream.Collectors;
 public class Memory{
   private int id;
   private String name;
-  private int capacity;
+  private double capacity;
   private Map<Double,Double> memoryUtilization = new TreeMap<Double, Double>();
   private MEMORY_TYPE type;
   private Processor embeddedToProcessor;
@@ -75,7 +77,7 @@ public class Memory{
     this.setId(0);
     this.resetMemoryUtilization();
     // assume infinite size of memories if not specificed
-    this.setCapacity(Integer.MAX_VALUE);
+    this.setCapacity(Double.POSITIVE_INFINITY);
   }
    // cloning memory
   public Memory(Memory other) {
@@ -86,7 +88,7 @@ public class Memory{
     this.setType(other.getType());
   }
   // creating memory from given parameters
-  public Memory(int id, String name, int capacity){
+  public Memory(int id, String name, double capacity){
     this.name = name;
     this.id       = id;
     this.resetMemoryUtilization();
@@ -98,7 +100,7 @@ public class Memory{
     this.name = name;
     this.id       = id;
     this.resetMemoryUtilization();
-    this.capacity = Integer.MAX_VALUE;
+    this.capacity = Double.POSITIVE_INFINITY;
   }
   
   public boolean equals(Memory memory){
@@ -129,11 +131,11 @@ public class Memory{
     this.id = id;
   }
 
-  public int getCapacity() {
+  public double getCapacity() {
     return capacity;
   }
   
-  public void setCapacity(int capacity) {
+  public void setCapacity(double capacity) {
     this.capacity = capacity;
   }
 
@@ -161,6 +163,7 @@ public class Memory{
     List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
     Collections.sort(listKeys);
     double last_inserted_key = listKeys.get(listKeys.size()-1);
+    double current_data = memoryUtilization.get(last_inserted_key);
     double maxUtilization = last_inserted_key * capacity;
 
     double util = 0;
@@ -168,7 +171,18 @@ public class Memory{
       util += (listKeys.get(i+1) - listKeys.get(i)) * memoryUtilization.get(listKeys.get(i));
       //System.out.println("First square from"+listKeys.get(i)+" to "+listKeys.get(i+1)+" is: "+(listKeys.get(i+1) - listKeys.get(i)) * memoryUtilization.get(listKeys.get(i)));
     }
+    System.out.println("maxUtilization "+maxUtilization);
+    System.out.println("util "+util);
     return 1 - (maxUtilization - util)/maxUtilization;
+  }
+
+  public void processTransfer(Transfer transfer,double when){
+    if(transfer.getType() == Transfer.TRANSFER_TYPE.READ){
+      readDataInMemory(transfer.getBytes(),when);
+    }
+    if(transfer.getType() == Transfer.TRANSFER_TYPE.WRITE){
+      writeDataInMemory(transfer.getBytes(),when);
+    }
   }
 
   public void writeDataInMemory(int amountBytes, double when) {
@@ -183,7 +197,7 @@ public class Memory{
     memoryUtilization.put(when, currentBytes+amountBytes);
   }
 
-  public void readDataInMemory(int amountBytes, double when) {
+  public void readDataInMemory(double amountBytes, double when) {
     List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
     double last_inserted_key = listKeys.get(listKeys.size()-1);
     // get current amount of bytes
@@ -204,6 +218,13 @@ public class Memory{
     if (currentBytes + amountBytes <= this.getCapacity())
             return true;
     return false;
+  }
+
+  public double getCurrentAmountofBytes(){
+    List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
+    double last_inserted_key = listKeys.get(listKeys.size()-1);
+    // get current amount of bytes
+    return memoryUtilization.get(last_inserted_key);
   }
 
   // DUMPING the memory utilzation locally
