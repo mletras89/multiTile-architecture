@@ -37,20 +37,21 @@
 */
 package src.multitile.application;
 
+import src.multitile.Transfer;
 import src.multitile.architecture.Memory;
 import java.util.*;
 
 public class Fifo{
-  private int     id;
-  private String  name;
-  private int     tokens;    // current number of tokens
-  private int     initial_tokens; // the number of initial tokens
-  private int     capacity;  // maximal number of tokens
-  private int     tokenSize; // token size in bytes
-  private int     consRate;
-  private int     prodRate;
+  private int             id;
+  private String          name;
+  private int             tokens;    // current number of tokens
+  private int             initial_tokens; // the number of initial tokens
+  private int             capacity;  // maximal number of tokens
+  private int             tokenSize; // token size in bytes
+  private int             consRate;
+  private int             prodRate;
+  private Queue<Transfer> TimeProducedToken;  // each transfer transport a token, thus the due time is the produced token time
 
-  private Vector<Integer> memory_footprint;
   //private int   mapping;  // map to memory
   private Memory mapping;
 
@@ -66,7 +67,9 @@ public class Fifo{
   private int numberOfReadsTimeProduced;
   private int numberOfReads;
   private Queue<Boolean> ReMapping;
-  private Queue<Double> TimeProducedToken;
+  private Vector<Integer> memory_footprint;
+
+
 
   public Fifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
     this.id                          = id;
@@ -149,8 +152,8 @@ public class Fifo{
     return true;
   }
 
-  public void insertTimeProducedToken(double when) {
-	  this.TimeProducedToken.add(when);
+  public void insertTimeProducedToken(Transfer transfer) {
+	  this.TimeProducedToken.add(new Transfer(transfer));
   }
  
   public double readTimeProducedToken(int n){
@@ -164,7 +167,7 @@ public class Fifo{
   }
 
   public double readTimeProducedToken() {
-    double status;
+    Transfer status;
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
 	  
@@ -177,7 +180,7 @@ public class Fifo{
     else
       status = this.TimeProducedToken.remove();
 	  
-    return status;
+    return status.getDue_time();
   }
   
   public void insertReMapping(boolean value) {

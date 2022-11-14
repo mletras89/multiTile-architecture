@@ -194,7 +194,7 @@ public class Scheduler{
       if(MapManagement.isActorIdinMap(writeTransfers.keySet(),commitAction.getActor().getId())){
         List<Transfer> writes = writeTransfers.get(commitAction.getActor());
         for(Transfer transfer: writes){
-          fifoMap.get(transfer.getFifo().getId()).insertTimeProducedToken(transfer.getDue_time());
+          fifoMap.get(transfer.getFifo().getId()).insertTimeProducedToken(transfer);
         }
       }
     }
@@ -204,7 +204,7 @@ public class Scheduler{
     if(MapManagement.isActorIdinMap(writeTransfers.keySet(),commitAction.getActor().getId())){
       List<Transfer> writes = writeTransfers.get(commitAction.getActor());
       for(Transfer transfer: writes){
-        fifoMap.get(transfer.getFifo().getId()).insertTimeProducedToken(transfer.getDue_time());
+        fifoMap.get(transfer.getFifo().getId()).insertTimeProducedToken(transfer);
       }
     }
   }
