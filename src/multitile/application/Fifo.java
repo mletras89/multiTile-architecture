@@ -41,7 +41,7 @@ import src.multitile.Transfer;
 import src.multitile.architecture.Memory;
 import java.util.*;
 
-public class Fifo{
+public class Fifo implements Buffer{
   private int             id;
   private String          name;
   private int             tokens;    // current number of tokens
@@ -50,23 +50,23 @@ public class Fifo{
   private int             tokenSize; // token size in bytes
   private int             consRate;
   private int             prodRate;
-  private Queue<Transfer> TimeProducedToken;  // each transfer transport a token, thus the due time is the produced token time
+  private Queue<Transfer> timeProducedToken;  // each transfer transport a token, thus the due time is the produced token time
 
   //private int   mapping;  // map to memory
   private Memory mapping;
 
-  // extension for merged buffer
-  private boolean MergedFifo=false;
   private HashMap<Integer,Fifo> mergedFifos;
 
   private Actor source; // source actor
   private Actor destination; // destination actor
 
 
-  private int numberOfReadsReMapping;
-  private int numberOfReadsTimeProduced;
-  private int numberOfReads;
-  private Queue<Boolean> ReMapping;
+  private Queue<Boolean> ReMapping; 
+  private int numberOfReadsReMapping; 
+
+  public int numberOfReadsTimeProduced;
+  public int numberOfReads;
+
   private Vector<Integer> memory_footprint;
 
 
@@ -81,16 +81,14 @@ public class Fifo{
     this.initial_tokens              = tokens;
     this.setConsRate(consRate);
     this.setProdRate(prodRate);
-    this.setMergedFifo(false);
-    this.setMergedFifos(new HashMap<Integer,Fifo>());
-
     this.setSource(src);
     this.setDestination(dst);
-    this.setNumberOfReadsReMapping(0);
     this.setNumberOfReadsTimeProduced(0);
-    this.ReMapping = new LinkedList<>();
-    this.TimeProducedToken = new LinkedList<>();
+
+    this.timeProducedToken = new LinkedList<>();
     this.numberOfReads = 0;
+    this.ReMapping = new LinkedList<>();
+    this.setNumberOfReadsReMapping(0);
   }
 
   public Fifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate){
@@ -103,14 +101,13 @@ public class Fifo{
     this.initial_tokens              = tokens;
     this.setConsRate(consRate);
     this.setProdRate(prodRate);
-    this.setMergedFifo(false);
-    this.setMergedFifos(new HashMap<Integer,Fifo>());
 
-    this.setNumberOfReadsReMapping(0);
     this.setNumberOfReadsTimeProduced(0);
-    this.ReMapping = new LinkedList<>();
-    this.TimeProducedToken = new LinkedList<>();
+    this.timeProducedToken = new LinkedList<>();
     this.numberOfReads = 0;
+
+    this.ReMapping = new LinkedList<>();
+    this.setNumberOfReadsReMapping(0);
   }
 
 
@@ -124,16 +121,41 @@ public class Fifo{
     this.initial_tokens              = another.initial_tokens;
     this.setConsRate(another.getConsRate());
     this.setProdRate(another.getProdRate());
-    this.setMergedFifo(another.isMergedFifo());
-    this.setMergedFifos(another.getMergedFifos());
 
     this.setSource(another.getSource());
     this.setDestination(another.getDestination());
-    this.setNumberOfReadsReMapping(another.getNumberOfReadsReMapping());
-    this.ReMapping = new LinkedList<>();
-    this.TimeProducedToken = new LinkedList<>();
+
+    this.timeProducedToken = new LinkedList<>();
     this.setNumberOfReadsTimeProduced(another.getNumberOfReadsTimeProduced());
     this.numberOfReads = 0;
+    this.setNumberOfReadsReMapping(another.getNumberOfReadsReMapping());
+    this.ReMapping = new LinkedList<>();
+
+  }
+  
+  public void setNumberOfReadsReMapping(int numberOfReads) {
+    this.numberOfReadsReMapping = numberOfReads;
+  }
+
+ public int getNumberOfReadsReMapping(){
+    return this.numberOfReadsReMapping;
+ }
+
+  public void insertReMapping(boolean value) {
+    this.ReMapping.add(value);
+  }
+
+  public boolean peekReMapping(){
+    return this.ReMapping.peek();
+  }
+
+
+  public Transfer removeTimeProducedToken(){
+    return this.timeProducedToken.remove();
+  }
+
+  public Transfer peekTimeProducedToken(){
+    return this.timeProducedToken.peek();
   }
 
   public boolean equals(Fifo fifo){
@@ -153,7 +175,7 @@ public class Fifo{
   }
 
   public void insertTimeProducedToken(Transfer transfer) {
-	  this.TimeProducedToken.add(new Transfer(transfer));
+	  this.timeProducedToken.add(new Transfer(transfer));
   }
  
   public double readTimeProducedToken(int n){
@@ -170,29 +192,13 @@ public class Fifo{
     Transfer status;
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
-	  
-    if (this.isMergedFifo())
-      if (currentNumberOfReads % mergedFifos.size()==0)
-        status = this.TimeProducedToken.remove();
-      else {
-        status = this.TimeProducedToken.peek();
-      }
-    else
-      status = this.TimeProducedToken.remove();
-	  
+    
+    status = this.timeProducedToken.remove();
     return status.getDue_time();
   }
   
-  public void insertReMapping(boolean value) {
-    this.ReMapping.add(value);
-  }
-  
+ 
   public boolean canReadData() {
-    if (this.isMergedFifo())
-      if(this.numberOfReads % mergedFifos.size() == 0)
-        return true;
-      else
-        return false;
     return true;
   }
   
@@ -205,14 +211,7 @@ public class Fifo{
     int currentNumberOfReads = this.numberOfReadsReMapping;
     boolean status = false;
 	  
-    if (this.isMergedFifo())
-      if(currentNumberOfReads % mergedFifos.size() == 0)
-        status =  this.ReMapping.remove();
-      else
-        status = this.ReMapping.peek();
-    else
-      status = this.ReMapping.remove();
-	  
+    status = this.ReMapping.remove();
     return status;
   }
   
@@ -282,20 +281,8 @@ public class Fifo{
     return this.id;
   }
 
-  public boolean isMergedFifo() {
-    return MergedFifo;
-  }
-
-  public void setMergedFifo(boolean mergedFifo) {
-    MergedFifo = mergedFifo;
-  }
-
-  public HashMap<Integer,Fifo> getMergedFifos() {
-    return mergedFifos;
-  }
-
-  public void setMergedFifos(HashMap<Integer,Fifo> mergedFifos) {
-    this.mergedFifos = mergedFifos;
+  public boolean isCompositeChannel(){
+      return false;
   }
 
   public Actor getSource() {
@@ -312,14 +299,6 @@ public class Fifo{
 
   public void setDestination(Actor destination) {
     this.destination = destination;
-  }
-
-  public int getNumberOfReadsReMapping() {
-    return this.numberOfReadsReMapping;
-  }
-
-  public void setNumberOfReadsReMapping(int numberOfReads) {
-    this.numberOfReadsReMapping = numberOfReads;
   }
 
   public Queue<Boolean> getReMapping() {

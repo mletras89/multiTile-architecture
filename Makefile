@@ -11,6 +11,19 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+testCompositeChannel:
+	javac $(DIR_SRC)/testCompositeChannel.java
+
+testCompositeChannel_run:
+	java -ea $(PACKAGE_TEST).testCompositeChannel;
+
+testCompositeChannel_check:
+	#diff testMemory.csv golden-cases/testMemory-golden.csv
+	
+testCompositeChannel_clean:
+	echo "Cleaning Test Memory"; ./clean.sh
+
+
 
 testMemory:
 	javac $(DIR_SRC)/testMemory.java
