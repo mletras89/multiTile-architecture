@@ -48,19 +48,13 @@ public class CompositeFifo extends Fifo implements Buffer{
   List<Fifo> readers;
   //private HashMap<Integer,Fifo> readers;
 
-  private static int compositeActorID;
-
-  static{
-    compositeActorID =  0;
-  }
-
-  public CompositeFifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
-    super(id,name,tokens,capacity,tokenSize,mapping,consRate,prodRate,src,dst);
+  public CompositeFifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
+    super(name,tokens,capacity,tokenSize,mapping,consRate,prodRate,src,dst);
     this.readers = new ArrayList<>();
   }
 
-  public CompositeFifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate){
-    super(id,name,tokens,capacity,tokenSize,mapping,consRate,prodRate);
+  public CompositeFifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate){
+    super(name,tokens,capacity,tokenSize,mapping,consRate,prodRate);
     this.readers = new ArrayList<>();
   }
 
@@ -83,14 +77,37 @@ public class CompositeFifo extends Fifo implements Buffer{
     return status;
   }
 
+  public void fifoWrite(){
+    for(Fifo fifo : this.readers) {
+      int new_tokens = fifo.get_tokens()+fifo.getProdRate();
+      fifo.set_tokens(new_tokens);
+      assert (fifo.get_tokens()<=fifo.get_capacity()): "Error in writing composite fifo!!!";
+    }
+  }
+
+  public void fifoRead(){
+    int new_tokens = this.writer.get_tokens() - this.writer.getConsRate();
+    this.writer.set_tokens(new_tokens);
+    assert (this.writer.get_tokens()>=0) :  "Error reading composite Fifo!!!";
+  }
+
   public boolean canFlushData(){
     if(this.numberOfReads % readers.size() == 0)
       return true;
     return false; 
   }
 
+  public boolean canBeWritten(){
+    for(Fifo reader : readers){
+      if(reader.get_capacity() < reader.get_tokens() + reader.getProdRate())
+        return false;
+    }
+    return true;
+  }
+
   public double readTimeProducedToken() {
     Transfer status;
+    System.out.println("FIFO: "+this.getName());
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
 	  

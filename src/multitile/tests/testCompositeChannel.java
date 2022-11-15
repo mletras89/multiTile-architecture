@@ -43,6 +43,7 @@ import src.multitile.architecture.Processor;
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
+import src.multitile.application.FifoManagement;
 
 import java.io.*;
 import java.math.*;
@@ -60,7 +61,7 @@ public class testCompositeChannel {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing composite channel Implementation!");
 
-      Tile t1 = new Tile(1,"TileSingleCoreCrossbar2_1",1,1.0,2);
+      Tile t1 = new Tile(1,"Tile_testComposite",1,1.0,2);
       Memory memory1 = t1.getTileLocalMemory();
       Processor cpu1 = t1.getProcessors().get(0);
 
@@ -71,7 +72,7 @@ public class testCompositeChannel {
       a1.setOutputs(1);
       a1.setMapping(cpu1);
 
-      Actor a2 = new Actor("a2");
+      Actor a2 = new Actor("a2");  // is a multicast actor
       a2.setId(2) ;
       a2.setExecutionTime(10000);
       a2.setInputs(1);
@@ -99,29 +100,35 @@ public class testCompositeChannel {
       a5.setOutputs(0);
       a5.setMapping(cpu1);
 
-      Fifo c1 = new Fifo(1,"c1",0,1,1000000,memory1,1,1,a1,a2);
-      Fifo c2 = new Fifo(2,"c2",0,1,1000000,memory1,1,1,a2,a3);
-      Fifo c3 = new Fifo(3,"c3",0,1,1000000,memory1,1,1,a2,a4);
-      CompositeFifo composite_123 = new CompositeFifo(6,"c5",0,1,1000000,memory1,1,1,a4,a5);
-      Fifo c4 = new Fifo(4,"c4",0,1,1000000,memory1,1,1,a3,a5);
-      Fifo c5 = new Fifo(5,"c5",0,1,1000000,memory1,1,1,a4,a5);
+      Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);  // channel connected to writer
+      System.out.println("c1.id = "+c1.getId());
+      Fifo c2 = new Fifo("c2",0,1,1000000,memory1,1,1,a2,a3);  // channels connected to readers
+      System.out.println("c2.id = "+c2.getId());
+      Fifo c3 = new Fifo("c3",0,1,1000000,memory1,1,1,a2,a4);  // channels connected to readers
+      System.out.println("c3.id = "+c3.getId());
+      Fifo c4 = new Fifo("c4",0,1,1000000,memory1,1,1,a3,a5);
+      System.out.println("c4.id = "+c4.getId());
+      Fifo c5 = new Fifo("c5",0,1,1000000,memory1,1,1,a4,a5);
+      System.out.println("c5.id = "+c5.getId());
 
+      CompositeFifo composite_123 = FifoManagement.createCompositeChannel(c1,Arrays.asList(c2,c3), a2); //new CompositeFifo("c5",0,1,1000000,memory1,1,1,a4,a5);
+      System.out.println("Composite channel "+composite_123.getName()+" with id "+composite_123.getId());
 
       Vector<Fifo> v1 = new Vector<Fifo>();
-      v1.addElement(c1);
+      v1.addElement(composite_123);
       a1.setOutputFifos(v1);
 
-      Vector<Fifo> v2 = new Vector<Fifo>();
-      v2.addElement(new Fifo(c1));
-      a2.setInputFifos(v2);
-
-      Vector<Fifo> v3 = new Vector<Fifo>();
-      v3.addElement(new Fifo(c2));
-      v3.addElement(new Fifo(c3));
-      a2.setOutputFifos(v3);
+//      Vector<Fifo> v2 = new Vector<Fifo>();
+//      v2.addElement(new Fifo(c1));
+//      a2.setInputFifos(v2);
+//
+//      Vector<Fifo> v3 = new Vector<Fifo>();
+//      v3.addElement(new Fifo(c2));
+//      v3.addElement(new Fifo(c3));
+//      a2.setOutputFifos(v3);
 
       Vector<Fifo> v4 = new Vector<Fifo>();
-      v4.addElement(new Fifo(c2));
+      v4.addElement(composite_123);
       a3.setInputFifos(v4);
 
       Vector<Fifo> v5 = new Vector<Fifo>();
@@ -129,7 +136,7 @@ public class testCompositeChannel {
       a3.setOutputFifos(v5);
 
       Vector<Fifo> v6 = new Vector<Fifo>();
-      v6.addElement(new Fifo(c3));
+      v6.addElement(composite_123);
       a4.setInputFifos(v6);
 
       Vector<Fifo> v7 = new Vector<Fifo>();
@@ -149,10 +156,11 @@ public class testCompositeChannel {
       fifoMap.put(3,c3);
       fifoMap.put(4,c4);
       fifoMap.put(5,c5);
+      fifoMap.put(6,composite_123);
 
-      List<Actor> actors = Arrays.asList(a1,a2,a3,a4,a5);
+      List<Actor> actors = Arrays.asList(a1,a3,a4,a5);
 
-      t1.setTotalIterations(10);
+      t1.setTotalIterations(1);
       t1.runTileActors(actors,fifoMap);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
