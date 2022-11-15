@@ -37,7 +37,7 @@
  
 --------------------------------------------------------------------------
 */
-package src.multitile;
+package src.multitile.application;
 
 import java.util.*;
 import src.multitile.application.Actor;
@@ -45,17 +45,29 @@ import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 
 public class FifoManagement{
+  private static int fifoIdCounter;
+  private static int compositeCounter;
 
-//  public 
+  static{
+    fifoIdCounter=1;
+    compositeCounter = 1;
+  }
+
+  public static int getCompositeCounter(){
+    return compositeCounter++;
+  }
+
+  public static int getFifoId(){
+    return fifoIdCounter++;
+  }
 
   public static CompositeFifo createCompositeChannel(Fifo writer,List<Fifo> readerFifos, Actor multicastActor){
     // create a composite channel from a given list of fifos
     // a composite actor has only one writer and multiple readers
-    CompositeFifo compositeFifo;
+    CompositeFifo compositeFifo = new CompositeFifo("compositeFifo_"+getCompositeCounter(),writer.get_tokens(),writer.get_capacity(),writer.getTokenSize(),writer.getMapping(),writer.getConsRate(),writer.getProdRate(),writer.getSource(),writer.getDestination());
 
-
-
-
+    compositeFifo.setWriter(writer);
+    compositeFifo.setReaders(readerFifos);
 
     return compositeFifo;
   }
