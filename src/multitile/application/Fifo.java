@@ -51,15 +51,10 @@ public class Fifo implements Buffer{
   private int             consRate;
   private int             prodRate;
   private Queue<Transfer> timeProducedToken;  // each transfer transport a token, thus the due time is the produced token time
-
-  //private int   mapping;  // map to memory
-  private Memory mapping;
-
-  private HashMap<Integer,Fifo> mergedFifos;
+  private Memory mapping;   // map to memory 
 
   private Actor source; // source actor
   private Actor destination; // destination actor
-
 
   private Queue<Boolean> ReMapping; 
   private int numberOfReadsReMapping; 
@@ -68,8 +63,6 @@ public class Fifo implements Buffer{
   public int numberOfReads;
 
   private Vector<Integer> memory_footprint;
-
-
 
   public Fifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
     this.id                          = id;
@@ -84,7 +77,6 @@ public class Fifo implements Buffer{
     this.setSource(src);
     this.setDestination(dst);
     this.setNumberOfReadsTimeProduced(0);
-
     this.timeProducedToken = new LinkedList<>();
     this.numberOfReads = 0;
     this.ReMapping = new LinkedList<>();
@@ -198,7 +190,7 @@ public class Fifo implements Buffer{
   }
   
  
-  public boolean canReadData() {
+  public boolean canFlushData() {
     return true;
   }
   

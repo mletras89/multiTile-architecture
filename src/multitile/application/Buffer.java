@@ -39,7 +39,7 @@ package src.multitile.application;
 interface Buffer{
   public boolean isCompositeChannel();
   public double readTimeProducedToken();
-  public boolean canReadData();
+  public boolean canFlushData();
   public boolean removeReMapping();
 }
 

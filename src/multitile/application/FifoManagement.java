@@ -28,10 +28,11 @@
  -------------------------------------------------------------------------
  
   @author Martin Letras
-  @date   02 November 2022
+  @date  15 November 2022
   @version 1.1
   @ brief
-	This class implements methods for map management
+        This class implements methods for fifo management such as merging
+        the fifos
  
  
 --------------------------------------------------------------------------
@@ -41,25 +42,23 @@ package src.multitile;
 import java.util.*;
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
+import src.multitile.application.CompositeFifo;
 
-public class MapManagement{
-  public static boolean isActorIdinMap(Set<Actor> mapKeys, int id){
-    if (mapKeys.isEmpty())
-      return false;
-    for(Actor key: mapKeys){
-      if(key.getId() == id)
-        return true;
-    }
-    return false;
+public class FifoManagement{
+
+//  public 
+
+  public static CompositeFifo createCompositeChannel(Fifo writer,List<Fifo> readerFifos, Actor multicastActor){
+    // create a composite channel from a given list of fifos
+    // a composite actor has only one writer and multiple readers
+    CompositeFifo compositeFifo;
+
+
+
+
+
+    return compositeFifo;
   }
 
-  public static Fifo getFifoFromList(List<Fifo> fifos, int idFifo){
-    // the fifo must be in the list, if not it will assert
-    for(Fifo fifo : fifos){
-      if(fifo.getId() == idFifo)
-        return fifo;
-    }
-    assert (true) : "the Fifo id is not in the list, this must not happen!";
-    return null;
-  }
 }
+

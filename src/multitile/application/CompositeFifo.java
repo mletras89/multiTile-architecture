@@ -44,32 +44,38 @@ import src.multitile.architecture.Memory;
 import java.util.*;
 
 public class CompositeFifo extends Fifo implements Buffer{
-  List<Fifo> mergedFifos;
+  Fifo writer;
+  List<Fifo> readers;
+  //private HashMap<Integer,Fifo> readers;
 
+  private static int compositeActorID;
 
+  static{
+    compositeActorID =  0;
+  }
 
   public CompositeFifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
     super(id,name,tokens,capacity,tokenSize,mapping,consRate,prodRate,src,dst);
-    this.mergedFifos = new ArrayList<>();
+    this.readers = new ArrayList<>();
   }
 
   public CompositeFifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate){
     super(id,name,tokens,capacity,tokenSize,mapping,consRate,prodRate);
-    this.mergedFifos = new ArrayList<>();
+    this.readers = new ArrayList<>();
   }
 
   public CompositeFifo(CompositeFifo another){
     super(another);
-    this.setMergedFifos(another.getMergedFifos());
+    this.setReaders(another.getReaders());
+    this.setWriter(another.getWriter());
   }
-
 
   public boolean removeReMapping(){
     this.setNumberOfReadsReMapping(this.getNumberOfReadsReMapping()+1);
     int currentNumberOfReads = this.getNumberOfReadsReMapping();
     boolean status = false;
 	  
-    if(currentNumberOfReads % mergedFifos.size() == 0)
+    if(currentNumberOfReads % readers.size() == 0)
       status =  this.removeReMapping();
     else
       status = this.peekReMapping();
@@ -77,8 +83,8 @@ public class CompositeFifo extends Fifo implements Buffer{
     return status;
   }
 
-  public boolean canReadData(){
-    if(this.numberOfReads % mergedFifos.size() == 0)
+  public boolean canFlushData(){
+    if(this.numberOfReads % readers.size() == 0)
       return true;
     return false; 
   }
@@ -88,7 +94,7 @@ public class CompositeFifo extends Fifo implements Buffer{
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
 	  
-    if (currentNumberOfReads % mergedFifos.size()==0)
+    if (currentNumberOfReads % readers.size()==0)
       status = this.removeTimeProducedToken();
     else 
       status = this.peekTimeProducedToken(); 
@@ -99,13 +105,21 @@ public class CompositeFifo extends Fifo implements Buffer{
   public boolean isCompositeChannel(){
     return true;
   }
-  
-  public void setMergedFifos(List<Fifo> mergedFifos){
-    this.mergedFifos = mergedFifos;
+
+  public void setWriter(Fifo writer){
+    this.writer = writer;
   }
 
-  public List<Fifo> getMergedFifos(){
-    return this.mergedFifos;
+  public Fifo getWriter(){
+    return this.writer;
+  }
+
+  public void setReaders(List<Fifo> readers){
+    this.readers = readers;
+  }
+
+  public List<Fifo> getReaders(){
+    return this.readers;
   }
 
 }
