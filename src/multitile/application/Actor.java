@@ -148,15 +148,14 @@ public class Actor {
   // method that fires the actor
   public boolean fire(Map<Integer,Fifo> fifos){
     //System.out.println("Firing actor "+this.name);
-    
+    System.out.println("Firing "+this.getName());
+
     for(Fifo fifo : outputFifos){
-      fifos.get(fifo.getId()).set_tokens(fifos.get(fifo.getId()).get_tokens()+fifos.get(fifo.getId()).getProdRate()); 
-      assert (fifos.get(fifo.getId()).get_tokens()<=fifos.get(fifo.getId()).get_capacity()): "Something weird!";
+      fifos.get(fifo.getId()).fifoWrite();
     }
 
     for(Fifo fifo: inputFifos){
-        fifos.get(fifo.getId()).set_tokens(fifos.get(fifo.getId()).get_tokens() - fifos.get(fifo.getId()).getConsRate());
-        assert (fifos.get(fifo.getId()).get_tokens()>=0) :  "Second assert message";
+      fifos.get(fifo.getId()).fifoRead();
     }
        
     return true;
