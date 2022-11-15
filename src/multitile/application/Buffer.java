@@ -38,6 +38,11 @@ package src.multitile.application;
 
 interface Buffer{
   public boolean isCompositeChannel();
+  // can read is the same for any buffer
+  //public boolean fifoCanBeRead();
+  public boolean fifoCanBeWritten();
+  public void fifoWrite();
+  public void fifoRead();
   public double readTimeProducedToken();
   public boolean canFlushData();
   public boolean removeReMapping();
