@@ -78,7 +78,7 @@ public class testWriteReadTransfers {
       a5.setOutputs(0);
       a5.setMapping(cpu1);
 
-      Fifo c1 = new Fifo(1,"c1",0,1,1000000,memory1,1,1,a1,a5);
+      Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a5);
 
       Vector<Fifo> v1 = new Vector<Fifo>();
       v1.addElement(c1);
