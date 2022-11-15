@@ -38,6 +38,7 @@
 package src.multitile.application;
 
 import src.multitile.Transfer;
+//import src.multitile.FifoManagement;
 import src.multitile.architecture.Memory;
 import java.util.*;
 
@@ -64,8 +65,9 @@ public class Fifo implements Buffer{
 
   private Vector<Integer> memory_footprint;
 
-  public Fifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
-    this.id                          = id;
+  public Fifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
+    //this.id                          = id;
+    this.id                          = FifoManagement.getFifoId();
     this.name                        = name;
     this.tokens                      = tokens;
     this.capacity                    = capacity;
@@ -83,8 +85,9 @@ public class Fifo implements Buffer{
     this.setNumberOfReadsReMapping(0);
   }
 
-  public Fifo(int id, String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate){
-    this.id                          = id;
+  public Fifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate){
+  //  this.id                          = id;
+    this.id                          = FifoManagement.getFifoId();
     this.name                        = name;
     this.tokens                      = tokens;
     this.capacity                    = capacity;
@@ -154,6 +157,16 @@ public class Fifo implements Buffer{
     return this.getId()==fifo.getId() && this.getName().equals(fifo.getName());
   }
 
+  public void fifoWrite(){
+    this.set_tokens(this.get_tokens()+this.getProdRate()); 
+    assert (this.get_tokens()<= this.get_capacity()): "Error in writing!!!";
+  }
+
+  public void fifoRead(){
+    this.set_tokens(this.get_tokens() - this.getConsRate());
+    assert (this.get_tokens()>=0) :  "Error in reading!!!";
+  }
+
   public boolean fifoCanBeWritten(){
     if(this.get_capacity() < this.get_tokens() + this.getProdRate())
       return false;
@@ -182,6 +195,7 @@ public class Fifo implements Buffer{
 
   public double readTimeProducedToken() {
     Transfer status;
+    System.out.println("FIFOS: "+this.getName());
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
     
