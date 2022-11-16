@@ -50,19 +50,17 @@ public class Actor {
   private Vector<Fifo> inputFifos;
   private Vector<Fifo> outputFifos;
 
-
-  private HashMap<Integer,Integer> inputMergedFifos;  // the key is the fifo ID, and the value the merged fifo id
-  private HashMap<Integer,ArrayList<Integer>> outputMergedFifos;
-  
   private Processor mapping;  // mapping to the Processor object
   private double executionTime;  // the execution time is associated with the mapping
-  
-  private TYPE type;
-  private boolean mergeBroadcast = false;
-  
-  public static enum TYPE {
+
+  private ACTOR_TYPE type;
+
+//  private HashMap<Integer,Integer> inputMergedFifos;  // the key is the fifo ID, and the value the merged fifo id
+//  private HashMap<Integer,ArrayList<Integer>> outputMergedFifos;
+ 
+  public static enum ACTOR_TYPE {
       ACTOR,
-      BROADCAST
+      MULTICAST
     }
     
   public Actor(
@@ -77,22 +75,13 @@ public class Actor {
     this.setPriority(priority);
     this.setInputs(inputs);
     this.setOutputs(outputs);
-
-    this.setInputMergedFiFos(new HashMap<Integer,Integer>());
-    this.setOutputMergedFifos(new HashMap<Integer,ArrayList<Integer>>()); 
-
-    if (name.contains("broadcast"))
-      this.setType(TYPE.BROADCAST);
-    else
-      this.setType(TYPE.ACTOR);
-
-    this.mergeBroadcast = false;
-
-    this.setMapping(mapping);
     this.setExecutionTime(executionTime);
-
+    this.setMapping(mapping);
+    this.setType(ACTOR_TYPE.ACTOR);
     this.inputFifos  = new Vector<Fifo>();   
     this.outputFifos = new Vector<Fifo>();    
+//    this.setInputMergedFiFos(new HashMap<Integer,Integer>());
+//    this.setOutputMergedFifos(new HashMap<Integer,ArrayList<Integer>>()); 
   }
     
   public Actor(Actor another){
@@ -101,20 +90,13 @@ public class Actor {
     this.setPriority(another.getPriority());
     this.setInputs(another.getInputs());
     this.setOutputs(another.getOutputs());
+    this.setExecutionTime(another.getExecutionTime());
+    this.setMapping(another.getMapping());
+    this.setType(ACTOR_TYPE.ACTOR);
     this.inputFifos    = another.getInputFifos();
     this.outputFifos   = another.getOutputFifos();
-
-    this.setInputMergedFiFos(another.getInputMergedFiFos());   
-    this.setOutputMergedFifos(another.getOutputMergedFifos());
-
-    this.setType(another.getType());
-    this.mergeBroadcast = another.isMergeBroadcast();
-    
-    this.setMapping(another.getMapping());
-    this.setExecutionTime(another.getExecutionTime());
-
-    this.inputFifos  = new Vector<Fifo>();   
-    this.outputFifos = new Vector<Fifo>();    
+//    this.setInputMergedFiFos(another.getInputMergedFiFos());   
+//    this.setOutputMergedFifos(another.getOutputMergedFifos());
   }
     
   public Actor(String name){
@@ -231,37 +213,30 @@ public class Actor {
     this.outputFifos = outputs;
   }
 
-  public TYPE getType() {
+  public ACTOR_TYPE getType() {
     return type;
   }
   
-  public void setType(TYPE type) {
+  public void setType(ACTOR_TYPE type) {
     this.type = type;
   }
 
-  public boolean isMergeBroadcast() {
-    return mergeBroadcast;
-  }
   
-  public void setMergeBroadcast(boolean mergeBroadcast) {
-    this.mergeBroadcast = mergeBroadcast;
-  }
+//  public HashMap<Integer,Integer> getInputMergedFiFos() {
+//    return inputMergedFifos;
+//  }
+//  
+//  public void setInputMergedFiFos(HashMap<Integer,Integer> inputMergedFifos) {
+//    this.inputMergedFifos = inputMergedFifos;
+//  }
   
-  public HashMap<Integer,Integer> getInputMergedFiFos() {
-    return inputMergedFifos;
-  }
-  
-  public void setInputMergedFiFos(HashMap<Integer,Integer> inputMergedFifos) {
-    this.inputMergedFifos = inputMergedFifos;
-  }
-  
-  public HashMap<Integer,ArrayList<Integer>> getOutputMergedFifos() {
-    return outputMergedFifos;
-  }
-  
-  public void setOutputMergedFifos(HashMap<Integer,ArrayList<Integer>> outputMergedFifos) {
-    this.outputMergedFifos = outputMergedFifos;
-  }
+//  public HashMap<Integer,ArrayList<Integer>> getOutputMergedFifos() {
+//    return outputMergedFifos;
+//  }
+//  
+//  public void setOutputMergedFifos(HashMap<Integer,ArrayList<Integer>> outputMergedFifos) {
+//    this.outputMergedFifos = outputMergedFifos;
+//  }
   
   public int getNInputs() {
     return this.inputFifos.size();
