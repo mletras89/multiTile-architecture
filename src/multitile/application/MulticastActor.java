@@ -34,6 +34,9 @@
     Multicast actor that is part of an application
 --------------------------------------------------------------------------
 */
+package src.multitile.application;
+
+import src.multitile.architecture.Processor;
 
 public class MulticastActor extends Actor{
   
@@ -50,7 +53,13 @@ public class MulticastActor extends Actor{
     this.setType(ACTOR_TYPE.MULTICAST);
     this.mergeMulticast = false;
   }
-  
+
+  public MulticastActor(String name){
+    super(name);
+    this.setType(ACTOR_TYPE.MULTICAST);
+    this.mergeMulticast = false;
+  }
+
   public boolean isMergeMulticast(){
     return this.mergeMulticast;
   }
