@@ -50,7 +50,7 @@ public class FifoManagement{
 
   static{
     fifoIdCounter=1;
-    compositeCounter = 1;
+    compositeCounter = 0;
   }
 
   public static int getCompositeCounter(){
@@ -64,10 +64,19 @@ public class FifoManagement{
   public static CompositeFifo createCompositeChannel(Fifo writer,List<Fifo> readerFifos, Actor multicastActor){
     // create a composite channel from a given list of fifos
     // a composite actor has only one writer and multiple readers
-    CompositeFifo compositeFifo = new CompositeFifo("compositeFifo_"+getCompositeCounter(),writer.get_tokens(),writer.get_capacity(),writer.getTokenSize(),writer.getMapping(),writer.getConsRate(),writer.getProdRate(),writer.getSource(),writer.getDestination());
+    //
+    // the capacity of the composite is the addition of the capacity of the writer and the max capacity of readers
+    int capacityWriter = writer.get_capacity();
+    int capacityReader = 0;
 
-    compositeFifo.setWriter(writer);
-    compositeFifo.setReaders(readerFifos);
+    for(Fifo fifo : readerFifos){
+      if(fifo.get_capacity() > capacityReader)
+        capacityReader = fifo.get_capacity();
+    }
+
+    // when doing the composite channel, we take the mapping of the writer
+           
+    CompositeFifo compositeFifo = new CompositeFifo("compositeFifo_"+getCompositeCounter(),writer.get_tokens(),capacityWriter+capacityReader,writer.getTokenSize(),writer.getMapping(),writer.getConsRate(),writer.getProdRate(),writer.getSource(),readerFifos);
 
     return compositeFifo;
   }
