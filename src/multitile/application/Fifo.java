@@ -127,7 +127,15 @@ public class Fifo implements Buffer{
     this.ReMapping = new LinkedList<>();
 
   }
-  
+
+  public int getInitialTokens(int initial_tokens){
+    return this.initial_tokens;
+  }
+
+  public void setInitialTokens(int initial_tokens){
+    this.initial_tokens = initial_tokens;
+  }
+
   public void setNumberOfReadsReMapping(int numberOfReads) {
     this.numberOfReadsReMapping = numberOfReads;
   }
@@ -162,18 +170,21 @@ public class Fifo implements Buffer{
     assert (this.get_tokens()<= this.get_capacity()): "Error in writing!!!";
   }
 
-  public void fifoRead(){
+  public void fifoRead(int idActorReader){
+    assert idActorReader == this.getDestination().getId(): "Wrong reading attemp!!!";
     this.set_tokens(this.get_tokens() - this.getConsRate());
     assert (this.get_tokens()>=0) :  "Error in reading!!!";
   }
 
   public boolean fifoCanBeWritten(){
+    System.out.println("Checking regular fifo");
     if(this.get_capacity() < this.get_tokens() + this.getProdRate())
       return false;
     return true;
   }
 
-  public boolean fifoCanBeRead(){
+  public boolean fifoCanBeRead(int idWhoIsReading){
+    assert idWhoIsReading == this.getDestination().getId(): "Wrong guard reading attemp!!!";
     if(this.get_tokens() - this.getConsRate() < 0)
       return false; 
     return true;
