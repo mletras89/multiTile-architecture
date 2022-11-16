@@ -35,16 +35,30 @@
 	a set of fifos
 --------------------------------------------------------------------------
 */
+package src.multitile.application;
+
+import java.util.*;
 
 public class Application{
-  private Map<Integer,Actor> actors;
+  private List<Actor> actors;
   private Map<Integer,Fifo> fifos;
 
   public Application(){
-    actors = new HashMap<>();
+    actors = new ArrayList<>();
     fifos = new HashMap<>();
   }
+  
+  public void setActors(List<Actor> actors){
+    this.actors = actors;
+  }
 
+  public void setFifos(Map<Integer,Fifo> fifos){
+    this.fifos = fifos;
+  }
+
+  public Map<Integer,Fifo> getFifos(){
+    return fifos;
+  }
 }
 
 
