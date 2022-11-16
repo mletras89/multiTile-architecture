@@ -40,16 +40,23 @@ package src.multitile.application;
 import java.util.*;
 
 public class Application{
-  private List<Actor> actors;
+  private Map<Integer,Actor> actors;
   private Map<Integer,Fifo> fifos;
 
   public Application(){
-    actors = new ArrayList<>();
-    fifos = new HashMap<>();
+    actors = new HashMap<>();
+    fifos  = new HashMap<>();
   }
   
-  public void setActors(List<Actor> actors){
+  public void setActors(Map<Integer,Actor> actors){
     this.actors = actors;
+  }
+
+  public void setActors(List<Actor> actors){
+    this.actors = new HashMap<>();
+    for(Actor actor:actors){
+      this.actors.put(actor.getId(),actor);
+    }
   }
 
   public void setFifos(Map<Integer,Fifo> fifos){
@@ -59,6 +66,11 @@ public class Application{
   public Map<Integer,Fifo> getFifos(){
     return fifos;
   }
+
+  public Map<Integer,Actor> getActors(){
+    return actors;
+  }
+
 }
 
 
