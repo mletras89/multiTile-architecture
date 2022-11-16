@@ -40,7 +40,9 @@ import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
 
+import src.multitile.application.Application;
 import src.multitile.application.Actor;
+import src.multitile.application.MulticastActor;
 import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 import src.multitile.application.FifoManagement;
@@ -72,7 +74,7 @@ public class testCompositeChannel {
       a1.setOutputs(1);
       a1.setMapping(cpu1);
 
-      Actor a2 = new Actor("a2");  // is a multicast actor
+      MulticastActor a2 = new MulticastActor("a2");  // is a multicast actor
       a2.setId(2) ;
       a2.setExecutionTime(10000);
       a2.setInputs(1);
@@ -118,15 +120,6 @@ public class testCompositeChannel {
       v1.addElement(composite_123);
       a1.setOutputFifos(v1);
 
-//      Vector<Fifo> v2 = new Vector<Fifo>();
-//      v2.addElement(new Fifo(c1));
-//      a2.setInputFifos(v2);
-//
-//      Vector<Fifo> v3 = new Vector<Fifo>();
-//      v3.addElement(new Fifo(c2));
-//      v3.addElement(new Fifo(c3));
-//      a2.setOutputFifos(v3);
-
       Vector<Fifo> v4 = new Vector<Fifo>();
       v4.addElement(composite_123);
       a3.setInputFifos(v4);
@@ -148,8 +141,6 @@ public class testCompositeChannel {
       v8.addElement(new Fifo(c5));
       a5.setInputFifos(v8);
 
-
-
       Map<Integer,Fifo> fifoMap = new HashMap<Integer,Fifo>();
       fifoMap.put(1,c1);
       fifoMap.put(2,c2);
@@ -159,9 +150,13 @@ public class testCompositeChannel {
       fifoMap.put(6,composite_123);
 
       List<Actor> actors = Arrays.asList(a1,a3,a4,a5);
+      
+      Application app = new Application();
+      app.setActors(actors);
+      app.setFifos(fifoMap);
 
-      t1.setTotalIterations(1);
-      t1.runTileActors(actors,fifoMap);
+      t1.setTotalIterations(10);
+      t1.runTileActors(actors,app.getFifos());
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing composite channel Implementation done!");
