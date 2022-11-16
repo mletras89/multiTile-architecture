@@ -65,14 +65,14 @@ public class Actor {
       BROADCAST
     }
     
-  public Actor(int id,
+  public Actor(
                String name,
                int priority,
                int inputs, 
                int outputs, 
                double executionTime, 
                Processor mapping){
-    this.setId(id);
+    this.setId(ActorManagement.getActorId());
     this.setName(name);
     this.setPriority(priority);
     this.setInputs(inputs);
@@ -118,6 +118,7 @@ public class Actor {
   }
     
   public Actor(String name){
+    this.setId(ActorManagement.getActorId());
     this.setName(name);
     this.inputFifos  = new Vector<Fifo>();   
     this.outputFifos = new Vector<Fifo>();    
@@ -139,7 +140,7 @@ public class Actor {
     
     for(Fifo fifo : this.inputFifos){
       Fifo selectedFifo = fifos.get(fifo.getId());
-      if(!selectedFifo.fifoCanBeRead())
+      if(!selectedFifo.fifoCanBeRead(this.getId()))
         return false; 
     }
     return true;
@@ -147,17 +148,16 @@ public class Actor {
   
   // method that fires the actor
   public boolean fire(Map<Integer,Fifo> fifos){
-    //System.out.println("Firing actor "+this.name);
-    System.out.println("Firing "+this.getName());
+    System.out.println("Firing actor "+this.name);
 
     for(Fifo fifo : outputFifos){
       fifos.get(fifo.getId()).fifoWrite();
     }
 
     for(Fifo fifo: inputFifos){
-      fifos.get(fifo.getId()).fifoRead();
+      fifos.get(fifo.getId()).fifoRead(this.getId());
     }
-       
+    System.out.println("Firing done!");
     return true;
   }
 
