@@ -46,11 +46,13 @@ import java.util.*;
 public class CompositeFifo extends Fifo implements Buffer{
   private Map<Integer,Fifo> readers; // the key is the id of the actor reading the fifo
   private List<Actor> destinations;
-  
-  public CompositeFifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, List<Fifo> destinationFifos){
+  private MulticastActor multicastActor;
+
+  public CompositeFifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, List<Fifo> destinationFifos,MulticastActor multicastActor){
     super(name,tokens,capacity,tokenSize,mapping,consRate,prodRate);
     this.setSource(src);
     this.setDestinations(destinationFifos);
+    this.setMulticastActor(multicastActor);
   }
 
 //  public CompositeFifo(CompositeFifo another){
@@ -136,7 +138,7 @@ public class CompositeFifo extends Fifo implements Buffer{
 
   public double readTimeProducedToken() {
     Transfer status;
-    System.out.println("FIFO: "+this.getName());
+    //System.out.println("FIFO: "+this.getName());
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
 	  
@@ -150,6 +152,14 @@ public class CompositeFifo extends Fifo implements Buffer{
 
   public boolean isCompositeChannel(){
     return true;
+  }
+
+  public MulticastActor getMulticastActor(){
+    return this.multicastActor;
+  }
+
+  public void setMulticastActor(MulticastActor multicastActor){
+    this.multicastActor = multicastActor;
   }
 
 //  public void setReaders(List<Fifo> readers){
