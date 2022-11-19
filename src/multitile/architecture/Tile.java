@@ -41,6 +41,7 @@ package src.multitile.architecture;
 
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
+import src.multitile.application.Application;
 
 import src.multitile.FCFS;
 import src.multitile.Action;
@@ -104,7 +105,9 @@ public class Tile{
     return this.crossbar;
   }
 
-  public void runTileActors(List<Actor> actors, Map<Integer,Fifo> fifoMap){ 
+  public void runTileActors(Application application){ 
+    List<Actor> actors = application.getListActors(); 
+    Map<Integer,Fifo> fifoMap = application.getFifos();
     this.resetTile();
     int runIterations = 0;
     while(runIterations < this.totalIterations){
