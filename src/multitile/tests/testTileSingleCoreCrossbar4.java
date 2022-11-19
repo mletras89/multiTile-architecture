@@ -40,9 +40,9 @@ import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
 
+import src.multitile.application.Application;
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
-
 
 import java.io.*;
 import java.math.*;
@@ -150,8 +150,12 @@ public class testTileSingleCoreCrossbar4{
 
       List<Actor> actors = Arrays.asList(a1,a2,a3,a4,a5);
 
+      Application application = new Application();
+      application.setActors(actors);
+      application.setFifos(fifoMap);
+
       t1.setTotalIterations(5);
-      t1.runTileActors(actors,fifoMap);
+      t1.runTileActors(application);
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing testTileSingleCoreCrossbar4 Implementation done!");
