@@ -130,7 +130,7 @@ public class Actor {
   
   // method that fires the actor
   public boolean fire(Map<Integer,Fifo> fifos){
-    System.out.println("Firing actor "+this.name);
+    //System.out.println("Firing actor "+this.name);
 
     for(Fifo fifo : outputFifos){
       fifos.get(fifo.getId()).fifoWrite();
@@ -139,7 +139,7 @@ public class Actor {
     for(Fifo fifo: inputFifos){
       fifos.get(fifo.getId()).fifoRead(this.getId());
     }
-    System.out.println("Firing done!");
+    //System.out.println("Firing done!");
     return true;
   }
 
@@ -240,6 +240,24 @@ public class Actor {
   
   public int getNInputs() {
     return this.inputFifos.size();
+  }
+
+  public void removeInputFifo(int fifoId){
+    int indexRemove=0;
+    for(int i=0; i<this.getInputFifos().size();i++){
+      if(this.getInputFifos().get(i).getId() == fifoId)
+        indexRemove = i;
+    }
+    this.getInputFifos().remove(indexRemove);
+  }
+  
+  public void removeOutputFifo(int fifoId){
+    int indexRemove=0;
+    for(int i=0;i<this.getOutputFifos().size();i++){
+      if(this.getOutputFifos().get(i).getId() == fifoId)
+        indexRemove = i;
+    }
+    this.getOutputFifos().remove(indexRemove);
   }
 
 }
