@@ -177,7 +177,7 @@ public class Fifo implements Buffer{
   }
 
   public boolean fifoCanBeWritten(){
-    System.out.println("Checking regular fifo");
+    //System.out.println("Checking regular fifo");
     if(this.get_capacity() < this.get_tokens() + this.getProdRate())
       return false;
     return true;
@@ -206,7 +206,7 @@ public class Fifo implements Buffer{
 
   public double readTimeProducedToken() {
     Transfer status;
-    System.out.println("FIFOS: "+this.getName());
+    //System.out.println("FIFOS: "+this.getName());
     this.numberOfReadsTimeProduced++;
     int currentNumberOfReads = this.numberOfReadsTimeProduced;
     
