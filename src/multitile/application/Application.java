@@ -71,6 +71,14 @@ public class Application{
     return actors;
   }
 
+  public List<Actor> getListActors(){
+    List<Actor> listActors = new ArrayList<>();
+    for(Map.Entry<Integer,Actor> actor : actors.entrySet() ){
+      listActors.add(actor.getValue());
+    } 
+    return listActors;
+  }
+
 }
 
 
