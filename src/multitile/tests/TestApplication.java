@@ -30,7 +30,7 @@
   @date  19 November 2022
   @version 1.1
   @ brief
-	Sample test application used for testing 
+	Sample sobel test application used for testing 
  
 --------------------------------------------------------------------------
 */
