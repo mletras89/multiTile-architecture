@@ -40,22 +40,28 @@ package src.multitile.application;
 import java.util.*;
 
 public class Application{
-  private Map<Integer,Actor> actors;
-  private Map<Integer,Fifo> fifos;
+  private static Map<Integer,Actor> actors;
+  private static Map<Integer,Fifo> fifos;
 
   public Application(){
     actors = new HashMap<>();
     fifos  = new HashMap<>();
   }
-  
+
+  public void resetApplication(){
+    for(Map.Entry<Integer,Fifo> fifo : fifos.entrySet()){
+      fifo.getValue().resetFifo();
+    }
+  }
+
   public void setActors(Map<Integer,Actor> actors){
     this.actors = actors;
   }
 
-  public void setActors(List<Actor> actors){
+  public void setActors(List<Actor> actorsList){
     this.actors = new HashMap<>();
-    for(Actor actor:actors){
-      this.actors.put(actor.getId(),actor);
+    for(Actor actor:actorsList){
+      this.actors.put(actor.getId(),new Actor(actor));
     }
   }
 
@@ -73,9 +79,12 @@ public class Application{
 
   public List<Actor> getListActors(){
     List<Actor> listActors = new ArrayList<>();
+    System.out.println("Getting list ");
     for(Map.Entry<Integer,Actor> actor : actors.entrySet() ){
+      System.out.println("Adding: "+actor.getValue().getName());
       listActors.add(actor.getValue());
-    } 
+    }
+    System.out.println("done Getting list ");
     return listActors;
   }
 
