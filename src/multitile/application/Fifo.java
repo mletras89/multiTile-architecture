@@ -232,10 +232,13 @@ public class Fifo implements Buffer{
     return status;
   }
   
-  public void reset_Fifo(){
+  public void resetFifo(){
     this.tokens = this.initial_tokens;
-    this.memory_footprint.clear();
-    this.memory_footprint.add(this.initial_tokens);
+    this.timeProducedToken.clear();
+    this.numberOfReads = 0;
+    this.numberOfReadsTimeProduced = 0;
+    this.numberOfReadsReMapping = 0;
+    this.ReMapping.clear();
   }
 
   public void update_memory_footprint(){
