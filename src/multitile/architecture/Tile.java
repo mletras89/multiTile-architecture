@@ -76,8 +76,8 @@ public class Tile{
     for(int i=0; i<this.numberProcessors;i++){
       Processor processor = new Processor(i,"Processor"+i);
       processors.add(processor);
-      crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
     }
+    crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
     tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
     this.totalIterations = 1;
   }
@@ -91,10 +91,19 @@ public class Tile{
     for(int i=0; i<this.numberProcessors;i++){
       Processor processor = new Processor(i,this.name+"_Processor"+i);
       processors.add(processor);
-      crossbar = new Crossbar(1,"crossbar_"+this.name, crossbarBw,crossbarChannels);
     }
+    crossbar = new Crossbar(1,"crossbar_"+this.name, crossbarBw,crossbarChannels);
     tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
     this.totalIterations = 1;
+  }
+
+  public void setName(String name){
+    this.name = name;
+    crossbar.setName("crossbar_"+this.name);
+    for(int i=0; i<this.numberProcessors;i++){
+      processors.get(i).getScheduler().setName(this.name+"_Processor"+i);
+    }
+    tileLocalMemory.setName("TileLocalMemory_"+this.name);
   }
 
   public boolean equals(Tile tile){
@@ -268,10 +277,6 @@ public class Tile{
   
   public String getName(){
     return this.name;
-  }
-
-  public void setName(String name){
-    this.name = name;
   }
 
   public int getId(){
