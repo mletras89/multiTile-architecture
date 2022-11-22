@@ -43,7 +43,6 @@ import src.multitile.architecture.Processor;
 
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
-import src.multitile.application.MulticastActor;
 import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 import src.multitile.application.FifoManagement;
@@ -61,7 +60,6 @@ import java.util.stream.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-
 public class TestApplication{
   private Application sampleApplication;
 
@@ -77,12 +75,14 @@ public class TestApplication{
       a1.setOutputs(1);
       a1.setMapping(cpu1);
 
-      MulticastActor a2 = new MulticastActor("a2");  // is a multicast actor
+      Actor a2 = new Actor("a2");  // is a multicast actor
       a2.setId(2) ;
       a2.setExecutionTime(10000);
       a2.setInputs(1);
       a2.setOutputs(2);
       a2.setMapping(cpu1);
+      a2.setType(Actor.ACTOR_TYPE.MULTICAST);
+      System.out.println("Actor 2 type:"+a2.getType());
 
       Actor a3 = new Actor("a3");
       a3.setId(3) ;
@@ -160,7 +160,7 @@ public class TestApplication{
       List<Actor> actors = Arrays.asList(a1,a2,a3,a4,a5);
       sampleApplication = new Application();
 
-      sampleApplication.setActors(actors);
+      sampleApplication.setActorsFromList(actors);
       sampleApplication.setFifos(fifoMap);
   }
 
