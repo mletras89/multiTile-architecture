@@ -61,7 +61,7 @@ public class FifoManagement{
     return fifoIdCounter++;
   }
 
-  public static CompositeFifo createCompositeChannel(Fifo writer,List<Fifo> readerFifos, MulticastActor multicastActor){
+  public static CompositeFifo createCompositeChannel(Fifo writer,List<Fifo> readerFifos, Actor multicastActor){
     // create a composite channel from a given list of fifos
     // a composite actor has only one writer and multiple readers
     //
