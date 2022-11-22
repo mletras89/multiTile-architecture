@@ -157,6 +157,9 @@ public class Tile{
           // update the write transfers of each processor with the correct start and due time
           Map<Actor,List<Transfer>> processorWriteTransfers = crossbar.getScheduledWriteTransfers(processors.get(i));
           processors.get(i).getScheduler().setWriteTransfers(processorWriteTransfers);
+          // update the last event in processor, taking into the account the processorWriteTransfers
+          processors.get(i).getScheduler().updateLastEventAfterWrite(action);
+          // insert the time of the produced tokens by acton into the correspondent fifos
           processors.get(i).getScheduler().produceTokensinFifo(action,fifoMap);
 
           processors.get(i).getScheduler().getReadTransfers().clear();
