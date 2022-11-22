@@ -46,9 +46,9 @@ import java.util.*;
 public class CompositeFifo extends Fifo implements Buffer{
   private Map<Integer,Fifo> readers; // the key is the id of the actor reading the fifo
   private List<Actor> destinations;
-  private MulticastActor multicastActor;
+  private Actor multicastActor;
 
-  public CompositeFifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, List<Fifo> destinationFifos,MulticastActor multicastActor){
+  public CompositeFifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, List<Fifo> destinationFifos,Actor multicastActor){
     super(name,tokens,capacity,tokenSize,mapping,consRate,prodRate);
     this.setSource(src);
     this.setDestinations(destinationFifos);
@@ -154,11 +154,11 @@ public class CompositeFifo extends Fifo implements Buffer{
     return true;
   }
 
-  public MulticastActor getMulticastActor(){
+  public Actor getMulticastActor(){
     return this.multicastActor;
   }
 
-  public void setMulticastActor(MulticastActor multicastActor){
+  public void setMulticastActor(Actor multicastActor){
     this.multicastActor = multicastActor;
   }
 
