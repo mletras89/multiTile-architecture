@@ -208,6 +208,13 @@ public class Scheduler{
       }
     }
   }
+  
+  public void updateLastEventAfterWrite(Action action){
+    double lastWrite = this.getTimeLastWriteofActor(action.getActor());
+
+    if (lastWrite > this.lastEventinProcessor)
+      this.lastEventinProcessor = lastWrite;
+  }
 
   public void commitSingleAction(Action commitAction){
     // proceed to schedule the Action
