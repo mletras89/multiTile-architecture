@@ -48,24 +48,42 @@ import src.multitile.application.CompositeFifo;
 
 public class ApplicationManagement{
   
-  public static Map<Integer,MulticastActor> getMulticastActors(Application app){
-    Map<Integer,MulticastActor> multicastActors = new HashMap<>();
+  public static Map<Integer,Actor> getMulticastActors(Application app){
+    //System.out.println("getMulticastActors");
+    Map<Integer,Actor> multicastActors = new HashMap<>();
     for(Map.Entry<Integer,Actor> actor : app.getActors().entrySet()){
-      if (actor.getValue().getType() == Actor.ACTOR_TYPE.MULTICAST){
-        multicastActors.put(actor.getKey(),(MulticastActor)actor.getValue());
+      //System.out.println("Name: "+actor.getValue().getName());
+      //System.out.println("\tType: "+actor.getValue().getType());
+      if (actor.getValue().isMulticastActor() == true){
+        //System.out.println("IS Multicast actor "+actor.getValue().getName());
+        multicastActors.put(actor.getKey(),actor.getValue());
       }
     }
     return multicastActors;
   }
 
+  // this method set to true all the multicast actors in the application
+  public static void setAllMulticastActorsAsMergeable(Application app){
+    //System.out.println("setAllMulticastActorsAsMergeable");
+    // get all the multicast actors
+    Map<Integer,Actor> multicastActors = getMulticastActors(app);
+    
+    for(Map.Entry<Integer,Actor> multicastActor : multicastActors.entrySet()){
+      Actor selectedActor = multicastActor.getValue();
+      //System.out.println("Setting: "+selectedActor.getName());
+      app.getActors().get(selectedActor.getId()).setMergeMulticast(true);
+    }
+  }
+
+
   // these method receives an application and returns a modified application removing 
   // all the mergeable multicast actors from the application and replace them by composite channels
   public static void collapseMergeableMulticastActors(Application app){
     // get all the multicast actors
-    Map<Integer,MulticastActor> multicastActors = getMulticastActors(app);
+    Map<Integer,Actor> multicastActors = getMulticastActors(app);
     
-    for(Map.Entry<Integer,MulticastActor> multicastActor : multicastActors.entrySet()){
-      MulticastActor selectedActor = multicastActor.getValue();
+    for(Map.Entry<Integer,Actor> multicastActor : multicastActors.entrySet()){
+      Actor selectedActor = multicastActor.getValue();
       
       if(selectedActor.isMergeMulticast() == true){
         // if the actor is mergeable, we remove it and replace it by a composite channel
@@ -88,6 +106,10 @@ public class ApplicationManagement{
           // connectinf the outputs of the composite fifo
           app.getActors().get(idReaderActor).getInputFifos().add(compositeFifo);
         }
+        // remove the merged multicast actor from the map of actors
+        app.getActors().remove(multicastActor.getKey());
+        // add the new composite fifo into the app fifo map
+        app.getFifos().put(compositeFifo.getId(),compositeFifo);
       }
     }
   }
