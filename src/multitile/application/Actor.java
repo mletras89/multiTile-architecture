@@ -39,7 +39,7 @@ package src.multitile.application;
 import src.multitile.architecture.Processor;
 import java.util.*;
 
-public class Actor {
+public class Actor{
   private int id;
   private String name;
   private int priority;    
@@ -54,6 +54,7 @@ public class Actor {
   private double executionTime;  // the execution time is associated with the mapping
 
   private ACTOR_TYPE type;
+  private boolean mergeMulticast = false;
 
 //  private HashMap<Integer,Integer> inputMergedFifos;  // the key is the fifo ID, and the value the merged fifo id
 //  private HashMap<Integer,ArrayList<Integer>> outputMergedFifos;
@@ -103,11 +104,18 @@ public class Actor {
     this.setId(ActorManagement.getActorId());
     this.setName(name);
     this.inputFifos  = new Vector<Fifo>();   
-    this.outputFifos = new Vector<Fifo>();    
+    this.outputFifos = new Vector<Fifo>();   
+    this.setType(ACTOR_TYPE.ACTOR);
   }
 
   public boolean equals(Actor actor){
     return this.getId() == actor.getId() && this.getName().equals(actor.getName());
+  }
+
+  public boolean isMulticastActor(){
+    if (this.getType() == ACTOR_TYPE.ACTOR)
+    return false;
+    return true;
   }
 
   // method for checking if an actor can FIRE
@@ -116,6 +124,7 @@ public class Actor {
 
     for(Fifo fifo : this.outputFifos){
       Fifo selectedFifo = fifos.get(fifo.getId());
+      //System.out.println("Checking fifo "+selectedFifo.getName()+" ?");
       if (!selectedFifo.fifoCanBeWritten())
         return false;
     }
@@ -258,6 +267,14 @@ public class Actor {
         indexRemove = i;
     }
     this.getOutputFifos().remove(indexRemove);
+  }
+
+  public boolean isMergeMulticast(){
+    return this.mergeMulticast;
+  }
+  
+  public void setMergeMulticast(boolean mergeMulticast){
+    this.mergeMulticast = mergeMulticast;
   }
 
 }
