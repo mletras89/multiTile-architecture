@@ -95,7 +95,7 @@ public class testWriteReadTransfers {
       List<Actor> actors = Arrays.asList(a1,a5);
 
       Application application = new Application();
-      application.setActors(actors);
+      application.setActorsFromList(actors);
       application.setFifos(fifoMap);
 
       t1.setTotalIterations(10);
