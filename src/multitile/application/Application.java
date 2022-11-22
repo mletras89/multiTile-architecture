@@ -49,7 +49,7 @@ public class Application{
   }
 
   public void resetApplication(){
-    for(Map.Entry<Integer,Fifo> fifo : fifos.entrySet()){
+    for(Map.Entry<Integer,Fifo> fifo : this.fifos.entrySet()){
       fifo.getValue().resetFifo();
     }
   }
@@ -58,10 +58,10 @@ public class Application{
     this.actors = actors;
   }
 
-  public void setActors(List<Actor> actorsList){
+  public void setActorsFromList(List<Actor> actorsList){
     this.actors = new HashMap<>();
     for(Actor actor:actorsList){
-      this.actors.put(actor.getId(),new Actor(actor));
+      this.actors.put(actor.getId(),actor);
     }
   }
 
@@ -70,23 +70,37 @@ public class Application{
   }
 
   public Map<Integer,Fifo> getFifos(){
-    return fifos;
+    return this.fifos;
   }
 
   public Map<Integer,Actor> getActors(){
-    return actors;
+    return this.actors;
   }
 
   public List<Actor> getListActors(){
     List<Actor> listActors = new ArrayList<>();
-    System.out.println("Getting list ");
-    for(Map.Entry<Integer,Actor> actor : actors.entrySet() ){
-      System.out.println("Adding: "+actor.getValue().getName());
+//   System.out.println("Getting list ");
+    for(Map.Entry<Integer,Actor> actor : this.actors.entrySet() ){
+//      System.out.println("Adding: "+actor.getValue().getName());
       listActors.add(actor.getValue());
     }
-    System.out.println("done Getting list ");
+//    System.out.println("done Getting list ");
     return listActors;
   }
+
+  public void printActors(){
+    for(Map.Entry<Integer,Actor> actorEntry : this.actors.entrySet()){   
+      System.out.println("Actor:"+actorEntry.getValue().getName()+" is multicast:"+actorEntry.getValue().isMulticastActor()+" is mergeable: "+actorEntry.getValue().isMergeMulticast());
+    }
+  }
+
+
+  public void printFifos(){
+    for(Map.Entry<Integer,Fifo> fifoEntry : this.fifos.entrySet()){
+      System.out.println("Fifo:"+fifoEntry.getValue().getName()+" is composite?:"+fifoEntry.getValue().isCompositeChannel());
+    }
+  }
+
 
 }
 
