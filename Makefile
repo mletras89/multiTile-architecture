@@ -1,13 +1,13 @@
 DIR_SRC=./src/multitile/tests
 PACKAGE_TEST=src.multitile.tests
 
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run
 
-clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean
+clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean testCompositeChannel_clean
 
 distclean_all: crossbar_distclean 
 
@@ -16,14 +16,15 @@ testCompositeChannel:
 
 testCompositeChannel_run:
 	java -ea $(PACKAGE_TEST).testCompositeChannel;
+	./python/merge-csv-files.py crossbar-utilization-crossbar_Tile_testComposite.csv processor-utilization-Tile_testComposite_Processor0.csv -o test-before-MRB-insertion.csv;
+	./python/merge-csv-files.py crossbar-utilization-crossbar_Tile_testCompositeAfterMerging.csv processor-utilization-Tile_testCompositeAfterMerging_Processor0.csv  -o test-after-MRB-insertion.csv
 
 testCompositeChannel_check:
-	#diff testMemory.csv golden-cases/testMemory-golden.csv
+	diff test-before-MRB-insertion.csv golden-cases/test-before-MRB-insertion-golden.csv;
+	diff test-after-MRB-insertion.csv golden-cases/test-after-MRB-insertion-golden.csv
 	
 testCompositeChannel_clean:
 	echo "Cleaning Test Memory"; ./clean.sh
-
-
 
 testMemory:
 	javac $(DIR_SRC)/testMemory.java
@@ -36,7 +37,6 @@ testMemory_check:
 	
 testMemory_clean:
 	echo "Cleaning Test Memory"; ./clean.sh
-
 
 singleCoreCrossbar4:
 	javac $(DIR_SRC)/testTileSingleCoreCrossbar4.java
