@@ -42,7 +42,6 @@ import src.multitile.architecture.Processor;
 
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
-import src.multitile.application.MulticastActor;
 import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 import src.multitile.application.FifoManagement;
@@ -74,15 +73,16 @@ public class testCompositeChannel {
       t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
 
-
- //     ApplicationManagement.collapseMergeableMulticastActors(app);
-//      app.resetApplication();
-//      
-//      t1.setName("Tile_testCompositeAfterMerging");
-//      t1.setTotalIterations(3);
-//      t1.runTileActors(app);
-//      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-//      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      // merge all the multicast actors in the application
+      ApplicationManagement.setAllMulticastActorsAsMergeable(app);
+      ApplicationManagement.collapseMergeableMulticastActors(app);
+      app.resetApplication();
+      
+      t1.setName("Tile_testCompositeAfterMerging");
+      t1.setTotalIterations(3);
+      t1.runTileActors(app);
+      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      t1.getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing composite channel Implementation done!");
     }
 }
