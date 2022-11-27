@@ -141,14 +141,14 @@ public class Actor{
   public boolean fire(Map<Integer,Fifo> fifos){
     //System.out.println("Firing actor "+this.name);
 
-    for(Fifo fifo : outputFifos){
-      fifos.get(fifo.getId()).fifoWrite();
-    }
-
     for(Fifo fifo: inputFifos){
       fifos.get(fifo.getId()).fifoRead(this.getId());
     }
-    //System.out.println("Firing done!");
+
+    for(Fifo fifo : outputFifos){
+      fifos.get(fifo.getId()).fifoWrite();
+    }                                         
+    System.out.println("Firing done!");
     return true;
   }
 
