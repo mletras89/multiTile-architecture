@@ -36,6 +36,8 @@
 */
 package src.multitile;
 
+import src.multitile.architecture.Processor;
+
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
 
@@ -44,20 +46,28 @@ import java.util.Map;
 
 public class FCFS extends Scheduler implements Schedule{
   
-  public FCFS(String name){
-    super(name);
+  public FCFS(String name,Processor owner){
+    super(name,owner);
   }
-  
+
+	public void printSchedulableActors(){
+		for(Action action : this.getQueueActions()){
+			System.out.println("Schedulable action:"+action.getActor().getName());
+		}	
+	}
+	  
   public void getSchedulableActors(List<Actor> actors,Map<Integer,Fifo> fifos){
     // from the list of actors in Processor, check which of them can fire
     this.cleanQueue();
    
     for(Actor actor: actors){
-      if(actor.canFire(fifos)){
-        //System.out.println("Fireable: "+actor.getName());
-        Action action = new Action(actor);
-        this.insertAction(action);
-      }
+			if(actor.getMapping().equals(this.getOwner())){
+      	if(actor.canFire(fifos)){
+        	//System.out.println("Fireable: "+actor.getName());
+        	Action action = new Action(actor);
+        	this.insertAction(action);
+      	}
+			}
     }
   }
 
