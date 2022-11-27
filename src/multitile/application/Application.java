@@ -101,6 +101,12 @@ public class Application{
     }
   }
 
+	public void printFifosState(){
+		for(Map.Entry<Integer,Fifo> fifoEntry : this.fifos.entrySet()){
+			System.out.println("Fifo: "+fifoEntry.getValue().getName()+" contains tokens: "+fifoEntry.getValue().get_tokens());
+		}
+	}
+
 
 }
 
