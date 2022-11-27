@@ -44,7 +44,7 @@
 package src.multitile;
 
 import src.multitile.architecture.Memory;
-
+import src.multitile.architecture.Processor;
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
 
@@ -67,13 +67,16 @@ public class Scheduler{
   private Queue<Action> queueActions;
   private Map<Actor,List<Transfer>> readTransfers;
   private Map<Actor,List<Transfer>> writeTransfers;
+	
+	// including also the processor owner of this scheduler
+	private Processor owner;
 
   private double lastEventinProcessor;
   private int numberIterations;
   private int runIterations;
   private String name;
 
-  Scheduler(String name){
+  Scheduler(String name,Processor owner){
     this.scheduledActions = new LinkedList<Action>();
     this.queueActions = new LinkedList<>();
     this.readTransfers = new HashMap<>();
@@ -82,6 +85,7 @@ public class Scheduler{
     this.numberIterations = 1;
     this.runIterations = 0;
     this.name = name;
+		this.owner = owner;	
   }
 
   public void restartScheduler() {
@@ -92,6 +96,14 @@ public class Scheduler{
     this.lastEventinProcessor = 0.0;
     this.runIterations = 0;
   } 
+
+	public Processor getOwner(){
+		return this.owner;
+	}
+
+	public void setOwner(Processor owner){
+		this.owner = owner;
+	}
 
   public String getName() {
     return name;
