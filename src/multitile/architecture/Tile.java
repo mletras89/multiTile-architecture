@@ -121,8 +121,11 @@ public class Tile{
     int runIterations = 0;
     while(runIterations < this.totalIterations){
       // first collect all the schedulable actors per processor
+      //application.printFifosState();
       for(int i =0 ; i < this.numberProcessors; i++){
         ((FCFS)processors.get(i).getScheduler()).getSchedulableActors(actors,fifoMap);
+	//System.out.println("Processor:"+processors.get(i).getName());
+	//((FCFS)processors.get(i).getScheduler()).printSchedulableActors();
       } 
       // proceed to schedule each of the actions per processor
       for(int i=0; i< this.numberProcessors; i++){
@@ -167,7 +170,7 @@ public class Tile{
         }
       }
       //fire the actions, updating fifos
-      for(int i =0 ; i < numberProcessors; i++){
+      for(int i =0 ; i < this.numberProcessors; i++){
         processors.get(i).getScheduler().fireCommitedActions(fifoMap);
       } 
       runIterations = this.getRunIterations();
