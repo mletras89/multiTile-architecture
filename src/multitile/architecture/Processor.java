@@ -64,11 +64,9 @@ public class Processor {
   public Processor(int id, String name) {
     this.setName(name);
     this.setId(id);
-    
-    scheduler = new FCFS(name);
-    scheduler.setNumberIterations(1);
-    
     localMemory = new LocalMemory(1,this.name+"_localMemory");
+    scheduler = new FCFS(name,this);
+    scheduler.setNumberIterations(1);  
   }
     
   public Processor(Processor other) {
