@@ -267,6 +267,16 @@ public class Crossbar{
       double transferTime = this.calculateTransferTime(commitTransfer);
       double startTime = (commitTransfer.getStart_time() > timeLastAction) ? commitTransfer.getStart_time() : timeLastAction;
       double endTime  = startTime + transferTime;
+
+      if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+        (commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
+        !commitTransfer.getFifo().getMapping().getEmbeddedToProcessor().equals(commitTransfer.getActor().getMapping()))){
+      	endTime = startTime + transferTime;  
+      }
+      else{
+        endTime = startTime;
+      }
+
       // update now the commit transfer
       commitTransfer.setStart_time(startTime);
       commitTransfer.setDue_time(endTime);
@@ -275,6 +285,12 @@ public class Crossbar{
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
       // then add the scheduled transfers accordingly, with the scheduled due time
+
+
+
+
+
+
       this.addScheduledTransfer(commitTransfer);
     }
   }
