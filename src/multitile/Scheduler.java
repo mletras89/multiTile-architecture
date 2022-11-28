@@ -223,7 +223,7 @@ public class Scheduler{
   
   public void updateLastEventAfterWrite(Action action){
     double lastWrite = this.getTimeLastWriteofActor(action.getActor());
-
+    //System.out.println("Last Write:"+lastWrite);
     if (lastWrite > this.lastEventinProcessor)
       this.lastEventinProcessor = lastWrite;
   }
@@ -267,8 +267,8 @@ public class Scheduler{
     //System.out.println("Actor "+commitAction.getActor().getName());
     for(Fifo fifo : commitAction.getActor().getInputFifos()){
       int cons      = fifo.getProdRate();
+      //System.out.println("1)Actor: "+commitAction.getActor().getName()+" reading from "+fifo.getName());
       double timeLastReadToken = fifos.get(fifo.getId()).readTimeProducedToken(cons);
-
       // I scheduled read of data by token reads
       for(int n = 0 ; n<cons;n++) {
         if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
@@ -277,6 +277,7 @@ public class Scheduler{
           // then the read must be scheduled in the crossbar
           Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,Collections.max(Arrays.asList(this.lastEventinProcessor,timeLastReadToken)),Transfer.TRANSFER_TYPE.READ);
           reads.add(readTransfer);
+          //System.out.println("2)Actor: "+commitAction.getActor().getName()+" reading from "+fifo.getName()); 
         }
       }
     }
@@ -287,17 +288,19 @@ public class Scheduler{
     for(Action commitAction : this.queueActions){
       List<Transfer> reads = new ArrayList<>();
       for(Fifo fifo : commitAction.getActor().getInputFifos()){
+        //System.out.println("1)Actor: "+commitAction.getActor().getName()+" reading from "+fifo.getName());
         int cons      = fifo.getProdRate();
         double timeLastReadToken = fifos.get(fifo.getId()).readTimeProducedToken(cons);
         // I scheduled read of data by token reads
         for(int n = 0 ; n<cons;n++) {
-          if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
-            (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
-            !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
+//          if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+//            (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
+//            !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
             // then the read must be scheduled in the crossbar
             Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,Collections.max(Arrays.asList(this.lastEventinProcessor,timeLastReadToken)),Transfer.TRANSFER_TYPE.READ);
             reads.add(readTransfer);
-          }
+            //System.out.println("2)Actor: "+commitAction.getActor().getName()+" reading from "+fifo.getName());
+//          }
         }
       }
       readTransfers.put(commitAction.getActor(),reads);
@@ -308,6 +311,7 @@ public class Scheduler{
     for(Action commitAction : this.queueActions){
       List<Transfer> writes = new ArrayList<>();
       for(Fifo fifo : commitAction.getActor().getOutputFifos()){
+      //System.out.println("1)Actor: "+commitAction.getActor().getName()+" writing to "+fifo.getName());
         int prod    = fifo.getProdRate();
         for(int n=0; n<prod; n++){
           if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
@@ -316,6 +320,7 @@ public class Scheduler{
               // Then the write must be scheduled in the crossbar
               Transfer writeTransfer = new Transfer(commitAction.getActor(),fifo,this.lastEventinProcessor,Transfer.TRANSFER_TYPE.WRITE);
               writes.add(writeTransfer);
+              //System.out.println("2)Actor: "+commitAction.getActor().getName()+" writing to "+fifo.getName());
           }
         }
       }
@@ -326,15 +331,17 @@ public class Scheduler{
   public void commitWritesToCrossbar(Action commitAction){
     List<Transfer> writes = new ArrayList<>();
     for(Fifo fifo : commitAction.getActor().getOutputFifos()){
+      //System.out.println("1)Actor: "+commitAction.getActor().getName()+" writing to "+fifo.getName());
       int prod    = fifo.getProdRate();
       for(int n=0; n<prod; n++){
-        if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
-          (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
-          !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
+//        if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+//          (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
+//          !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
           // Then the write must be scheduled in the crossbar
           Transfer writeTransfer = new Transfer(commitAction.getActor(),fifo,this.lastEventinProcessor,Transfer.TRANSFER_TYPE.WRITE);
           writes.add(writeTransfer);
-        }
+          //System.out.println("2)Actor: "+commitAction.getActor().getName()+" writing to "+fifo.getName());
+//        }
       }
     }
     writeTransfers.put(commitAction.getActor(),writes);
