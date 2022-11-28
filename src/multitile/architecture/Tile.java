@@ -76,6 +76,8 @@ public class Tile{
     for(int i=0; i<this.numberProcessors;i++){
       Processor processor = new Processor(i,"Processor"+i);
       processors.add(processor);
+      // connecting local memory to processor
+      processors.get(i).getLocalMemory().setEmbeddedToProcessor(processors.get(i));
     }
     crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
     tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
