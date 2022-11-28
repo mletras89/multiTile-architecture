@@ -76,16 +76,6 @@ public class testQuadCoreImplementation {
       t1.getProcessors().get(3).getScheduler().saveScheduleStats(".");      
       t1.getCrossbar().saveCrossbarUtilizationStats(".");
 
-      // merge all the multicast actors in the application
-//      ApplicationManagement.setAllMulticastActorsAsMergeable(app);
-//      ApplicationManagement.collapseMergeableMulticastActors(app);
-//      app.resetApplication();
-    
-//      t1.setName("Tile_testCompositeAfterMerging");
-//      t1.setTotalIterations(3);
-//      t1.runTileActors(app);
-//      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-//      t1.getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing quadcore implementation testcase done!");
     }
 }
