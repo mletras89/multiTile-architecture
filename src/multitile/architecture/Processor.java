@@ -66,13 +66,16 @@ public class Processor {
     this.setId(id);
     localMemory = new LocalMemory(1,this.name+"_localMemory");
     scheduler = new FCFS(name,this);
-    scheduler.setNumberIterations(1);  
+    scheduler.setNumberIterations(1); 
+    // connecting local memory to processor
+    this.localMemory.setEmbeddedToProcessor(this);
   }
     
   public Processor(Processor other) {
     this.setName(other.getName());
     this.setId(other.getId());
     this.scheduler = other.scheduler;
+    this.localMemory.setEmbeddedToProcessor(this);
   }
 
   public boolean equals(Processor processor){
