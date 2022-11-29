@@ -22,7 +22,7 @@ public class testCrossbar {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing crossbar!");
 
-      Memory memoryTest1 = new Memory(1,"Memory_1",100);
+      Memory memoryTest1 = new Memory("Memory_1");
       memoryTest1.setType(Memory.MEMORY_TYPE.TILE_LOCAL_MEM);
 
       Actor actor1 = new Actor("actor1");
