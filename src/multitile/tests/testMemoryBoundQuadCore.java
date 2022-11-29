@@ -67,19 +67,11 @@ public class testMemoryBoundQuadCore {
 
       Tile t1 = new Tile(1,"Tile_testQuadCore",4,1.0,2);
 
-      // testing list of different subtypes of memories
-//      List<Memory> memories = new ArrayList<>();
-//      Memory mem1 = new Memory();
-//      LocalMemory mem2 = new LocalMemory();
-//      TileLocalMemory mem3 = new TileLocalMemory();
-//
-//      memories.add(mem1);
-//      memories.add(mem2);
-//      memories.add(mem3);
-//
-//      for(Memory mem : memories){
-//        System.out.println(mem.getType());
-//      }
+      // set the memory sizes
+      t1.getProcessors().get(0).getLocalMemory().setCapacity(2000000);
+      t1.getProcessors().get(1).getLocalMemory().setCapacity(2000000);
+      t1.getProcessors().get(2).getLocalMemory().setCapacity(2000000);
+      t1.getProcessors().get(3).getLocalMemory().setCapacity(2000000);
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(t1);  
       Application app = sampleApplication.getSampleApplication();
