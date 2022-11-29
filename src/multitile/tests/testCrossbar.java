@@ -63,7 +63,7 @@ public class testCrossbar {
       actor8.setId(8);
 
 
-      Crossbar crossbar1 = new Crossbar(1,"Crossbar",1,4);
+      Crossbar crossbar1 = new Crossbar("Crossbar",1,4);
       crossbar1.insertTransfer(t1);
       crossbar1.insertTransfer(t2);
       crossbar1.insertTransfer(t3);

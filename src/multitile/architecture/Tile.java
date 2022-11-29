@@ -80,7 +80,7 @@ public class Tile{
       // connecting local memory to processor
       processors.get(i).getLocalMemory().setEmbeddedToProcessor(processors.get(i));
     }
-    crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
+    crossbar = new Crossbar("crossbar_"+this.name, 1,2);
     tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
     this.totalIterations = 1;
   }
@@ -95,7 +95,7 @@ public class Tile{
       Processor processor = new Processor(this.name+"_Processor"+i);
       processors.add(processor);
     }
-    crossbar = new Crossbar(1,"crossbar_"+this.name, crossbarBw,crossbarChannels);
+    crossbar = new Crossbar("crossbar_"+this.name, crossbarBw,crossbarChannels);
     tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
     this.totalIterations = 1;
   }

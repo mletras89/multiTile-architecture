@@ -72,7 +72,7 @@ public class Crossbar{
 
   // initializing empty crossbar
   public Crossbar() {
-    this.id = 0;
+    this.id = ArchitectureManagement.getCrossbarId();
     this.name = "bus";
     this.queueTransfers = new ArrayList<>();
     this.numberofParallelChannels = 1; // as a regular bus
@@ -96,9 +96,9 @@ public class Crossbar{
     this.scheduledWriteTransfers = new HashMap<>();
   }
   // creating memory from given parameters
-  public Crossbar(int id, String name, double bandwidth, int numberofParallelChannels){
+  public Crossbar(String name, double bandwidth, int numberofParallelChannels){
     this.name = name;
-    this.id   = id;
+    this.id   = ArchitectureManagement.getCrossbarId();
     this.numberofParallelChannels = numberofParallelChannels;
     this.queueTransfers = new ArrayList<>();
     this.scheduledActions = new ArrayList<>();
