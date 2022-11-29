@@ -38,7 +38,7 @@
 package src.multitile.application;
 
 import src.multitile.Transfer;
-//import src.multitile.FifoManagement;
+import src.multitile.Transfer;
 import src.multitile.architecture.Memory;
 import java.util.*;
 
@@ -163,6 +163,14 @@ public class Fifo implements Buffer{
 
   public boolean equals(Fifo fifo){
     return this.getId()==fifo.getId() && this.getName().equals(fifo.getName());
+  }
+
+  public void fifoWriteToMemory(Transfer transfer){
+    this.mapping.writeDataInMemory(this.prodRate*this.tokenSize,transfer.getDue_time());
+  }
+
+  public void fifoReadFromMemory(Transfer transfer){
+    this.mapping.readDataInMemory(this.consRate*this.tokenSize,transfer.getDue_time());  
   }
 
   public void fifoWrite(){
