@@ -50,13 +50,13 @@ public class LocalMemory extends Memory{
     super(other);
   }
 
-  public LocalMemory(int id, String name, int capacity){
-    super(id,name,capacity);
+  public LocalMemory(String name, int capacity){
+    super(name,capacity);
     this.setType(MEMORY_TYPE.LOCAL_MEM);
   }
 
-  public LocalMemory(int id, String name){
-    super(id,name);
+  public LocalMemory(String name){
+    super(name);
     this.setType(MEMORY_TYPE.LOCAL_MEM);
   }
 
