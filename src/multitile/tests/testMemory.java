@@ -17,9 +17,9 @@ import static java.util.stream.Collectors.toList;
 public class testMemory {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing Memory class!");
-      Memory memoryTest = new Memory(1,"Memory_1",1000);
-      Memory memoryTest2 = new Memory(2,"Memory_2",2000);
-      Memory memoryTest3 = new Memory(3,"Memory_3",Double.POSITIVE_INFINITY);
+      Memory memoryTest = new Memory("Memory_1",1000);
+      Memory memoryTest2 = new Memory("Memory_2",2000);
+      Memory memoryTest3 = new Memory("Memory_3",Double.POSITIVE_INFINITY);
      
       int load1 = 100;
       int load2 = 200;
