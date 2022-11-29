@@ -74,7 +74,7 @@ public class Memory{
   // initializing empty memory
   public Memory() {
     this.setName("");
-    this.setId(0);
+    this.setId(ArchitectureManagement.getMemoryId());
     this.resetMemoryUtilization();
     // assume infinite size of memories if not specificed
     this.setCapacity(Double.POSITIVE_INFINITY);
@@ -88,17 +88,17 @@ public class Memory{
     this.setType(other.getType());
   }
   // creating memory from given parameters
-  public Memory(int id, String name, double capacity){
+  public Memory(String name, double capacity){
     this.name = name;
-    this.id       = id;
+    this.id       = ArchitectureManagement.getMemoryId();
     this.resetMemoryUtilization();
     this.capacity = capacity;
   }
 
   // creating memory from given parameters
-  public Memory(int id, String name){
+  public Memory(String name){
     this.name = name;
-    this.id       = id;
+    this.id       = ArchitectureManagement.getMemoryId();
     this.resetMemoryUtilization();
     this.capacity = Double.POSITIVE_INFINITY;
   }
