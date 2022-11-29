@@ -46,6 +46,7 @@ import src.multitile.application.Application;
 import src.multitile.FCFS;
 import src.multitile.Action;
 import src.multitile.Transfer;
+import src.multitile.SchedulerManagement;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -80,7 +81,7 @@ public class Tile{
       processors.get(i).getLocalMemory().setEmbeddedToProcessor(processors.get(i));
     }
     crossbar = new Crossbar(1,"crossbar_"+this.name, 1,2);
-    tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
+    tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
     this.totalIterations = 1;
   }
 
@@ -95,7 +96,7 @@ public class Tile{
       processors.add(processor);
     }
     crossbar = new Crossbar(1,"crossbar_"+this.name, crossbarBw,crossbarChannels);
-    tileLocalMemory = new TileLocalMemory(1,"TileLocalMemory_"+this.name);
+    tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
     this.totalIterations = 1;
   }
 
@@ -121,6 +122,7 @@ public class Tile{
     Map<Integer,Fifo> fifoMap = application.getFifos();
     this.resetTile();
     int runIterations = 0;
+    List<Transfer> transfersToMemory = new ArrayList<>();
     while(runIterations < this.totalIterations){
       // first collect all the schedulable actors per processor
       //application.printFifosState();
@@ -168,8 +170,10 @@ public class Tile{
           processors.get(i).getScheduler().produceTokensinFifo(action,fifoMap);
           
           // managing the tracking of the memories
-          processors.get(i).getScheduler().setReadTransfersToMemory();
-          processors.get(i).getScheduler().setWriteTransfersToMemory();
+          processors.get(i).getScheduler().setTransfersToMemory();
+          transfersToMemory.addAll(processors.get(i).getScheduler().getTransfersToMemory());
+          //processors.get(i).getScheduler().setReadTransfersToMemory();
+          //processors.get(i).getScheduler().setWriteTransfersToMemory();
 
           processors.get(i).getScheduler().getReadTransfers().clear();
           processors.get(i).getScheduler().getWriteTransfers().clear();       
@@ -179,12 +183,25 @@ public class Tile{
       for(int i =0 ; i < this.numberProcessors; i++){
         processors.get(i).getScheduler().fireCommitedActions(fifoMap);
         // update the memories
-        processors.get(i).getScheduler().updateReadsStateMemory();
-        processors.get(i).getScheduler().updateWritesStateMemory();
+//        processors.get(i).getScheduler().updateStateMemory();
+//        processors.get(i).getScheduler().updateReadsStateMemory();
+//        processors.get(i).getScheduler().updateWritesStateMemory();
+
         // clean the transfers to memories
-        processors.get(i).getScheduler().getWriteTransfersToMemory().clear();
-        processors.get(i).getScheduler().getReadTransfersToMemory().clear();
+        processors.get(i).getScheduler().getTransfersToMemory().clear();       
+        //processors.get(i).getScheduler().getWriteTransfersToMemory().clear();
+        //processors.get(i).getScheduler().getReadTransfersToMemory().clear();
       } 
+      // commit the reads/writes to memory
+      SchedulerManagement.sort(transfersToMemory);
+      for(Transfer t : transfersToMemory){
+        if(t.getType() == Transfer.TRANSFER_TYPE.READ)
+          t.getFifo().fifoReadFromMemory(t);
+        else
+          t.getFifo().fifoWriteToMemory(t);
+
+      }
+      transfersToMemory.clear();
       runIterations = this.getRunIterations();
     }
   }
