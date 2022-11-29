@@ -36,6 +36,8 @@
 */
 package src.multitile.application;
 
+import src.multitile.Transfer;
+
 interface Buffer{
   public boolean isCompositeChannel();
   // can read is the same for any buffer
@@ -46,5 +48,10 @@ interface Buffer{
   public double readTimeProducedToken();
   public boolean canFlushData();
   public boolean removeReMapping();
+
+  // methods for handling the writes/reads to/from memory 
+  //public void fifoWriteToMemory(Transfer transfer);
+  public void fifoReadFromMemory(Transfer transfer);
+
 }
 
