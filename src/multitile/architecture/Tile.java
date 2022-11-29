@@ -166,6 +166,10 @@ public class Tile{
           processors.get(i).getScheduler().updateLastEventAfterWrite(action);
           // insert the time of the produced tokens by acton into the correspondent fifos
           processors.get(i).getScheduler().produceTokensinFifo(action,fifoMap);
+          
+          // managing the tracking of the memories
+          processors.get(i).getScheduler().setReadTransfersToMemory();
+          processors.get(i).getScheduler().setWriteTransfersToMemory();
 
           processors.get(i).getScheduler().getReadTransfers().clear();
           processors.get(i).getScheduler().getWriteTransfers().clear();       
@@ -174,6 +178,12 @@ public class Tile{
       //fire the actions, updating fifos
       for(int i =0 ; i < this.numberProcessors; i++){
         processors.get(i).getScheduler().fireCommitedActions(fifoMap);
+        // update the memories
+        processors.get(i).getScheduler().updateReadsStateMemory();
+        processors.get(i).getScheduler().updateWritesStateMemory();
+        // clean the transfers to memories
+        processors.get(i).getScheduler().getWriteTransfersToMemory().clear();
+        processors.get(i).getScheduler().getReadTransfersToMemory().clear();
       } 
       runIterations = this.getRunIterations();
     }
