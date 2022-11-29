@@ -37,7 +37,7 @@ public class testProcessor {
       Actor actor7 = new Actor("actor5");
       Actor actor8 = new Actor("actor6");
 
-      Processor cpu1 = new Processor(1,"cpu1");
+      Processor cpu1 = new Processor("cpu1");
       
       cpu1.getScheduler().insertAction(a1);
       cpu1.getScheduler().insertAction(a2);

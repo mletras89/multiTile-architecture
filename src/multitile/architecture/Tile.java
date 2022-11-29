@@ -75,7 +75,7 @@ public class Tile{
     this.numberProcessors = 1;
     this.processors = new ArrayList<>();
     for(int i=0; i<this.numberProcessors;i++){
-      Processor processor = new Processor(i,"Processor"+i);
+      Processor processor = new Processor("Processor"+i);
       processors.add(processor);
       // connecting local memory to processor
       processors.get(i).getLocalMemory().setEmbeddedToProcessor(processors.get(i));
@@ -92,7 +92,7 @@ public class Tile{
     this.processors = new ArrayList<>();
     //System.out.println("Here!");
     for(int i=0; i<this.numberProcessors;i++){
-      Processor processor = new Processor(i,this.name+"_Processor"+i);
+      Processor processor = new Processor(this.name+"_Processor"+i);
       processors.add(processor);
     }
     crossbar = new Crossbar(1,"crossbar_"+this.name, crossbarBw,crossbarChannels);

@@ -61,9 +61,9 @@ public class Processor {
   // each processors has a local memory
   private LocalMemory localMemory;
 
-  public Processor(int id, String name) {
+  public Processor(String name) {
     this.setName(name);
-    this.setId(id);
+    this.setId(ArchitectureManagement.getProcessorId());
     localMemory = new LocalMemory(this.name+"_localMemory");
     scheduler = new FCFS(name,this);
     scheduler.setNumberIterations(1); 
