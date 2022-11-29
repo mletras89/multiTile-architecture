@@ -54,6 +54,10 @@ public class ArchitectureManagement{
     tileIdCounter = 0;
   }
 
+  public static int getTileId(){
+    return tileIdCounter++;
+  }
+
   public static int getProcessorId(){
     return processorIdCounter++;
   }

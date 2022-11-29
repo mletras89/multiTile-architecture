@@ -60,7 +60,7 @@ public class testWriteReadTransfers {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing testWriteReadTransfers!");
 
-      Tile t1 = new Tile(1,"TileReadWrite",1,1.0,2);
+      Tile t1 = new Tile("TileReadWrite",1,1.0,2);
       Memory memory1 = t1.getTileLocalMemory();
       Processor cpu1 = t1.getProcessors().get(0);
 

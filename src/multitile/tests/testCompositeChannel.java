@@ -63,7 +63,7 @@ public class testCompositeChannel {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing composite channel Implementation!");
 
-      Tile t1 = new Tile(1,"Tile_testComposite",1,1.0,2);
+      Tile t1 = new Tile("Tile_testComposite",1,1.0,2);
       
       TestApplication sampleApplication = new TestApplication(t1);  
       Application app = sampleApplication.getSampleApplication();

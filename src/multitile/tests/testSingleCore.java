@@ -51,7 +51,7 @@ public class testSingleCore {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing Single Core Implementation!");
 
-      Tile t1 = new Tile(1,"Tile1",1,1.0,4);
+      Tile t1 = new Tile("Tile1",1,1.0,4);
       Memory memory1 = t1.getTileLocalMemory();
       Processor cpu1 = t1.getProcessors().get(0);
 

@@ -60,7 +60,7 @@ public class testTileSingleCoreCrossbar4{
     public static void main(String[] args) throws IOException {
       System.out.println("Testing testTileSingleCoreCrossbar4 Implementation!");
 
-      Tile t1 = new Tile(1,"TileSingleCoreCrossbar4_1",1,1.0,4);
+      Tile t1 = new Tile("TileSingleCoreCrossbar4_1",1,1.0,4);
 
       TestApplication sampleApplication = new TestApplication(t1);  
       Application application = sampleApplication.getSampleApplication();

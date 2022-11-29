@@ -70,7 +70,7 @@ public class Tile{
   private int totalIterations;
   
   public Tile(){
-    this.id = 1;
+    this.id = ArchitectureManagement.getTileId();
     this.name = "Tile1";
     this.numberProcessors = 1;
     this.processors = new ArrayList<>();
@@ -85,8 +85,8 @@ public class Tile{
     this.totalIterations = 1;
   }
 
-  public Tile(int id,String name,int numberProcessors,double crossbarBw,int crossbarChannels){
-    this.id = id;
+  public Tile(String name,int numberProcessors,double crossbarBw,int crossbarChannels){
+    this.id = ArchitectureManagement.getTileId();
     this.name = name;
     this.numberProcessors = numberProcessors;
     this.processors = new ArrayList<>();

@@ -64,7 +64,7 @@ public class testDualCoreImplementation {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing dualcore implementation testcase!");
 
-      Tile t1 = new Tile(1,"Tile_testDualCore",2,1.0,2);
+      Tile t1 = new Tile("Tile_testDualCore",2,1.0,2);
       
       TestApplicationDualCore sampleApplication = new TestApplicationDualCore(t1);  
       Application app = sampleApplication.getSampleApplication();

@@ -63,7 +63,7 @@ public class testQuadCoreImplementation {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing quadcore implementation testcase!");
 
-      Tile t1 = new Tile(1,"Tile_testQuadCore",4,1.0,2);
+      Tile t1 = new Tile("Tile_testQuadCore",4,1.0,2);
       
       TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(t1);  
       Application app = sampleApplication.getSampleApplication();

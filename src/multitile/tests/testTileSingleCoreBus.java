@@ -61,7 +61,7 @@ public class testTileSingleCoreBus {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing Single Core Bus Implementation!");
 
-      Tile t1 = new Tile(1,"TileSingleCoreBus1",1,1.0,1);
+      Tile t1 = new Tile("TileSingleCoreBus1",1,1.0,1);
 
       TestApplication sampleApplication = new TestApplication(t1);  
       Application application = sampleApplication.getSampleApplication();
