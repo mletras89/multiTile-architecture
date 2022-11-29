@@ -474,4 +474,10 @@ public class Scheduler{
     }
   }
 
+  // printing info for debug purposes
+  public void printSchedulableActors(){
+    for(Action action : this.getQueueActions()){
+      System.out.println("Schedulable action:"+action.getActor().getName());
+    } 
+  }
 }

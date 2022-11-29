@@ -49,12 +49,6 @@ public class FCFS extends Scheduler implements Schedule{
   public FCFS(String name,Processor owner){
     super(name,owner);
   }
-
-	public void printSchedulableActors(){
-		for(Action action : this.getQueueActions()){
-			System.out.println("Schedulable action:"+action.getActor().getName());
-		}	
-	}
 	  
   public void getSchedulableActors(List<Actor> actors,Map<Integer,Fifo> fifos){
     // from the list of actors in Processor, check which of them can fire
