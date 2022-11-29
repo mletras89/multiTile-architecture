@@ -48,14 +48,14 @@ public class TileLocalMemory extends Memory{
     super(other);
   }
 
-  public TileLocalMemory(int id, String name, int capacity){
-    super(id,name,capacity);
+  public TileLocalMemory(String name, int capacity){
+    super(name,capacity);
     this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
     this.setEmbeddedToProcessor(null);
   }
 
-  public TileLocalMemory(int id, String name){
-    super(id,name);
+  public TileLocalMemory(String name){
+    super(name);
     this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
     this.setEmbeddedToProcessor(null);
   }
