@@ -11,6 +11,20 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+QuadCoreMemoryBound:
+	javac $(DIR_SRC)/testMemoryBoundQuadCore.java
+
+QuadCoreMemoryBound_run:
+	java -ea $(PACKAGE_TEST).testMemoryBoundQuadCore;
+#	./python/merge-csv-files.py crossbar-utilization-crossbar_Tile_testQuadCore.csv processor-utilization-Tile_testQuadCore_Processor3.csv processor-utilization-Tile_testQuadCore_Processor2.csv processor-utilization-Tile_testQuadCore_Processor1.csv  processor-utilization-Tile_testQuadCore_Processor0.csv -o testQuadCore-unbounded-memory.csv
+
+QuadCoreMemoryBound_check:
+	diff testQuadCore-unbounded-memory.csv golden-cases/testQuadCore-unbounded-memory-golden.csv;
+        
+QuadCoreMemoryBound_clean:
+	echo "Cleaning Test QuadCoreMemoryBound"; ./clean.sh
+
+
 DualCore:
 	javac $(DIR_SRC)/testDualCoreImplementation.java
 
