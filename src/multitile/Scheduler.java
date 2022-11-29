@@ -67,9 +67,12 @@ public class Scheduler{
   private Queue<Action> queueActions;
   private Map<Actor,List<Transfer>> readTransfers;
   private Map<Actor,List<Transfer>> writeTransfers;
-	
-	// including also the processor owner of this scheduler
-	private Processor owner;
+  // this map is to 
+  private List<Transfer> readTransfersToMemory;
+  private List<Transfer> writeTransfersToMemory;
+
+  // including also the processor owner of this scheduler
+  private Processor owner;
 
   private double lastEventinProcessor;
   private int numberIterations;
@@ -85,7 +88,9 @@ public class Scheduler{
     this.numberIterations = 1;
     this.runIterations = 0;
     this.name = name;
-		this.owner = owner;	
+    this.owner = owner;
+    this.readTransfersToMemory = new ArrayList<>();
+    this.writeTransfersToMemory = new ArrayList<>();
   }
 
   public void restartScheduler() {
@@ -95,15 +100,17 @@ public class Scheduler{
     this.writeTransfers.clear();
     this.lastEventinProcessor = 0.0;
     this.runIterations = 0;
+    this.readTransfersToMemory.clear();
+    this.writeTransfersToMemory.clear();
   } 
 
-	public Processor getOwner(){
-		return this.owner;
-	}
-
-	public void setOwner(Processor owner){
-		this.owner = owner;
-	}
+  public Processor getOwner(){
+    return this.owner;
+  }
+  
+  public void setOwner(Processor owner){
+    this.owner = owner;
+  }
 
   public String getName() {
     return name;
@@ -144,6 +151,50 @@ public class Scheduler{
   public Map<Actor,List<Transfer>> getReadTransfers(){
     return this.readTransfers;
   } 
+
+  public List<Transfer> getWriteTransfersToMemory(){
+    return this.writeTransfersToMemory;
+  }
+
+  public List<Transfer> getReadTransfersToMemory(){
+    return this.readTransfersToMemory;
+  }
+
+  public void updateWritesStateMemory(){
+    for(Transfer t : this.writeTransfersToMemory){
+      // now we update the memory of this transfer
+      int numberTokens = t.getFifo().getProdRate();
+      int numberBytesperToken  = t.getFifo().getTokenSize();
+      t.getFifo().getMapping().writeDataInMemory(numberTokens*numberBytesperToken,t.getDue_time());
+    }
+  }
+
+  public void updateReadsStateMemory(){
+    for(Transfer t : this.readTransfersToMemory){
+      // now we update the memory of this transfer
+      int numberTokens = t.getFifo().getConsRate();
+      int numberBytesperToken  = t.getFifo().getTokenSize();
+      t.getFifo().getMapping().readDataInMemory(numberTokens*numberBytesperToken,t.getDue_time());
+    }
+  }
+
+  public void setReadTransfersToMemory(){
+    for(Map.Entry<Actor,List<Transfer>> entry : this.readTransfers.entrySet()){
+      // setting the read Transfers
+      for(Transfer t: entry.getValue()){
+        readTransfersToMemory.add(t);
+      }
+    }
+  }
+
+  public void setWriteTransfersToMemory(){
+    for(Map.Entry<Actor,List<Transfer>> entry : this.writeTransfers.entrySet()){
+      // setting the read Transfers
+      for(Transfer t: entry.getValue()){
+        writeTransfersToMemory.add(t);
+      }
+    }
+  }
 
   public void setReadTransfers(Map<Actor,List<Transfer>> readTransfers){
     this.readTransfers = readTransfers;
