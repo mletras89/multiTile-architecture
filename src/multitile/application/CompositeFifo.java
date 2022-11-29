@@ -105,6 +105,13 @@ public class CompositeFifo extends Fifo implements Buffer{
     }
   }
 
+  public void fifoReadFromMemory(Transfer transfer){
+    this.numberOfReads++;
+    if(this.canFlushData()){
+      this.getMapping().readDataInMemory(this.getConsRate()*this.getTokenSize(),transfer.getDue_time());
+    }
+  }
+
   public void fifoRead(int idActorReader){
     Fifo fifo = readers.get(idActorReader);
     int new_tokens = fifo.get_tokens() - fifo.getConsRate();
