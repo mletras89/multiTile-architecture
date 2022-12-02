@@ -60,6 +60,7 @@ public class Processor {
   private Scheduler scheduler;
   // each processors has a local memory
   private LocalMemory localMemory;
+  private Tile ownerTile;
 
   public Processor(String name) {
     this.setName(name);
@@ -80,6 +81,14 @@ public class Processor {
 
   public boolean equals(Processor processor){
     return this.getId() == processor.getId() && this.getName().equals(processor.getName());
+  }
+
+  public Tile getOwnerTile(){
+    return this.ownerTile;
+  }
+
+  public void setOwnerTile(Tile owner){
+    this.ownerTile = owner;
   }
 
   public LocalMemory getLocalMemory(){
