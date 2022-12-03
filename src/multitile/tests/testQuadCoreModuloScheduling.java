@@ -27,17 +27,16 @@
  UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  -------------------------------------------------------------------------
   @author Martin Letras
-  @date   04 November 2022
+  @date   03 December 2022
   @version 1.1
   @ brief
      Example of a single tile architecture with a single processor with local
-     memory, crossbar and tile local memory
+     memory, crossbar and tile local memory running a modulo scheduluer
 --------------------------------------------------------------------------
 */
 package src.multitile.tests;
 
 import src.multitile.ModuloScheduler;
-
 
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
@@ -77,17 +76,11 @@ public class testQuadCoreModuloScheduling {
       scheduler.setApplication(app);
       scheduler.setArchitecture(architecture);
 
-      scheduler.schedule();
-
+      scheduler.calculateModuloSchedule();
       scheduler.printKernelBody();
-//      t1.setTotalIterations(3);
-//      t1.runTileActors(app);
-//      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-//      t1.getProcessors().get(1).getScheduler().saveScheduleStats(".");
-//      t1.getProcessors().get(2).getScheduler().saveScheduleStats(".");
-//      t1.getProcessors().get(3).getScheduler().saveScheduleStats(".");      
-//      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+			scheduler.schedule();
 
+			System.out.println("The MMI is: "+scheduler.getMII());
       System.out.println("Testing quadcore implementation testcase done!");
     }
 }

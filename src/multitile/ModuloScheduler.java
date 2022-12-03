@@ -54,6 +54,7 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
   private Application application;
   // key is the actor id and the value is the scheduled step
   private HashMap<Integer,Integer> l;
+	private int MII;
 
   public ModuloScheduler(){
     //super(name,owner);
@@ -68,7 +69,7 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     this.tiles = tiles;
   }
 
-  public void schedule(){
+  public void calculateModuloSchedule(){
     List<Integer> V = new ArrayList<>();
     for(Map.Entry<Integer,Actor> v : application.getActors().entrySet()){
       V.add(v.getKey());
@@ -98,13 +99,14 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     // 		a) [Compute the resource-constrained initiation interval]
     List<Integer> tmpL = new ArrayList<>();
     for(Tile t:tiles){
-      tmpL.add(usage.get(t.getId()));
+			// have to modifiy this part for multitile, here I am assuming that all the actors are mapped to the same tile
+      tmpL.add((int)Math.ceil(usage.get(t.getId())/(double)t.getProcessors().size()));
     }
     int RESII = Collections.max(tmpL);
     //          b) [Compute the recurrence-constrained initiation interval]
     // 		   I do not have to calcualte this because there are not cycles
     // 		c) [Compute the minimum initiation interval]
-    int MII = RESII;
+    MII = RESII;
     // [Modulo schedule the loop]
     // 		a) [Schedule operations in G(V, E) taking only intra-iteration dependences into account]
     // 		   Let U(i, j) denote the usage of the i-th resource class in control step j
@@ -167,6 +169,7 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
 	    l.put(w,maxVal);
 	  }
 	  scheduled.put(v, true);
+    //System.out.println("Actor: "+application.getActors().get(v).getName());
 	  removeV.add(v);
 	  //System.out.println("Scheduling "+actors.get(v).getName()+" on control step "+l.get(v)+ " on resource "+cpus.get(actors.get(v).getMapping()).getName());
 	  //V.remove(Integer.valueOf(v));
@@ -183,13 +186,52 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
       System.out.println("Scheduling Step: "+step);
       for(Map.Entry<Integer,Integer> entryL : l.entrySet()){
         if(entryL.getValue() == step){
-          System.out.println("Actor"+application.getActors().get(entryL.getKey()).getName());
+          System.out.println("Actor: "+application.getActors().get(entryL.getKey()).getName());
           scheduled++;
         }
       }
       step++;
     }
   }
+
+	public void schedule(){
+		List<List<Integer>>	singleIteration 		= new ArrayList<>();
+		HashMap<Integer, List<Integer>>	kernel 	= new HashMap<>();
+		int scheduled = 0;
+		int step = 1;
+		while(scheduled < application.getActors().size()){
+			List<Integer> stepList = new ArrayList<>();
+			for(Map.Entry<Integer,Integer> entryL : l.entrySet()){
+				if(entryL.getValue() == step){
+					stepList.add(entryL.getKey());
+					scheduled++;
+				}
+			}
+			kernel.put(step, new ArrayList<>(stepList));
+			singleIteration.add(new ArrayList<>(stepList));
+			step++;
+		}
+		
+		for(int i = MII; i < singleIteration.size()+MII; i++ ){
+			if(kernel.containsKey(i)){
+			  List<Integer> actors = kernel.get(i);
+				actors.addAll(singleIteration.get(i-MII));
+				kernel.put(i, actors);
+			}
+			else{
+				kernel.put(i, singleIteration.get(i-MII));
+			}
+		}
+		// now, we print the schedule
+		for(Map.Entry<Integer,List<Integer>> e : kernel.entrySet()){
+			System.out.println("Step: "+e.getKey());
+			for(int v : e.getValue()){
+				System.out.println("Actor: "+application.getActors().get(v).getName());
+			}
+		}
+	}
+
+
 
 //  public void getSchedulableActors(List<Actor> actors,Map<Integer,Fifo> fifos){
 //    // from the list of actors in Processor, check which of them can fire
@@ -257,6 +299,8 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     return BU;
   }
 
-
+	public int getMII(){
+			return this.MII;
+	}
 
 }
