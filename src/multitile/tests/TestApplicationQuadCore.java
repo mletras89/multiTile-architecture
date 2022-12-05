@@ -76,6 +76,7 @@ public class TestApplicationQuadCore{
       a1.setInputs(0);
       a1.setOutputs(1);
       a1.setMapping(cpu1);
+      a1.setMappingToTile(t1);
 
       Actor a2 = new Actor("a2");  // is a multicast actor
       a2.setId(2) ;
@@ -83,6 +84,8 @@ public class TestApplicationQuadCore{
       a2.setInputs(1);
       a2.setOutputs(2);
       a2.setMapping(cpu2);
+      a2.setMappingToTile(t1);
+
       //a2.setType(Actor.ACTOR_TYPE.MULTICAST);
       //System.out.println("Actor 2 type:"+a2.getType());
 
@@ -92,6 +95,7 @@ public class TestApplicationQuadCore{
       a3.setInputs(1);
       a3.setOutputs(1);
       a3.setMapping(cpu3);
+      a3.setMappingToTile(t1);
 
       Actor a4 = new Actor("a4");
       a4.setId(4) ;
@@ -99,6 +103,8 @@ public class TestApplicationQuadCore{
       a4.setInputs(1);
       a4.setOutputs(1);
       a4.setMapping(cpu4);
+      a4.setMappingToTile(t1);
+
 
       Actor a5 = new Actor("a5:sink");
       a5.setId(5) ;
@@ -106,6 +112,7 @@ public class TestApplicationQuadCore{
       a5.setInputs(2);
       a5.setOutputs(0);
       a5.setMapping(cpu1);
+      a5.setMappingToTile(t1);
 
       Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);  // channel connected to writer
       //System.out.prin architecturen("c1.id = "+c1.getId());

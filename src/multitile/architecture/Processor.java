@@ -41,6 +41,7 @@ package src.multitile.architecture;
 
 import src.multitile.Scheduler;
 import src.multitile.FCFS;
+import src.multitile.Action;
 
 import java.io.File;
 import java.io.FileWriter;

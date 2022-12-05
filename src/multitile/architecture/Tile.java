@@ -59,12 +59,14 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.Queue;
+import java.util.*;
 
 public class Tile{
   private int id;
   private String name;
   private int numberProcessors;
-  private List<Processor> processors;
+  // the key is the id
+  private HashMap<Integer,Processor> processors;
   private Crossbar crossbar;
   private TileLocalMemory tileLocalMemory;
   private int totalIterations;
@@ -73,13 +75,16 @@ public class Tile{
     this.id = ArchitectureManagement.getTileId();
     this.name = "Tile1";
     this.numberProcessors = 1;
-    this.processors = new ArrayList<>();
+    this.processors = new HashMap<>();
     for(int i=0; i<this.numberProcessors;i++){
       Processor processor = new Processor("Processor"+i);
       processor.setOwnerTile(this);
-      processors.add(processor);
+      processors.put(processor.getId(),processor);
+    }
+
+    for(HashMap.Entry<Integer,Processor> e: processors.entrySet()){
       // connecting local memory to processor
-      processors.get(i).getLocalMemory().setEmbeddedToProcessor(processors.get(i));
+      e.getValue().getLocalMemory().setEmbeddedToProcessor(e.getValue());
     }
     crossbar = new Crossbar("crossbar_"+this.name, 1,2);
     tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
@@ -90,14 +95,16 @@ public class Tile{
     this.id = ArchitectureManagement.getTileId();
     this.name = name;
     this.numberProcessors = numberProcessors;
-    this.processors = new ArrayList<>();
+    this.processors = new HashMap<>();
     //System.out.println("Here!");
     for(int i=0; i<this.numberProcessors;i++){
       Processor processor = new Processor(this.name+"_Processor"+i);
       processor.setOwnerTile(this);
-      processors.add(processor);
-      // connecting local memory to processor
-      processors.get(i).getLocalMemory().setEmbeddedToProcessor(processors.get(i));
+      processors.put(processor.getId(),processor);
+    }
+    for(HashMap.Entry<Integer,Processor> e: processors.entrySet()){
+      // connecting local memory to processor     
+      e.getValue().getLocalMemory().setEmbeddedToProcessor(e.getValue());     
     }
     crossbar = new Crossbar("crossbar_"+this.name, crossbarBw,crossbarChannels);
     tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
@@ -107,8 +114,9 @@ public class Tile{
   public void setName(String name){
     this.name = name;
     crossbar.setName("crossbar_"+this.name);
-    for(int i=0; i<this.numberProcessors;i++){
-      processors.get(i).getScheduler().setName(this.name+"_Processor"+i);
+    int i=0;
+    for(HashMap.Entry<Integer,Processor> e: processors.entrySet()){
+      e.getValue().getScheduler().setName(this.name+"_Processor"+(i++));  
     }
     tileLocalMemory.setName("TileLocalMemory_"+this.name);
   }
@@ -120,7 +128,7 @@ public class Tile{
   public Crossbar getCrossbar(){
     return this.crossbar;
   }
-
+/*
   public void runTileActors(Application application){ 
     List<Actor> actors = application.getListActors(); 
     Map<Integer,Fifo> fifoMap = application.getFifos();
@@ -176,8 +184,6 @@ public class Tile{
           // managing the tracking of the memories
           processors.get(i).getScheduler().setTransfersToMemory();
           transfersToMemory.addAll(processors.get(i).getScheduler().getTransfersToMemory());
-          //processors.get(i).getScheduler().setReadTransfersToMemory();
-          //processors.get(i).getScheduler().setWriteTransfersToMemory();
 
           processors.get(i).getScheduler().getReadTransfers().clear();
           processors.get(i).getScheduler().getWriteTransfers().clear();       
@@ -187,14 +193,8 @@ public class Tile{
       for(int i =0 ; i < this.numberProcessors; i++){
         processors.get(i).getScheduler().fireCommitedActions(fifoMap);
         // update the memories
-//        processors.get(i).getScheduler().updateStateMemory();
-//        processors.get(i).getScheduler().updateReadsStateMemory();
-//        processors.get(i).getScheduler().updateWritesStateMemory();
-
         // clean the transfers to memories
         processors.get(i).getScheduler().getTransfersToMemory().clear();       
-        //processors.get(i).getScheduler().getWriteTransfersToMemory().clear();
-        //processors.get(i).getScheduler().getReadTransfersToMemory().clear();
       } 
       // commit the reads/writes to memory
       SchedulerManagement.sort(transfersToMemory);
@@ -208,8 +208,8 @@ public class Tile{
       transfersToMemory.clear();
       runIterations = this.getRunIterations();
     }
-  }
-
+  }*/
+/*
   public void runTile(List<Actor> actors, Map<Integer,Fifo> fifoMap){
     this.resetTile();
     int runIterations = 0;
@@ -242,7 +242,7 @@ public class Tile{
           for(Transfer t : entry.getValue()){
             System.out.println("\t\tScheduling reading from "+t.getFifo().getName()+" to "+t.getActor().getName()+" start time "+t.getStart_time()+" due time "+t.getDue_time());
           }
-	}*/
+	}*//*
 	processors.get(i).getScheduler().setReadTransfers(processorReadTransfers);
         processors.get(i).getScheduler().commitActionsinQueue();
       }
@@ -279,8 +279,8 @@ public class Tile{
         processors.get(i).getScheduler().getWriteTransfers().clear();       
       }
     }
-    
   }
+  */
   
   public void setTotalIterations(int totalIterations){
     this.totalIterations = totalIterations;
@@ -290,23 +290,23 @@ public class Tile{
     return this.tileLocalMemory;
   }
 
-  public List<Processor> getProcessors(){
+  public HashMap<Integer,Processor> getProcessors(){
     return this.processors;
   }
 
   public int getRunIterations(){
     int max = 0 ;
-    for(int i=0;i<numberProcessors;i++){
-      if (max < processors.get(i).getRunIterations())
-        max = processors.get(i).getRunIterations();
+    for(HashMap.Entry<Integer,Processor> e : processors.entrySet()){
+      if(max < e.getValue().getRunIterations())
+        max = e.getValue().getRunIterations();
     }
     return max;
   }
 
   public void resetTile(){
     // first reset the processors
-    for(int i=0;i<numberProcessors;i++){
-      processors.get(i).restartProcessor();
+    for(HashMap.Entry<Integer,Processor> e: processors.entrySet()){
+      e.getValue().restartProcessor();
     }
     // refresh the tile local memory
     tileLocalMemory.resetMemoryUtilization();

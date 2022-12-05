@@ -66,8 +66,8 @@ public class testQuadCoreModuloScheduling {
       System.out.println("Testing quadcore implementation testcase!");
 
       Tile t1 = new Tile("Tile_testQuadCore",4,1.0,2);
-      List<Tile> architecture = new ArrayList<>();
-      architecture.add(t1);
+      HashMap<Integer,Tile> architecture = new HashMap<>();
+      architecture.put(t1.getId(),t1);
 
       TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(t1);  
       Application app = sampleApplication.getSampleApplication();
@@ -77,10 +77,15 @@ public class testQuadCoreModuloScheduling {
       scheduler.setArchitecture(architecture);
 
       scheduler.calculateModuloSchedule();
-      scheduler.printKernelBody();
-			scheduler.schedule();
+      //scheduler.printKernelBody();
+      scheduler.schedule();
 
-			System.out.println("The MMI is: "+scheduler.getMII());
+      System.out.println("The MMI is: "+scheduler.getMII());
+      
+      for(HashMap.Entry<Integer,Processor> p: t1.getProcessors().entrySet()){
+        p.getValue().getScheduler().saveScheduleStats(".");
+      }
+
       System.out.println("Testing quadcore implementation testcase done!");
     }
 }

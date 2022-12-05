@@ -37,6 +37,7 @@
 package src.multitile.application;
 
 import src.multitile.architecture.Processor;
+import src.multitile.architecture.Tile;
 import java.util.*;
 
 public class Actor{
@@ -51,6 +52,8 @@ public class Actor{
   private Vector<Fifo> outputFifos;
 
   private Processor mapping;  // mapping to the Processor object
+  private Tile mappingToTile;  // mapping to the Tile
+
   private double executionTime;  // the execution time is associated with the mapping
 
   private ACTOR_TYPE type;
@@ -106,6 +109,14 @@ public class Actor{
     this.inputFifos  = new Vector<Fifo>();   
     this.outputFifos = new Vector<Fifo>();   
     this.setType(ACTOR_TYPE.ACTOR);
+  }
+
+  public void setMappingToTile(Tile tile){
+    this.mappingToTile = tile;
+  }
+
+  public Tile getMappingToTile(){
+    return this.mappingToTile;
   }
 
   public boolean equals(Actor actor){
