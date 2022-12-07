@@ -57,17 +57,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.*;
 
-public class ModuloScheduler  { //extends Scheduler implements Schedule{
-  // key is the step and the list are the actions scheduled in the step
-  private HashMap<Integer,LinkedList<Action>> scheduledActions;
+public class ModuloScheduler extends BaseScheduler { //extends Scheduler implements Schedule{
+
+
   // first level key is the step,
   // the second level map, key is the id of the tile, 
   // the third level of the map, the key is the processor and bool the state of the occupation
   private HashMap<Integer,HashMap<Integer,HashMap<Integer,Boolean>>> resourceOcupation;
-  private Queue<Action> queueActions;
 
-	private Architecture architecture;
-  private Application application;
   // key is the actor id and the value is the scheduled step
   private HashMap<Integer,Integer> l;
   private int MII;
@@ -77,10 +74,9 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
 	private int maxIterations;
 
   public ModuloScheduler(){
-    //super(name,owner);
+    super();
     this.l = new HashMap<>();
-    this.scheduledActions = new HashMap<>();
-    this.queueActions = new LinkedList<>();
+
     this.resourceOcupation = new HashMap<>();
 		this.maxIterations = 3;
   }
@@ -88,14 +84,6 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
 	public void setMaxIterations(int maxIterations){
 		this.maxIterations = maxIterations;
 	}
-
-  public void setApplication(Application application){
-    this.application = application;
-  }
-
-  public void setArchitecture(Architecture architecture){
-    this.architecture = architecture;
-  }
 
   public void calculateModuloSchedule(){
 		HashMap<Integer,Tile> tiles = architecture.getTiles();
@@ -414,15 +402,6 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
       }
     }
   }
-
-  public void cleanQueue(){
-    this.queueActions.clear();
-  }
-
-  public void insertAction(Action a){
-    queueActions.add(new Action(a));
-  }
-
 
   // PCOUNT: is the number of immediate predecessors of v not yet scheduled  
   int getPCOUNT(Actor v, HashMap<Integer, Boolean> scheduled) {
