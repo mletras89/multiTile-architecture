@@ -39,13 +39,14 @@
   NOTE: This is only valid for single-rate dataflows
 --------------------------------------------------------------------------
 */
-package src.multitile;
+package src.multitile.scheduler;
 
 import src.multitile.Action;
+import src.multitile.Transfer;
 
 import src.multitile.architecture.Processor;
 import src.multitile.architecture.Tile;
-
+import src.multitile.architecture.Architecture;
 
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
@@ -65,12 +66,15 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
   private HashMap<Integer,HashMap<Integer,HashMap<Integer,Boolean>>> resourceOcupation;
   private Queue<Action> queueActions;
 
-
-  private HashMap<Integer,Tile> tiles;
+	private Architecture architecture;
   private Application application;
   // key is the actor id and the value is the scheduled step
   private HashMap<Integer,Integer> l;
   private int MII;
+	private int lastStep;
+  private HashMap<Integer,List<Integer>> kernel;
+
+	private int maxIterations;
 
   public ModuloScheduler(){
     //super(name,owner);
@@ -78,17 +82,23 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     this.scheduledActions = new HashMap<>();
     this.queueActions = new LinkedList<>();
     this.resourceOcupation = new HashMap<>();
+		this.maxIterations = 3;
   }
+
+	public void setMaxIterations(int maxIterations){
+		this.maxIterations = maxIterations;
+	}
 
   public void setApplication(Application application){
     this.application = application;
   }
 
-  public void setArchitecture(HashMap<Integer,Tile> tiles){
-    this.tiles = tiles;
+  public void setArchitecture(Architecture architecture){
+    this.architecture = architecture;
   }
 
   public void calculateModuloSchedule(){
+		HashMap<Integer,Tile> tiles = architecture.getTiles();
     List<Integer> V = new ArrayList<>();
     for(Map.Entry<Integer,Actor> v : application.getActors().entrySet()){
       V.add(v.getKey());
@@ -211,10 +221,10 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     }
   }
 
-  public void schedule(){
+  public void findSchedule(){
     // at least 3 iterations
     List<List<Integer>>	singleIteration     = new ArrayList<>();
-    HashMap<Integer, List<Integer>> kernel  = new HashMap<>();
+    this.kernel  = new HashMap<>();
     int scheduled = 0;
     int step = 1;
 
@@ -230,42 +240,42 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     	  scheduled++;
         }
       }
-      kernel.put(step, new ArrayList<>(stepList));
+      this.kernel.put(step, new ArrayList<>(stepList));
       singleIteration.add(new ArrayList<>(stepList));
       step++;
     }
     
-    // 2) Generate a schedule with 3 iterations and put them in kernel
-    int lastStep = 0;
-    for(int k=1; k<3;k++){
+    // 2) Generate a schedule up to maxIterations iterations and put them in kernel
+    this.lastStep = 0;
+    for(int k=1; k<this.maxIterations;k++){
       for(int i = MII*k+1; i < MII*k+singleIteration.size()+1; i++ ){
-        if(kernel.containsKey(i)){
-          List<Integer> actors = kernel.get(i);
-      	  actors.addAll(singleIteration.get(i-(MII*k)-1));
-      	  kernel.put(i, actors);
+        if(this.kernel.containsKey(i)){
+          List<Integer> actors = new ArrayList<>(this.kernel.get(i));
+      	  actors.addAll(new ArrayList<>(singleIteration.get(i-(MII*k)-1)));
+      	  this.kernel.put(i, actors);
         }
         else{
-          kernel.put(i, singleIteration.get(i-MII*k-1));
+          this.kernel.put(i, new ArrayList<>(singleIteration.get(i-MII*k-1)));
         }
-        lastStep = i;
+        this.lastStep = i;
       }
     }
 //    System.out.println("Last step:"+lastStep);
 //    // now, we print the schedule
-    for(int i=1; i <= lastStep;i++){
-//      System.out.println("Step: "+i);
-      Collections.sort(kernel.get(i));
-//      for(int v : kernel.get(i)){
-//        System.out.println("Actor: "+application.getActors().get(v).getName());
-//      }
+    for(int i=1; i <= this.lastStep;i++){
+      System.out.println("STEP: "+i);
+      Collections.sort(this.kernel.get(i));
+      for(int v : this.kernel.get(i)){
+        System.out.println("Actor: "+application.getActors().get(v).getName());
+      }
     }
     // 3) we find the kernel, to calculate the throuhgput
     boolean foundKernel = false;
-    for(int i=1;i<=lastStep-1;i++){
+    for(int i=1;i<=this.lastStep-1;i++){
       stepStartKernel = i;  
-      for(int j=i+1;j<=lastStep;j++){
+      for(int j=i+1;j<=this.lastStep;j++){
         stepEndKernel = j;
-        if(kernel.get(stepStartKernel).equals(kernel.get(stepEndKernel))){
+        if(this.kernel.get(stepStartKernel).equals(this.kernel.get(stepEndKernel))){
           foundKernel = true;
           break;
         }
@@ -273,23 +283,28 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
       if (foundKernel == true)
         break;
     }
+    System.out.println("Kernel starts at: "+stepStartKernel+" and ends at: "+stepEndKernel);
+	}
+
+	public void schedule(){
+		HashMap<Integer,Tile> tiles = architecture.getTiles();
     // 4) set the resource ocupation of all the resources as empty
     resourceOcupation = new HashMap<>();
-    for(int i=1; i <= lastStep;i++){
+    for(int i=1; i <= this.lastStep;i++){
       // filling first level with step as key
       resourceOcupation.put(i,new HashMap<>());
       // filling second level where the key is the tile id
-      for(HashMap.Entry<Integer,Tile> t: this.tiles.entrySet()){
+      for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
         resourceOcupation.get(i).put(t.getKey(),new HashMap<>());
         // filling the third level where the key is the processor id
         for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
           resourceOcupation.get(i).get(t.getKey()).put(p.getKey(),false);
         }
       }
-    }
+    }   
     // 5) now, we schedule the actions in the first tree iterations
-    for(int i = 1 ; i<=lastStep;i++){
-      this.getSchedulableActors(application.getActors(),application.getFifos(),i,kernel);
+    for(int i = 1 ; i<=this.lastStep;i++){
+      this.getSchedulableActors(application.getActors(),application.getFifos(),i,this.kernel);
       //LinkedList<Action> stepScheduledActions = new LinkedList<Action>();
       // key is tile id
       HashMap<Integer,HashMap<Integer,Boolean>> currentTilesOccupation = resourceOcupation.get(i);
@@ -371,7 +386,6 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
       }
       resourceOcupation.put(i,currentTilesOccupation);
     }
-    System.out.println("Kernel starts at: "+stepStartKernel+" and ends at: "+stepEndKernel);
   }
 
   public int getNextAvailableProcessor(HashMap<Integer,Boolean> processorUtilization){
@@ -409,16 +423,6 @@ public class ModuloScheduler  { //extends Scheduler implements Schedule{
     queueActions.add(new Action(a));
   }
 
-//
-//  public void runSchedule(List<Actor> actors,Map<Integer,Fifo> fifos){
-//    while(this.getRunIterations() < this.getNumberIterations()){
-//    //for(int i=0;i<10;i++){
-//      // First enqueue the fireable actors!
-//      this.getSchedulableActors(actors,fifos);
-//      this.commitActionsinQueue();
-//      this.fireCommitedActions(fifos);
-//    }
-//  }
 
   // PCOUNT: is the number of immediate predecessors of v not yet scheduled  
   int getPCOUNT(Actor v, HashMap<Integer, Boolean> scheduled) {

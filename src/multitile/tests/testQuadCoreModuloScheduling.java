@@ -36,7 +36,7 @@
 */
 package src.multitile.tests;
 
-import src.multitile.ModuloScheduler;
+import src.multitile.scheduler.ModuloScheduler;
 
 import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
@@ -68,22 +68,21 @@ public class testQuadCoreModuloScheduling {
 
 			Architecture architecture = new Architecture("architecture");
 
-			for(HashMap.Entry<Integer,Tile> t : architecture.getTiles().entrySet()){
-				System.out.println("arch:"+t.getValue().getId()+" name "+t.getValue().getName());
-			}
-      //Tile t1 = new Tile("Tile_testQuadCore",4,1.0,2);
-      //HashMap<Integer,Tile> architecture = new HashMap<>();
-      //architecture.put(t1.getId(),t1);
+//			for(HashMap.Entry<Integer,Tile> t : architecture.getTiles().entrySet()){
+//				System.out.println("arch:"+t.getValue().getId()+" name "+t.getValue().getName());
+//			}
 
       TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
 
       ModuloScheduler scheduler = new ModuloScheduler();
       scheduler.setApplication(app);
-      scheduler.setArchitecture(architecture.getTiles());
-
+      scheduler.setArchitecture(architecture);
+			
+			scheduler.setMaxIterations(4);
       scheduler.calculateModuloSchedule();
-      //scheduler.printKernelBody();
+      scheduler.printKernelBody();
+			scheduler.findSchedule();
       scheduler.schedule();
 
       System.out.println("The MMI is: "+scheduler.getMII());
