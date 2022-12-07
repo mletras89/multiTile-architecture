@@ -39,8 +39,6 @@
 */
 package src.multitile.architecture;
 
-import src.multitile.Scheduler;
-import src.multitile.FCFS;
 import src.multitile.Action;
 
 import java.io.File;
@@ -67,7 +65,7 @@ public class Processor {
     this.setName(name);
     this.setId(ArchitectureManagement.getProcessorId());
     localMemory = new LocalMemory(this.name+"_localMemory");
-    scheduler = new FCFS(name,this);
+    scheduler = new Scheduler(name,this);
     scheduler.setNumberIterations(1); 
     // connecting local memory to processor
     this.localMemory.setEmbeddedToProcessor(this);

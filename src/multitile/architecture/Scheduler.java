@@ -41,10 +41,13 @@
         - writeTransfers write transfers executed in each simulation step
 --------------------------------------------------------------------------
 */
-package src.multitile;
+package src.multitile.architecture;
 
-import src.multitile.architecture.Memory;
-import src.multitile.architecture.Processor;
+import src.multitile.Action;
+import src.multitile.Transfer;
+import src.multitile.MapManagement;
+import src.multitile.SchedulerManagement;
+
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
 
@@ -80,7 +83,7 @@ public class Scheduler{
   private int runIterations;
   private String name;
 
-  Scheduler(String name,Processor owner){
+  public Scheduler(String name,Processor owner){
     this.scheduledActions = new LinkedList<Action>();
     this.queueActions = new LinkedList<>();
     this.readTransfers = new HashMap<>();
