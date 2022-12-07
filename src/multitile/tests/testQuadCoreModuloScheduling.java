@@ -38,6 +38,7 @@ package src.multitile.tests;
 
 import src.multitile.ModuloScheduler;
 
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -65,16 +66,21 @@ public class testQuadCoreModuloScheduling {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing quadcore implementation testcase!");
 
-      Tile t1 = new Tile("Tile_testQuadCore",4,1.0,2);
-      HashMap<Integer,Tile> architecture = new HashMap<>();
-      architecture.put(t1.getId(),t1);
+			Architecture architecture = new Architecture("architecture");
 
-      TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(t1);  
+			for(HashMap.Entry<Integer,Tile> t : architecture.getTiles().entrySet()){
+				System.out.println("arch:"+t.getValue().getId()+" name "+t.getValue().getName());
+			}
+      //Tile t1 = new Tile("Tile_testQuadCore",4,1.0,2);
+      //HashMap<Integer,Tile> architecture = new HashMap<>();
+      //architecture.put(t1.getId(),t1);
+
+      TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
 
       ModuloScheduler scheduler = new ModuloScheduler();
       scheduler.setApplication(app);
-      scheduler.setArchitecture(architecture);
+      scheduler.setArchitecture(architecture.getTiles());
 
       scheduler.calculateModuloSchedule();
       //scheduler.printKernelBody();
@@ -82,10 +88,11 @@ public class testQuadCoreModuloScheduling {
 
       System.out.println("The MMI is: "+scheduler.getMII());
       
-      for(HashMap.Entry<Integer,Processor> p: t1.getProcessors().entrySet()){
+      for(HashMap.Entry<Integer,Processor> p: architecture.getTiles().get(0).getProcessors().entrySet()){
         p.getValue().getScheduler().saveScheduleStats(".");
       }
 
+		  architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing quadcore implementation testcase done!");
     }
 }
