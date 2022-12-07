@@ -31,7 +31,7 @@
   @date   02 November 2022
   @version 1.1
   @ brief
-     This class describes an Tile in the architecture. Each Tile contains:
+     This class describes a Tile in the architecture. Each Tile contains:
         - processors: a list of processors in the tile.
         - crossbar: crossbar that communicate the processors
         - tileLocalMemory: is the memory local to this tile
