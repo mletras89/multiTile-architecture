@@ -53,41 +53,69 @@ import java.util.Queue;
 import java.util.*;
 
 public class Architecture{
-	// the key is the id
-	private String name;
-	private HashMap<Integer,Tile> tiles;
-	//private NoC noc;
-	private GlobalMemory globalMemory;
+  // the key is the id
+  private String name;
+  private HashMap<Integer,Tile> tiles;
+  //private NoC noc;
+  private GlobalMemory globalMemory;
+  
+  public Architecture(String name){
+    this.name = name;
+    // creaate one tile in the architecture
+    Tile t1 = new Tile("Tile1",4,1.0,2);
+    
+    tiles = new HashMap<>();	
+    tiles.put(t1.getId(),t1);
+    
+    globalMemory = new GlobalMemory("GlobalMemory");
+  }
 
-	public Architecture(String name){
-		this.name = name;
-		// creaate the three tiles in the architecture
-		Tile t1 = new Tile("Tile1",4,1.0,2);
-		//Tile t2 = new Tile("Tile2",4,1.0,2);	
-		//Tile t3 = new Tile("Tile3",4,1.0,2);	
-		
-		tiles = new HashMap<>();	
-		tiles.put(t1.getId(),t1);
-		//tiles.put(t2.getId(),t2);
-		//tiles.put(t3.getId(),t3);
+  public Architecture(String name, int nTiles, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
+    this.name = name;
+    tiles = new HashMap<>(); 
+    for(int i=0; i < nTiles; i++){
+      Tile t = new Tile("Tile"+(i+1), nProcPerTile, BWCrossbars, channelsCrossbar);
+      tiles.put(t.getId(),t);  
+    }
+    globalMemory = new GlobalMemory("GlobalMemory");
+  }
 
-		globalMemory = new GlobalMemory("GlobalMemory");
-	}
-	
-	public String getName(){
-		return this.name;
-	}
+  public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
+    // for test purposes, single tile with name tile
+    this.name = name;
+    tiles = new HashMap<>(); 
 
-	public void setName(String name){
-		this.name = name;
-	}
+    Tile t = new Tile(nameTile, nProcPerTile, BWCrossbars, channelsCrossbar);
+    tiles.put(t.getId(),t);  
 
-	public HashMap<Integer,Tile> getTiles(){
-		return this.tiles;
-	}
+    globalMemory = new GlobalMemory("GlobalMemory");
+  }
+  
+  
+  
+  public String getName(){
+  	return this.name;
+  }
+  
+  public void setName(String name){
+  	this.name = name;
+  }
+  
+  public HashMap<Integer,Tile> getTiles(){
+  	return this.tiles;
+  }
+  
+  public GlobalMemory getGlobalMemory(){
+  	return this.globalMemory;
+  }
+  
+  public void resetArchitecture(){
+    for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
+      t.getValue().resetTile();
+    }
+    // refresh the global memory
+    this.globalMemory.resetMemoryUtilization();
+  }
 
-	public GlobalMemory getGlobalMemory(){
-		return this.globalMemory;
-	}
-	
+
 }
