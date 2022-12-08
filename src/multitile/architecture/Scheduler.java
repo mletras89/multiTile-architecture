@@ -46,7 +46,8 @@ package src.multitile.architecture;
 import src.multitile.Action;
 import src.multitile.Transfer;
 import src.multitile.MapManagement;
-import src.multitile.SchedulerManagement;
+
+import src.multitile.scheduler.SchedulerManagement;
 
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
