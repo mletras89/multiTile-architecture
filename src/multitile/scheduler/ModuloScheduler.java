@@ -157,11 +157,23 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
 	  //System.out.println("TRY Scheduling "+actors.get(v).getName()+" on control step "+l.get(v)+ " on resource "+cpus.get(actors.get(v).getMapping()).getName());
 	  /* Check that no more than num(r(v)) operations are scheduled on the
              resources corresponding to *R(r(v)) at the same time modulo MII */
-	  int BU = calcU(l,MII,U,v); 
-	  while(BU>0) {
+	  int BU = calcU(l,MII,U,v);
+          //System.out.println("l:");
+          //System.out.println(l);
+          //System.out.println("U");
+          //System.out.println(U);
+
+          int mappingV = application.getActors().get(v).getMapping().getOwnerTile().getId();
+          //System.out.println("BU:"+BU);
+	  while(BU>=tiles.get(mappingV).getProcessors().size()) {
 	    l.put(v, l.get(v)+1);
 	    BU = calcU(l,MII,U,v);  
 	  }
+          ArrayList<Integer> pair = new ArrayList<>();
+          pair.add(mappingV);
+          pair.add(l.get(v));
+          U.put(pair, U.get(pair) + 1);
+          //System.out.println(U);
 	  for (int w : SUCC.get(v)) {
 	    PCOUNT.put(w, PCOUNT.get(w) -1 );
 	    int maxVal = l.get(w) > l.get(v)+1 ? l.get(w) : l.get(v)+1;
