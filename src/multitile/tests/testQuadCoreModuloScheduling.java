@@ -66,11 +66,11 @@ public class testQuadCoreModuloScheduling {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing quadcore implementation testcase!");
 
-			Architecture architecture = new Architecture("architecture");
+      Architecture architecture = new Architecture("architecture");
 
-//			for(HashMap.Entry<Integer,Tile> t : architecture.getTiles().entrySet()){
-//				System.out.println("arch:"+t.getValue().getId()+" name "+t.getValue().getName());
-//			}
+//for(HashMap.Entry<Integer,Tile> t : architecture.getTiles().entrySet()){
+//  System.out.println("arch:"+t.getValue().getId()+" name "+t.getValue().getName());
+//}
 
       TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
@@ -79,10 +79,10 @@ public class testQuadCoreModuloScheduling {
       scheduler.setApplication(app);
       scheduler.setArchitecture(architecture);
 			
-			scheduler.setMaxIterations(4);
+      scheduler.setMaxIterations(4);
       scheduler.calculateModuloSchedule();
-      scheduler.printKernelBody();
-			scheduler.findSchedule();
+      //scheduler.printKernelBody();
+      scheduler.findSchedule();
       scheduler.schedule();
 
       System.out.println("The MMI is: "+scheduler.getMII());
@@ -91,7 +91,7 @@ public class testQuadCoreModuloScheduling {
         p.getValue().getScheduler().saveScheduleStats(".");
       }
 
-		  architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing quadcore implementation testcase done!");
     }
 }

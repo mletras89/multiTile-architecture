@@ -36,6 +36,9 @@
 */
 package src.multitile.tests;
 
+import src.multitile.scheduler.FCFS;
+
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -63,26 +66,38 @@ public class testCompositeChannel {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing composite channel Implementation!");
 
-      Tile t1 = new Tile("Tile_testComposite",1,1.0,2);
-      
+      Architecture architecture = new Architecture("Arch","Tile_testComposite",1,1.0,2);
+      Tile t1 = architecture.getTiles().get(0); 
+
       TestApplication sampleApplication = new TestApplication(t1);  
       Application app = sampleApplication.getSampleApplication();
 
-      t1.setTotalIterations(3);
-      t1.runTileActors(app);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      FCFS scheduler = new FCFS();
+      scheduler.setApplication(app);
+      scheduler.setArchitecture(architecture);
+
+      scheduler.setMaxIterations(3);
+      scheduler.schedule();
+
+      architecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
 
       // merge all the multicast actors in the application
       ApplicationManagement.setAllMulticastActorsAsMergeable(app);
       ApplicationManagement.collapseMergeableMulticastActors(app);
       app.resetApplication();
+      architecture.resetArchitecture();
       
-      t1.setName("Tile_testCompositeAfterMerging");
-      t1.setTotalIterations(3);
-      t1.runTileActors(app);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      architecture.getTiles().get(0).setName("Tile_testCompositeAfterMerging");
+
+      scheduler.setApplication(app);
+      scheduler.setArchitecture(architecture);
+      scheduler.setMaxIterations(3);
+      scheduler.schedule();
+
+      architecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
       System.out.println("Testing composite channel Implementation done!");
     }
 }

@@ -36,6 +36,9 @@
 */
 package src.multitile.tests;
 
+import src.multitile.scheduler.FCFS;
+
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -59,8 +62,9 @@ import static java.util.stream.Collectors.toList;
 public class testWriteReadTransfers {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing testWriteReadTransfers!");
-
-      Tile t1 = new Tile("TileReadWrite",1,1.0,2);
+      
+      Architecture architecture = new Architecture("Arch","TileReadWrite",1,1.0,2); 
+      Tile t1 = architecture.getTiles().get(0);
       Memory memory1 = t1.getTileLocalMemory();
       Processor cpu1 = t1.getProcessors().get(0);
 
@@ -74,7 +78,6 @@ public class testWriteReadTransfers {
       Actor a5 = new Actor("a5:sink");
       a5.setId(5) ;
       a5.setExecutionTime(10000);
-      //a5.setInputs(2);
       a5.setInputs(1);
       a5.setOutputs(0);
       a5.setMapping(cpu1);
@@ -98,10 +101,16 @@ public class testWriteReadTransfers {
       application.setActorsFromList(actors);
       application.setFifos(fifoMap);
 
-      t1.setTotalIterations(10);
-      t1.runTileActors(application);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      FCFS scheduler = new FCFS();
+      scheduler.setApplication(application);
+      scheduler.setArchitecture(architecture);
+
+      scheduler.setMaxIterations(10);
+      scheduler.schedule();
+
+      architecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
       System.out.println("Testing testWriteReadTransfers done!");
     }
 }

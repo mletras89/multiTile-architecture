@@ -36,6 +36,9 @@
 */
 package src.multitile.tests;
 
+import src.multitile.scheduler.FCFS;
+
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -63,18 +66,23 @@ public class testQuadCoreImplementation {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing quadcore implementation testcase!");
 
-      Tile t1 = new Tile("Tile_testQuadCore",4,1.0,2);
-      
+      Architecture architecture = new Architecture("Arch","Tile_testQuadCore",4,1.0,2);
+      Tile t1 = architecture.getTiles().get(0);
+
       TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(t1);  
       Application app = sampleApplication.getSampleApplication();
 
-      t1.setTotalIterations(3);
-      t1.runTileActors(app);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getProcessors().get(1).getScheduler().saveScheduleStats(".");
-      t1.getProcessors().get(2).getScheduler().saveScheduleStats(".");
-      t1.getProcessors().get(3).getScheduler().saveScheduleStats(".");      
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      FCFS scheduler = new FCFS();
+      scheduler.setApplication(app);
+      scheduler.setArchitecture(architecture);
+
+      scheduler.setMaxIterations(3);
+      scheduler.schedule();
+
+      for(HashMap.Entry<Integer,Processor> p: architecture.getTiles().get(0).getProcessors().entrySet()){
+        p.getValue().getScheduler().saveScheduleStats(".");
+      }
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
 
       System.out.println("Testing quadcore implementation testcase done!");
     }

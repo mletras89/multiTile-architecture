@@ -36,6 +36,9 @@
 */
 package src.multitile.tests;
 
+import src.multitile.scheduler.FCFS;
+
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -60,15 +63,21 @@ public class testTileSingleCoreCrossbar2 {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing testTileSingleCoreCrossbar2 Implementation!");
 
-      Tile t1 = new Tile("TileSingleCoreCrossbar2_1",1,1.0,2);
+      Architecture architecture = new Architecture("Arch","TileSingleCoreCrossbar2_1",1,1.0,2);
+      Tile t1 = architecture.getTiles().get(0);
 
       TestApplication sampleApplication = new TestApplication(t1);  
       Application application = sampleApplication.getSampleApplication();
 
-      t1.setTotalIterations(10);
-      t1.runTileActors(application);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      FCFS scheduler = new FCFS();
+      scheduler.setApplication(application);
+      scheduler.setArchitecture(architecture);
+
+      scheduler.setMaxIterations(10);
+      scheduler.schedule();
+
+      architecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing testTileSingleCoreCrossbar2 Implementation done!");
     }
 }

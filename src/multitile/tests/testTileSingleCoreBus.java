@@ -37,6 +37,9 @@
 
 package src.multitile.tests;
 
+import src.multitile.scheduler.FCFS;
+
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -61,15 +64,21 @@ public class testTileSingleCoreBus {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing Single Core Bus Implementation!");
 
-      Tile t1 = new Tile("TileSingleCoreBus1",1,1.0,1);
+      Architecture architecture = new Architecture("Arch","TileSingleCoreBus1",1,1.0,1);
+      Tile t1 = architecture.getTiles().get(0);
 
       TestApplication sampleApplication = new TestApplication(t1);  
       Application application = sampleApplication.getSampleApplication();
 
-      t1.setTotalIterations(1);
-      t1.runTileActors(application);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      FCFS scheduler = new FCFS();
+      scheduler.setApplication(application);
+      scheduler.setArchitecture(architecture);
+
+      scheduler.setMaxIterations(1);
+      scheduler.schedule();
+
+      architecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
       System.out.println("Testing Single Core Bus Implementation done!");
     }
 }

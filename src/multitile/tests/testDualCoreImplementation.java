@@ -37,6 +37,9 @@
 */
 package src.multitile.tests;
 
+import src.multitile.scheduler.FCFS;
+
+import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Memory;
 import src.multitile.architecture.Processor;
@@ -64,16 +67,22 @@ public class testDualCoreImplementation {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing dualcore implementation testcase!");
 
-      Tile t1 = new Tile("Tile_testDualCore",2,1.0,2);
+      Architecture architecture = new Architecture("Arch","Tile_testDualCore",2,1.0,2);
+      Tile t1 = architecture.getTiles().get(0); 
       
       TestApplicationDualCore sampleApplication = new TestApplicationDualCore(t1);  
       Application app = sampleApplication.getSampleApplication();
 
-      t1.setTotalIterations(3);
-      t1.runTileActors(app);
-      t1.getProcessors().get(0).getScheduler().saveScheduleStats(".");
-      t1.getProcessors().get(1).getScheduler().saveScheduleStats(".");
-      t1.getCrossbar().saveCrossbarUtilizationStats(".");
+      FCFS scheduler = new FCFS();
+      scheduler.setApplication(app);
+      scheduler.setArchitecture(architecture);
+
+      scheduler.setMaxIterations(3);
+      scheduler.schedule();
+
+      architecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getProcessors().get(1).getScheduler().saveScheduleStats(".");
+      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
 
       System.out.println("Testing dualcore implementation testcase done!");
     }
