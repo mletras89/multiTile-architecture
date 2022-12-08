@@ -54,6 +54,13 @@ public class ArchitectureManagement{
     tileIdCounter = 0;
   }
 
+  public static void resetCounters(){
+    processorIdCounter = 0;
+    memoryIdCounter = 0;
+    crossbarIdCounter = 0;
+    tileIdCounter = 0;
+  }
+
   public static int getTileId(){
     return tileIdCounter++;
   }

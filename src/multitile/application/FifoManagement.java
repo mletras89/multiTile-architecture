@@ -53,6 +53,11 @@ public class FifoManagement{
     compositeCounter = 0;
   }
 
+  public static void resetCounters(){
+    fifoIdCounter=1;
+    compositeCounter = 0;
+  }
+
   public static int getCompositeCounter(){
     return compositeCounter++;
   }

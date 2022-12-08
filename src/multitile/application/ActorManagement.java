@@ -52,6 +52,11 @@ public class ActorManagement{
     multicastActorCounter = 0;
   }
 
+  public static void resetCounters(){
+    actorIdCounter = 1;
+    multicastActorCounter = 0;
+  }
+
   public static int getActorId(){
     return actorIdCounter++;
   }
