@@ -36,7 +36,7 @@
  
 --------------------------------------------------------------------------
 */
-package src.multitile;
+package src.multitile.scheduler;
 
 import java.util.*;
 import src.multitile.Transfer;
