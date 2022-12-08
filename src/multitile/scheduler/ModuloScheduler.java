@@ -57,8 +57,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.*;
 
-public class ModuloScheduler extends BaseScheduler { //extends Scheduler implements Schedule{
-
+public class ModuloScheduler extends BaseScheduler implements Schedule{
 
   // first level key is the step,
   // the second level map, key is the id of the tile, 
@@ -68,25 +67,19 @@ public class ModuloScheduler extends BaseScheduler { //extends Scheduler impleme
   // key is the actor id and the value is the scheduled step
   private HashMap<Integer,Integer> l;
   private int MII;
-	private int lastStep;
+  private int lastStep;
   private HashMap<Integer,List<Integer>> kernel;
-
-	private int maxIterations;
 
   public ModuloScheduler(){
     super();
     this.l = new HashMap<>();
 
     this.resourceOcupation = new HashMap<>();
-		this.maxIterations = 3;
+    this.setMaxIterations(3);
   }
 
-	public void setMaxIterations(int maxIterations){
-		this.maxIterations = maxIterations;
-	}
-
   public void calculateModuloSchedule(){
-		HashMap<Integer,Tile> tiles = architecture.getTiles();
+    HashMap<Integer,Tile> tiles = architecture.getTiles();
     List<Integer> V = new ArrayList<>();
     for(Map.Entry<Integer,Actor> v : application.getActors().entrySet()){
       V.add(v.getKey());
@@ -164,22 +157,11 @@ public class ModuloScheduler extends BaseScheduler { //extends Scheduler impleme
 	  //System.out.println("TRY Scheduling "+actors.get(v).getName()+" on control step "+l.get(v)+ " on resource "+cpus.get(actors.get(v).getMapping()).getName());
 	  /* Check that no more than num(r(v)) operations are scheduled on the
              resources corresponding to *R(r(v)) at the same time modulo MII */
-	  //BU = calcU(l,MII,U,Mapping);
-	  //int BU = calcU(l,MII,U,v);
-	  //ArrayList<Integer> lQuery = new ArrayList<>();
-	  //lQuery.add(actors.get(v).getMapping().getOwnerTile().getId());
-	  //lQuery.add(l.get(v));
 	  int BU = calcU(l,MII,U,v); 
-	  //while BU > architecture[Mapping[v]] :
-	  // BU > the number of processors
 	  while(BU>0) {
 	    l.put(v, l.get(v)+1);
 	    BU = calcU(l,MII,U,v);  
 	  }
-	  //ArrayList<Integer> luNew = new ArrayList<>();
-	  //luNew.add(actors.get(v).getMapping());
-	  //luNew.add(l.get(v));
-	  //U.put(luNew, U.get(luNew)+1);
 	  for (int w : SUCC.get(v)) {
 	    PCOUNT.put(w, PCOUNT.get(w) -1 );
 	    int maxVal = l.get(w) > l.get(v)+1 ? l.get(w) : l.get(v)+1;
@@ -235,7 +217,7 @@ public class ModuloScheduler extends BaseScheduler { //extends Scheduler impleme
     
     // 2) Generate a schedule up to maxIterations iterations and put them in kernel
     this.lastStep = 0;
-    for(int k=1; k<this.maxIterations;k++){
+    for(int k=1; k<this.getMaxIterations();k++){
       for(int i = MII*k+1; i < MII*k+singleIteration.size()+1; i++ ){
         if(this.kernel.containsKey(i)){
           List<Integer> actors = new ArrayList<>(this.kernel.get(i));
@@ -272,10 +254,10 @@ public class ModuloScheduler extends BaseScheduler { //extends Scheduler impleme
         break;
     }
     System.out.println("Kernel starts at: "+stepStartKernel+" and ends at: "+stepEndKernel);
-	}
+  }
 
-	public void schedule(){
-		HashMap<Integer,Tile> tiles = architecture.getTiles();
+  public void schedule(){
+    HashMap<Integer,Tile> tiles = architecture.getTiles();
     // 4) set the resource ocupation of all the resources as empty
     resourceOcupation = new HashMap<>();
     for(int i=1; i <= this.lastStep;i++){
@@ -392,9 +374,7 @@ public class ModuloScheduler extends BaseScheduler { //extends Scheduler impleme
                                    
     // from the list of actors in Processor, check which of them can fire
     this.cleanQueue();
-
     List<Integer> actorsInStep = kernel.get(step);
-
     for(int v : actorsInStep){
       if (actors.get(v).canFire(fifos)){
         Action action = new Action(actors.get(v));
@@ -444,8 +424,8 @@ public class ModuloScheduler extends BaseScheduler { //extends Scheduler impleme
     return BU;
   }
 
-	public int getMII(){
-			return this.MII;
-	}
+  public int getMII(){
+    return this.MII;
+  }
 
 }
