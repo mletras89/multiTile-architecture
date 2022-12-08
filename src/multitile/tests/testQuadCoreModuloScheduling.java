@@ -49,6 +49,10 @@ import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 import src.multitile.application.FifoManagement;
 import src.multitile.application.ApplicationManagement;
+import src.multitile.application.ActorManagement;
+import src.multitile.application.FifoManagement;
+import src.multitile.architecture.ArchitectureManagement;
+
 
 import java.io.*;
 import java.math.*;
@@ -64,14 +68,65 @@ import static java.util.stream.Collectors.toList;
 
 public class testQuadCoreModuloScheduling {
     public static void main(String[] args) throws IOException {
+
+      System.out.println("Testing singlecore implementation testcase and modulo scheduling!");
+
+      Architecture singleCoreArchitecture = new Architecture("architecture","ModuloSchedulingSingle", 1, 1.0, 2);
+      TestApplication testApplication = new TestApplication(singleCoreArchitecture.getTiles().get(0));  
+      Application singleCoreApplication = testApplication.getSampleApplication();
+
+      ModuloScheduler singleCoreScheduler = new ModuloScheduler();
+      singleCoreScheduler.setApplication(singleCoreApplication);
+      singleCoreScheduler.setArchitecture(singleCoreArchitecture);
+
+      singleCoreScheduler.setMaxIterations(4);
+      singleCoreScheduler.calculateModuloSchedule();
+      singleCoreScheduler.printKernelBody();
+      singleCoreScheduler.findSchedule();
+      singleCoreScheduler.schedule();
+
+      System.out.println("The MMI is: "+singleCoreScheduler.getMII());
+
+      singleCoreArchitecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      singleCoreArchitecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
+      System.out.println("Testing singlecore implementation testcase done and modulo scheduling!");
+
+      System.out.println("Testing dualcore implementation testcase and modulo scheduling!");
+
+      ActorManagement.resetCounters();
+      FifoManagement.resetCounters();
+      ArchitectureManagement.resetCounters();
+
+      Architecture dualCoreArchitecture = new Architecture("architecture","ModuloSchedulingDual", 2, 1.0, 2);
+      TestApplicationDualCore testDualApplication = new TestApplicationDualCore(dualCoreArchitecture.getTiles().get(0));
+      Application dualCoreApplication = testDualApplication.getSampleApplication();
+
+      ModuloScheduler dualCoreScheduler = new ModuloScheduler();
+      dualCoreScheduler.setApplication(dualCoreApplication);
+      dualCoreScheduler.setArchitecture(dualCoreArchitecture);
+
+      dualCoreScheduler.setMaxIterations(4);
+      dualCoreScheduler.calculateModuloSchedule();
+      dualCoreScheduler.printKernelBody();
+      dualCoreScheduler.findSchedule();
+      dualCoreScheduler.schedule();
+
+      System.out.println("The MMI is: "+dualCoreScheduler.getMII());
+
+      dualCoreArchitecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
+      dualCoreArchitecture.getTiles().get(0).getProcessors().get(1).getScheduler().saveScheduleStats(".");
+      dualCoreArchitecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
+      System.out.println("Testing dualcore implementation testcase done and modulo scheduling!");
+
       System.out.println("Testing quadcore implementation testcase!");
 
-      Architecture architecture = new Architecture("architecture");
+      ActorManagement.resetCounters();
+      FifoManagement.resetCounters();
+      ArchitectureManagement.resetCounters();
 
-//for(HashMap.Entry<Integer,Tile> t : architecture.getTiles().entrySet()){
-//  System.out.println("arch:"+t.getValue().getId()+" name "+t.getValue().getName());
-//}
-
+      Architecture architecture = new Architecture("architecture","ModuloSchedulingQuad", 4, 1.0, 2);
       TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
 
@@ -90,8 +145,8 @@ public class testQuadCoreModuloScheduling {
       for(HashMap.Entry<Integer,Processor> p: architecture.getTiles().get(0).getProcessors().entrySet()){
         p.getValue().getScheduler().saveScheduleStats(".");
       }
-
       architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
       System.out.println("Testing quadcore implementation testcase done!");
     }
 }

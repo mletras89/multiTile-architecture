@@ -74,6 +74,7 @@ public class TestApplication{
       a1.setInputs(0);
       a1.setOutputs(1);
       a1.setMapping(cpu1);
+      a1.setMappingToTile(t1);
 
       Actor a2 = new Actor("a2");  // is a multicast actor
       a2.setId(2) ;
@@ -82,7 +83,8 @@ public class TestApplication{
       a2.setOutputs(2);
       a2.setMapping(cpu1);
       a2.setType(Actor.ACTOR_TYPE.MULTICAST);
-      System.out.println("Actor 2 type:"+a2.getType());
+      a2.setMappingToTile(t1);
+      //System.out.println("Actor 2 type:"+a2.getType());
 
       Actor a3 = new Actor("a3");
       a3.setId(3) ;
@@ -90,6 +92,7 @@ public class TestApplication{
       a3.setInputs(1);
       a3.setOutputs(1);
       a3.setMapping(cpu1);
+      a3.setMappingToTile(t1);
 
       Actor a4 = new Actor("a4");
       a4.setId(4) ;
@@ -97,6 +100,7 @@ public class TestApplication{
       a4.setInputs(1);
       a4.setOutputs(1);
       a4.setMapping(cpu1);
+      a4.setMappingToTile(t1);
 
       Actor a5 = new Actor("a5:sink");
       a5.setId(5) ;
@@ -104,6 +108,7 @@ public class TestApplication{
       a5.setInputs(2);
       a5.setOutputs(0);
       a5.setMapping(cpu1);
+      a5.setMappingToTile(t1);
 
       Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);  // channel connected to writer
       //System.out.println("c1.id = "+c1.getId());
