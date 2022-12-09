@@ -101,7 +101,8 @@ public class testQuadCoreModuloScheduling {
       Architecture dualCoreArchitecture = new Architecture("architecture","ModuloSchedulingDual", 2, 1.0, 2);
       TestApplicationDualCore testDualApplication = new TestApplicationDualCore(dualCoreArchitecture.getTiles().get(0));
       Application dualCoreApplication = testDualApplication.getSampleApplication();
-
+      ApplicationManagement.assingFifoMapping(dualCoreApplication,dualCoreArchitecture); 
+  
       ModuloScheduler dualCoreScheduler = new ModuloScheduler();
       dualCoreScheduler.setApplication(dualCoreApplication);
       dualCoreScheduler.setArchitecture(dualCoreArchitecture);
