@@ -114,15 +114,10 @@ public class TestApplicationQuadCoreMemoryBound{
       a5.setMapping(cpu4);
 
       Fifo c1 = new Fifo("c1",0,1,1000000,localMemory1,1,1,a1,a2);  // channel connected to writer
-      //System.out.prin architecturen("c1.id = "+c1.getId());
       Fifo c2 = new Fifo("c2",0,1,1000000,localMemory2,1,1,a2,a3);  // channels connected to readers
-      //System.out.println("c2.id = "+c2.getId());
       Fifo c3 = new Fifo("c3",0,1,1000000,localMemory2,1,1,a2,a4);  // channels connected to readers
-      //System.out.println("c3.id = "+c3.getId());
       Fifo c4 = new Fifo("c4",0,1,1000000,localMemory3,1,1,a3,a5);
-      //System.out.println("c4.id = "+c4.getId());
       Fifo c5 = new Fifo("c5",0,1,1000000,localMemory3,1,1,a4,a5);
-      //System.out.println("c5.id = "+c5.getId());
 
       Vector<Fifo> v1 = new Vector<Fifo>();
       v1.addElement(c1);
