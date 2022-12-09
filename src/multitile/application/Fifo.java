@@ -37,6 +37,8 @@
 */
 package src.multitile.application;
 
+import src.multitile.architecture.Tile;
+
 import src.multitile.Transfer;
 import src.multitile.Transfer;
 import src.multitile.architecture.Memory;
@@ -52,7 +54,10 @@ public class Fifo implements Buffer{
   private int             consRate;
   private int             prodRate;
   private Queue<Transfer> timeProducedToken;  // each transfer transport a token, thus the due time is the produced token time
-  private Memory mapping;   // map to memory 
+  private Memory mapping=null;   // map to memory 
+  private Tile mappingToTile;  // mapping to the Tile
+
+  private FIFO_MAPPING_TYPE mappingType;
 
   private Actor source; // source actor
   private Actor destination; // destination actor
@@ -65,6 +70,13 @@ public class Fifo implements Buffer{
 
   private Vector<Integer> memory_footprint;
 
+  public static enum FIFO_MAPPING_TYPE {
+    SOURCE,
+    DESTINATION,
+    TILE_LOCAL,
+    GLOBAL
+  }
+
   public Fifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst){
     //this.id                          = id;
     this.id                          = FifoManagement.getFifoId();
@@ -73,6 +85,26 @@ public class Fifo implements Buffer{
     this.capacity                    = capacity;
     this.setTokenSize(tokenSize);
     this.setMapping(mapping);
+    this.initial_tokens              = tokens;
+    this.setConsRate(consRate);
+    this.setProdRate(prodRate);
+    this.setSource(src);
+    this.setDestination(dst);
+    this.setNumberOfReadsTimeProduced(0);
+    this.timeProducedToken = new LinkedList<>();
+    this.numberOfReads = 0;
+    this.ReMapping = new LinkedList<>();
+    this.setNumberOfReadsReMapping(0);
+  }
+  
+  public Fifo(String name, int tokens, int capacity, int tokenSize,int consRate, int prodRate, Actor src, Actor dst,FIFO_MAPPING_TYPE mappingType){
+    //this.id                          = id;
+    this.id                          = FifoManagement.getFifoId();
+    this.name                        = name;
+    this.tokens                      = tokens;
+    this.capacity                    = capacity;
+    this.setTokenSize(tokenSize);
+    this.setMappingType(mappingType);
     this.initial_tokens              = tokens;
     this.setConsRate(consRate);
     this.setProdRate(prodRate);
@@ -105,6 +137,24 @@ public class Fifo implements Buffer{
     this.setNumberOfReadsReMapping(0);
   }
 
+  public Fifo(String name, int tokens, int capacity, int tokenSize,int consRate, int prodRate,FIFO_MAPPING_TYPE mappingType){
+    this.id                          = FifoManagement.getFifoId(); 
+    this.name                        = name;
+    this.tokens                      = tokens;
+    this.capacity                    = capacity;
+    this.setTokenSize(tokenSize);
+    this.setMappingType(mappingType);
+    this.initial_tokens              = tokens;
+    this.setConsRate(consRate);
+    this.setProdRate(prodRate);
+
+    this.setNumberOfReadsTimeProduced(0);
+    this.timeProducedToken = new LinkedList<>();
+    this.numberOfReads = 0;
+
+    this.ReMapping = new LinkedList<>();
+    this.setNumberOfReadsReMapping(0);
+  }
 
   public Fifo(Fifo another){
     this.id                          = another.getId();
@@ -113,6 +163,7 @@ public class Fifo implements Buffer{
     this.capacity                    = another.get_capacity();
     this.setTokenSize(another.getTokenSize());
     this.setMapping(another.getMapping());
+    this.setMappingType(another.getMappingType());
     this.initial_tokens              = another.initial_tokens;
     this.setConsRate(another.getConsRate());
     this.setProdRate(another.getProdRate());
@@ -126,6 +177,22 @@ public class Fifo implements Buffer{
     this.setNumberOfReadsReMapping(another.getNumberOfReadsReMapping());
     this.ReMapping = new LinkedList<>();
 
+  }
+
+  public Tile getMappingToTile(){
+    return this.mappingToTile;
+  }
+
+  public void setMappingToTile(Tile tile){
+    this.mappingToTile = tile;  
+  }
+
+  public FIFO_MAPPING_TYPE getMappingType(){
+    return this.mappingType;
+  }
+
+  public void setMappingType(FIFO_MAPPING_TYPE mappingType){
+    this.mappingType = mappingType;
   }
 
   public int getInitialTokens(int initial_tokens){
