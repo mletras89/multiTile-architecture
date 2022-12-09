@@ -84,7 +84,6 @@ public class TestApplication{
       a2.setMapping(cpu1);
       a2.setType(Actor.ACTOR_TYPE.MULTICAST);
       a2.setMappingToTile(t1);
-      //System.out.println("Actor 2 type:"+a2.getType());
 
       Actor a3 = new Actor("a3");
       a3.setId(3) ;
@@ -111,15 +110,10 @@ public class TestApplication{
       a5.setMappingToTile(t1);
 
       Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);  // channel connected to writer
-      //System.out.println("c1.id = "+c1.getId());
       Fifo c2 = new Fifo("c2",0,1,1000000,memory1,1,1,a2,a3);  // channels connected to readers
-      //System.out.println("c2.id = "+c2.getId());
       Fifo c3 = new Fifo("c3",0,1,1000000,memory1,1,1,a2,a4);  // channels connected to readers
-      //System.out.println("c3.id = "+c3.getId());
       Fifo c4 = new Fifo("c4",0,1,1000000,memory1,1,1,a3,a5);
-      //System.out.println("c4.id = "+c4.getId());
       Fifo c5 = new Fifo("c5",0,1,1000000,memory1,1,1,a4,a5);
-      //System.out.println("c5.id = "+c5.getId());
 
       Vector<Fifo> v1 = new Vector<Fifo>();
       v1.addElement(c1);
