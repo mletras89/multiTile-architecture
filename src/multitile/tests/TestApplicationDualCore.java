@@ -44,6 +44,7 @@ import src.multitile.architecture.Processor;
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
 import src.multitile.application.Fifo;
+import src.multitile.application.Fifo.FIFO_MAPPING_TYPE;
 import src.multitile.application.CompositeFifo;
 import src.multitile.application.FifoManagement;
 import src.multitile.application.ApplicationManagement;
@@ -83,8 +84,6 @@ public class TestApplicationDualCore{
       a2.setOutputs(2);
       a2.setMapping(cpu2);
       a2.setMappingToTile(t1);
-      //a2.setType(Actor.ACTOR_TYPE.MULTICAST);
-      //System.out.println("Actor 2 type:"+a2.getType());
 
       Actor a3 = new Actor("a3");
       a3.setId(3) ;
@@ -110,16 +109,17 @@ public class TestApplicationDualCore{
       a5.setMapping(cpu1);
       a5.setMappingToTile(t1);
 
-      Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);  // channel connected to writer
-      //System.out.prin architecturen("c1.id = "+c1.getId());
-      Fifo c2 = new Fifo("c2",0,1,1000000,memory1,1,1,a2,a3);  // channels connected to readers
-      //System.out.println("c2.id = "+c2.getId());
-      Fifo c3 = new Fifo("c3",0,1,1000000,memory1,1,1,a2,a4);  // channels connected to readers
-      //System.out.println("c3.id = "+c3.getId());
-      Fifo c4 = new Fifo("c4",0,1,1000000,memory1,1,1,a3,a5);
-      //System.out.println("c4.id = "+c4.getId());
-      Fifo c5 = new Fifo("c5",0,1,1000000,memory1,1,1,a4,a5);
-      //System.out.println("c5.id = "+c5.getId());
+      Fifo c1 = new Fifo("c1",0,1,1000000,1,1,a1,a2,FIFO_MAPPING_TYPE.TILE_LOCAL);  // channel connected to writer
+      Fifo c2 = new Fifo("c2",0,1,1000000,1,1,a2,a3,FIFO_MAPPING_TYPE.TILE_LOCAL);  // channels connected to readers
+      Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.TILE_LOCAL);  // channels connected to readers
+      Fifo c4 = new Fifo("c4",0,1,1000000,1,1,a3,a5,FIFO_MAPPING_TYPE.TILE_LOCAL);
+      Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.TILE_LOCAL);
+
+      c1.setMappingToTile(t1);
+      c2.setMappingToTile(t1);
+      c3.setMappingToTile(t1);
+      c4.setMappingToTile(t1);
+      c5.setMappingToTile(t1);
 
       Vector<Fifo> v1 = new Vector<Fifo>();
       v1.addElement(c1);
@@ -167,6 +167,7 @@ public class TestApplicationDualCore{
 
       sampleApplication.setActorsFromList(actors);
       sampleApplication.setFifos(fifoMap);
+
   }
 
   public Application getSampleApplication(){
