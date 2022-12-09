@@ -59,9 +59,6 @@ public class Actor{
   private ACTOR_TYPE type;
   private boolean mergeMulticast = false;
 
-//  private HashMap<Integer,Integer> inputMergedFifos;  // the key is the fifo ID, and the value the merged fifo id
-//  private HashMap<Integer,ArrayList<Integer>> outputMergedFifos;
- 
   public static enum ACTOR_TYPE {
       ACTOR,
       MULTICAST
@@ -84,8 +81,6 @@ public class Actor{
     this.setType(ACTOR_TYPE.ACTOR);
     this.inputFifos  = new Vector<Fifo>();   
     this.outputFifos = new Vector<Fifo>();    
-//    this.setInputMergedFiFos(new HashMap<Integer,Integer>());
-//    this.setOutputMergedFifos(new HashMap<Integer,ArrayList<Integer>>()); 
   }
     
   public Actor(Actor another){
@@ -99,8 +94,6 @@ public class Actor{
     this.setType(ACTOR_TYPE.ACTOR);
     this.inputFifos    = another.getInputFifos();
     this.outputFifos   = another.getOutputFifos();
-//    this.setInputMergedFiFos(another.getInputMergedFiFos());   
-//    this.setOutputMergedFifos(another.getOutputMergedFifos());
   }
     
   public Actor(String name){
@@ -241,23 +234,6 @@ public class Actor{
     this.type = type;
   }
 
-  
-//  public HashMap<Integer,Integer> getInputMergedFiFos() {
-//    return inputMergedFifos;
-//  }
-//  
-//  public void setInputMergedFiFos(HashMap<Integer,Integer> inputMergedFifos) {
-//    this.inputMergedFifos = inputMergedFifos;
-//  }
-  
-//  public HashMap<Integer,ArrayList<Integer>> getOutputMergedFifos() {
-//    return outputMergedFifos;
-//  }
-//  
-//  public void setOutputMergedFifos(HashMap<Integer,ArrayList<Integer>> outputMergedFifos) {
-//    this.outputMergedFifos = outputMergedFifos;
-//  }
-  
   public int getNInputs() {
     return this.inputFifos.size();
   }
