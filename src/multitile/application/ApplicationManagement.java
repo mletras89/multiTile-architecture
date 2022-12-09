@@ -41,13 +41,64 @@
 package src.multitile.application;
 
 import java.util.*;
+
+import src.multitile.architecture.Architecture;
+import src.multitile.architecture.Tile;
+import src.multitile.architecture.Processor;
+
 import src.multitile.application.Actor;
 import src.multitile.application.Application;
 import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 
 public class ApplicationManagement{
+
+  // this method assign the mapping of each fifo according the type
+  public static void assingFifoMapping(Application application, Architecture architecture){
+    for(Map.Entry<Integer,Fifo> f : application.getFifos().entrySet()){
+      Fifo.FIFO_MAPPING_TYPE type = f.getValue().getMappingType();
+      Processor p;
+      switch(type){
+        case SOURCE:
+          p = f.getValue().getSource().getMapping();
+          //f.getValue().setMapping(p.getLocalMemory());
+          application.getFifos().get(f.getKey()).setMapping(p.getLocalMemory());
+          break;
+        case DESTINATION:
+          p = f.getValue().getDestination().getMapping();
+          //f.getValue().setMapping(p.getLocalMemory());
+          application.getFifos().get(f.getKey()).setMapping(p.getLocalMemory());
+          break;
+        case TILE_LOCAL:
+          System.out.println("Type:"+type);
+          Tile t = f.getValue().getMappingToTile();
+          f.getValue().setMapping(t.getTileLocalMemory());
+          application.getFifos().put(f.getKey(),f.getValue());
+          break;
+        case GLOBAL:
+          application.getFifos().get(f.getKey()).setMapping(architecture.getGlobalMemory());
+          break;
+      }
+    }
+    // update actors
+    for(Map.Entry<Integer,Actor> e: application.getActors().entrySet()){
+      Vector<Fifo> inputs = e.getValue().getInputFifos();
+      Vector<Fifo> outputs = e.getValue().getOutputFifos();
+      Vector<Fifo> newInputs = new Vector<Fifo>();
+      Vector<Fifo> newOutputs = new Vector<Fifo>();
+
+      for(Fifo i : inputs){
+        newInputs.add(application.getFifos().get(i.getId()));
+      }
+      for(Fifo o : outputs){
+        newOutputs.add(application.getFifos().get(o.getId()));
+      }
+      e.getValue().setInputFifos(newInputs);
+      e.getValue().setOutputFifos(newOutputs);
+    }
   
+  }
+
   public static Map<Integer,Actor> getMulticastActors(Application app){
     //System.out.println("getMulticastActors");
     Map<Integer,Actor> multicastActors = new HashMap<>();
@@ -74,7 +125,6 @@ public class ApplicationManagement{
       app.getActors().get(selectedActor.getId()).setMergeMulticast(true);
     }
   }
-
 
   // these method receives an application and returns a modified application removing 
   // all the mergeable multicast actors from the application and replace them by composite channels
