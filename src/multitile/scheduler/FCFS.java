@@ -114,22 +114,35 @@ public class FCFS extends BaseScheduler implements Schedule{
             p.getValue().getScheduler().setTransfersToMemory();
             transfersToMemory.addAll(p.getValue().getScheduler().getTransfersToMemory());
 
+            // update the memories
+            // clean the transfers to memories
+            p.getValue().getScheduler().getTransfersToMemory().clear();
             p.getValue().getScheduler().getReadTransfers().clear();
             p.getValue().getScheduler().getWriteTransfers().clear();
           }
+        }
+        // when, I finish the tile update last event in each processor with the maximum of all the processors
+        double maxTimeP = 0.0;
+        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+          if (maxTimeP < p.getValue().getScheduler().getLastEventinProcessor())
+            maxTimeP = p.getValue().getScheduler().getLastEventinProcessor();
+        }
+        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+          p.getValue().getScheduler().setLastEventinProcessor(maxTimeP);
         }
       }
       //fire the actions, updating fifos
       for(HashMap.Entry<Integer,Tile> t :architecture.getTiles().entrySet()){
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           p.getValue().getScheduler().fireCommitedActions(application.getFifos());
-          // update the memories
-          // clean the transfers to memories
+
+
           p.getValue().getScheduler().getTransfersToMemory().clear();
         }
       }
       // commit the reads/writes to memory
-      SchedulerManagement.sort(transfersToMemory); 
+      SchedulerManagement.sort(transfersToMemory);
+
       for(Transfer t : transfersToMemory){
         if(t.getType() == Transfer.TRANSFER_TYPE.READ)
           t.getFifo().fifoReadFromMemory(t);
