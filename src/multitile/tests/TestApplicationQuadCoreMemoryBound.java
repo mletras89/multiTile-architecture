@@ -49,6 +49,7 @@ import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 import src.multitile.application.FifoManagement;
 import src.multitile.application.ApplicationManagement;
+import src.multitile.application.Fifo.FIFO_MAPPING_TYPE;
 
 import java.io.*;
 import java.math.*;
@@ -70,11 +71,15 @@ public class TestApplicationQuadCoreMemoryBound{
       LocalMemory localMemory1 = t1.getProcessors().get(0).getLocalMemory();
       LocalMemory localMemory2 = t1.getProcessors().get(1).getLocalMemory();
       LocalMemory localMemory3 = t1.getProcessors().get(2).getLocalMemory();
-      //LocalMemory localMemory4 = t1.getProcessors().get(3).getLocalMemory();
+
       Processor cpu1 = t1.getProcessors().get(0);
+      //System.out.println("CPU: "+cpu1.getName());
       Processor cpu2 = t1.getProcessors().get(1);
+      //System.out.println("CPU: "+cpu2.getName());
       Processor cpu3 = t1.getProcessors().get(2);
+      //System.out.println("CPU: "+cpu3.getName());
       Processor cpu4 = t1.getProcessors().get(3);
+      //System.out.println("CPU: "+cpu4.getName());
 
       Actor a1 = new Actor("a1");
       a1.setId(1) ;
@@ -82,6 +87,7 @@ public class TestApplicationQuadCoreMemoryBound{
       a1.setInputs(0);
       a1.setOutputs(1);
       a1.setMapping(cpu1);
+      a1.setMappingToTile(t1);
 
       Actor a2 = new Actor("a2");  // is a multicast actor
       a2.setId(2) ;
@@ -89,8 +95,8 @@ public class TestApplicationQuadCoreMemoryBound{
       a2.setInputs(1);
       a2.setOutputs(2);
       a2.setMapping(cpu2);
-      //a2.setType(Actor.ACTOR_TYPE.MULTICAST);
-      //System.out.println("Actor 2 type:"+a2.getType());
+      a2.setMappingToTile(t1);
+
 
       Actor a3 = new Actor("a3");
       a3.setId(3) ;
@@ -98,6 +104,7 @@ public class TestApplicationQuadCoreMemoryBound{
       a3.setInputs(1);
       a3.setOutputs(1);
       a3.setMapping(cpu3);
+      a3.setMappingToTile(t1);
 
       Actor a4 = new Actor("a4");
       a4.setId(4) ;
@@ -105,6 +112,7 @@ public class TestApplicationQuadCoreMemoryBound{
       a4.setInputs(1);
       a4.setOutputs(1);
       a4.setMapping(cpu3);
+      a4.setMappingToTile(t1);
 
       Actor a5 = new Actor("a5:sink");
       a5.setId(5) ;
@@ -112,12 +120,19 @@ public class TestApplicationQuadCoreMemoryBound{
       a5.setInputs(2);
       a5.setOutputs(0);
       a5.setMapping(cpu4);
+      a5.setMappingToTile(t1);
 
-      Fifo c1 = new Fifo("c1",0,1,1000000,localMemory1,1,1,a1,a2);  // channel connected to writer
-      Fifo c2 = new Fifo("c2",0,1,1000000,localMemory2,1,1,a2,a3);  // channels connected to readers
-      Fifo c3 = new Fifo("c3",0,1,1000000,localMemory2,1,1,a2,a4);  // channels connected to readers
-      Fifo c4 = new Fifo("c4",0,1,1000000,localMemory3,1,1,a3,a5);
-      Fifo c5 = new Fifo("c5",0,1,1000000,localMemory3,1,1,a4,a5);
+      Fifo c1 = new Fifo("c1",0,1,1000000,1,1,a1,a2,FIFO_MAPPING_TYPE.SOURCE);  // channel connected to writer
+      Fifo c2 = new Fifo("c2",0,1,1000000,1,1,a2,a3,FIFO_MAPPING_TYPE.SOURCE);  // channels connected to readers
+      Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.SOURCE);  // channels connected to readers
+      Fifo c4 = new Fifo("c4",0,1,1000000,1,1,a3,a5,FIFO_MAPPING_TYPE.SOURCE);
+      Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.SOURCE);
+
+      c1.setMappingToTile(t1);
+      c2.setMappingToTile(t1);
+      c3.setMappingToTile(t1);
+      c4.setMappingToTile(t1);
+      c5.setMappingToTile(t1);
 
       Vector<Fifo> v1 = new Vector<Fifo>();
       v1.addElement(c1);
