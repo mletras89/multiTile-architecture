@@ -73,13 +73,9 @@ public class TestApplicationQuadCoreMemoryBound{
       LocalMemory localMemory3 = t1.getProcessors().get(2).getLocalMemory();
 
       Processor cpu1 = t1.getProcessors().get(0);
-      //System.out.println("CPU: "+cpu1.getName());
       Processor cpu2 = t1.getProcessors().get(1);
-      //System.out.println("CPU: "+cpu2.getName());
       Processor cpu3 = t1.getProcessors().get(2);
-      //System.out.println("CPU: "+cpu3.getName());
       Processor cpu4 = t1.getProcessors().get(3);
-      //System.out.println("CPU: "+cpu4.getName());
 
       Actor a1 = new Actor("a1");
       a1.setId(1) ;
