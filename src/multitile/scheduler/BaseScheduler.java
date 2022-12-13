@@ -55,7 +55,7 @@ import java.util.*;
 
 public class BaseScheduler{
   // key is the step and the list are the actions scheduled in the step
-  private HashMap<Integer,LinkedList<Action>> scheduledActions;
+  private HashMap<Integer,List<Action>> scheduledStepActions;
 
   private int maxIterations;
   public Architecture architecture;
@@ -64,7 +64,11 @@ public class BaseScheduler{
 
   public BaseScheduler(){
     this.queueActions = new LinkedList<>();
-    this.scheduledActions = new HashMap<>();
+    this.scheduledStepActions = new HashMap<>();
+  }
+
+  public HashMap<Integer,List<Action>> getScheduledStepActions(){
+    return this.scheduledStepActions;
   }
 
   public void setMaxIterations(int maxIterations){
