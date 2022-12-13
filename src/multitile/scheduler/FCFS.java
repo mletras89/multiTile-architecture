@@ -135,8 +135,6 @@ public class FCFS extends BaseScheduler implements Schedule{
       for(HashMap.Entry<Integer,Tile> t :architecture.getTiles().entrySet()){
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           p.getValue().getScheduler().fireCommitedActions(application.getFifos());
-
-
           p.getValue().getScheduler().getTransfersToMemory().clear();
         }
       }
