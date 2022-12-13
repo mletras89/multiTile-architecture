@@ -42,19 +42,30 @@ public class Action {
   private double start_time;
   private double due_time;
   private Actor actor;
-  
+  private int step;
+
   public Action(Actor actor) {
       this.setStart_time(0.0);
       this.setDue_time(0.0);
       this.actor = actor;
+      this.step = 0;
   }
   
   public Action(Action other) {
-  	this.setStart_time(other.getStart_time());
-  	this.setDue_time(other.getDue_time());
-      this.setActor(other.getActor());
+    this.setStart_time(other.getStart_time());
+    this.setDue_time(other.getDue_time());
+    this.setActor(other.getActor());
+    this.setStep(other.getStep());
   }
-  
+
+  public int getStep(){
+    return this.step;
+  }
+
+  public void setStep(int step){
+    this.step = step;
+  }
+
   public double getStart_time() {
       return start_time;
   }
