@@ -1,11 +1,11 @@
 DIR_SRC=./src/multitile/tests
 PACKAGE_TEST=src.multitile.tests
 
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run
 
 clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean testCompositeChannel_clean DualCore_clean QuadCore_clean
 
@@ -30,10 +30,12 @@ QuadCoreMemoryBound:
 
 QuadCoreMemoryBound_run:
 	java -ea $(PACKAGE_TEST).testMemoryBoundQuadCore;
-#	./python/merge-csv-files.py crossbar-utilization-crossbar_Tile_testQuadCore.csv processor-utilization-Tile_testQuadCore_Processor3.csv processor-utilization-Tile_testQuadCore_Processor2.csv processor-utilization-Tile_testQuadCore_Processor1.csv  processor-utilization-Tile_testQuadCore_Processor0.csv -o testQuadCore-unbounded-memory.csv
+	./python/merge-csv-files.py crossbar-utilization-crossbar_Tile_testQuadCoreMemoryBound.csv processor-utilization-Tile_testQuadCoreMemoryBound_Processor3.csv processor-utilization-Tile_testQuadCoreMemoryBound_Processor2.csv processor-utilization-Tile_testQuadCoreMemoryBound_Processor1.csv  processor-utilization-Tile_testQuadCoreMemoryBound_Processor0.csv -o testQuadCore-bounded-memory.csv;
+	./python/merge-csv-files.py memory-utilization-Tile_testQuadCoreMemoryBound_Processor0_localMemory.csv memory-utilization-Tile_testQuadCoreMemoryBound_Processor1_localMemory.csv memory-utilization-Tile_testQuadCoreMemoryBound_Processor2_localMemory.csv memory-utilization-Tile_testQuadCoreMemoryBound_Processor3_localMemory.csv  -o testQuadCore-memory-utilization.csv;
 
 QuadCoreMemoryBound_check:
-	diff testQuadCore-unbounded-memory.csv golden-cases/testQuadCore-unbounded-memory-golden.csv;
+	diff testQuadCore-bounded-memory.csv golden-cases/testQuadCore-bounded-memory-golden.csv;
+	diff testQuadCore-memory-utilization.csv golden-cases/testQuadCore-memory-utilization-golden.csv
         
 QuadCoreMemoryBound_clean:
 	echo "Cleaning Test QuadCoreMemoryBound"; ./clean.sh
