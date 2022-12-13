@@ -19,13 +19,19 @@ ModuloScheduling_run:
 	java -ea $(PACKAGE_TEST).testQuadCoreModuloScheduling;
 	./python/merge-csv-files.py processor-utilization-ModuloSchedulingQuad_Processor0.csv processor-utilization-ModuloSchedulingQuad_Processor1.csv processor-utilization-ModuloSchedulingQuad_Processor2.csv processor-utilization-ModuloSchedulingQuad_Processor3.csv crossbar-utilization-crossbar_ModuloSchedulingQuad.csv -o testcase-ModuloSchedulingQuad.csv;
 	./python/merge-csv-files.py processor-utilization-ModuloSchedulingSingle_Processor0.csv crossbar-utilization-crossbar_ModuloSchedulingSingle.csv -o testcase-ModuloSchedulingSingle.csv;
-	./python/merge-csv-files.py processor-utilization-ModuloSchedulingDual_Processor0.csv processor-utilization-ModuloSchedulingDual_Processor1.csv crossbar-utilization-crossbar_ModuloSchedulingDual.csv -o testcase-ModuloSchedulingDual.csv
+	./python/merge-csv-files.py processor-utilization-ModuloSchedulingDual_Processor0.csv processor-utilization-ModuloSchedulingDual_Processor1.csv crossbar-utilization-crossbar_ModuloSchedulingDual.csv -o testcase-ModuloSchedulingDual.csv;
+	./python/merge-csv-files.py memory-utilization-ModuloSchedulingQuad_Processor0_localMemory.csv memory-utilization-ModuloSchedulingQuad_Processor1_localMemory.csv memory-utilization-ModuloSchedulingQuad_Processor2_localMemory.csv memory-utilization-ModuloSchedulingQuad_Processor3_localMemory.csv memory-utilization-TileLocalMemory_ModuloSchedulingQuad.csv -o memory-utilization-ModuloSchedulingQuad.csv;
+	./python/merge-csv-files.py memory-utilization-ModuloSchedulingDual_Processor0_localMemory.csv memory-utilization-ModuloSchedulingDual_Processor1_localMemory.csv memory-utilization-TileLocalMemory_ModuloSchedulingDual.csv -o memory-utilization-ModuloSchedulingDual.csv;
+	./python/merge-csv-files.py memory-utilization-ModuloSchedulingSingle_Processor0_localMemory.csv memory-utilization-TileLocalMemory_ModuloSchedulingSingle.csv -o  memory-utilization-ModuloSchedulingSingle.csv
 
 ModuloScheduling_check:
 	diff testcase-ModuloSchedulingQuad.csv  golden-cases/testcase-ModuloSchedulingQuad-golden.csv;
 	diff testcase-ModuloSchedulingSingle.csv golden-cases/testcase-ModuloSchedulingSingle-golden.csv;
 	diff testcase-ModuloSchedulingDual.csv golden-cases/testcase-ModuloSchedulingDual-golden.csv
-        
+	diff memory-utilization-ModuloSchedulingSingle.csv golden-cases/memory-utilization-ModuloSchedulingSingle-golden.csv
+	diff memory-utilization-ModuloSchedulingDual.csv golden-cases/memory-utilization-ModuloSchedulingDual-golden.csv
+	diff memory-utilization-ModuloSchedulingQuad.csv golden-cases/memory-utilization-ModuloSchedulingQuad-golden.csv
+
 #QuadCoreMemoryBound_clean:
 #	echo "Cleaning Test QuadCoreMemoryBound"; ./clean.sh
 
