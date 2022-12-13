@@ -286,12 +286,12 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       }
     }   
     // 5) now, we schedule the actions in the first tree iterations
-    for(int i = 1 ; i<=this.lastStep;i++){
+    int i = 1;
+    while(i<=this.lastStep){
       this.getSchedulableActors(application.getActors(),application.getFifos(),i,this.kernel);
       //LinkedList<Action> stepScheduledActions = new LinkedList<Action>();
       // key is tile id
       HashMap<Integer,HashMap<Integer,Boolean>> currentTilesOccupation = resourceOcupation.get(i);
-
       // remove all the actions in the queue
       int sizeActions = queueActions.size();
       for(int k =0 ; k < sizeActions; k++){
@@ -313,7 +313,6 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
         // update the availabilty
         currentTilesOccupation.put(actionToTileId,processorUtilization);
       }
-
       // iterate tiles and the processors to perform the simulation of the application
       for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
@@ -367,7 +366,17 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
                 this.getScheduledStepActions().get(action.getStep()).add(action);
           }
         }
+        // when, I finish the tile update last event in each processor with the maximum of all the processors
+        double maxTimeP = 0.0;
+        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+          if (maxTimeP < p.getValue().getScheduler().getLastEventinProcessor())
+            maxTimeP = p.getValue().getScheduler().getLastEventinProcessor();
+          }
+        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+          p.getValue().getScheduler().setLastEventinProcessor(maxTimeP);
+        }
       }
+
       // update the state of the fifos
       for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
@@ -375,6 +384,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
         }
       }
       resourceOcupation.put(i,currentTilesOccupation);
+      i++;
     }
   }
 
