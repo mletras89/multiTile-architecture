@@ -287,6 +287,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
     }   
     // 5) now, we schedule the actions in the first tree iterations
     int i = 1;
+    List<Transfer> transfersToMemory = new ArrayList<>();
     while(i<=this.lastStep){
       this.getSchedulableActors(application.getActors(),application.getFifos(),i,this.kernel);
       //LinkedList<Action> stepScheduledActions = new LinkedList<Action>();
@@ -318,7 +319,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           Queue<Action> actions = p.getValue().getScheduler().getQueueActions();
           for(Action action : actions){
-            // first schedule the reads
+                // first schedule the reads
           	p.getValue().getScheduler().commitReadsToCrossbar(action,application.getFifos());
           	Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
           	t.getValue().getCrossbar().cleanQueueTransfers();
@@ -353,8 +354,8 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           	p.getValue().getScheduler().produceTokensinFifo(action,application.getFifos());
 
           	// managing the tracking of the memories
-       	 	//processors.get(i).getScheduler().setTransfersToMemory();
-          	//transfersToMemory.addAll(processors.get(i).getScheduler().getTransfersToMemory());
+       	 	p.getValue().getScheduler().setTransfersToMemory();
+          	transfersToMemory.addAll(p.getValue().getScheduler().getTransfersToMemory());
 
           	p.getValue().getScheduler().getReadTransfers().clear();
           	p.getValue().getScheduler().getWriteTransfers().clear();
@@ -376,13 +377,24 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           p.getValue().getScheduler().setLastEventinProcessor(maxTimeP);
         }
       }
-
       // update the state of the fifos
       for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           p.getValue().getScheduler().fireCommitedActions(application.getFifos());
+          p.getValue().getScheduler().getTransfersToMemory().clear();
         }
       }
+      // commit the reads/writes to memory
+      SchedulerManagement.sort(transfersToMemory);
+      
+      for(Transfer t: transfersToMemory){
+        if(t.getType()==Transfer.TRANSFER_TYPE.READ)
+          t.getFifo().fifoReadFromMemory(t);
+        else
+          t.getFifo().fifoWriteToMemory(t);
+      }
+      transfersToMemory.clear();
+
       resourceOcupation.put(i,currentTilesOccupation);
       i++;
     }
