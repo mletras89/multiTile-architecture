@@ -48,7 +48,7 @@ public static void sort(List<Transfer> list) {
             -> Double.valueOf(o1.getDue_time()).compareTo(Double.valueOf(o2.getDue_time()))); 
 
 //  for(Transfer t : list){
-//    System.out.println("Actor:"+t.getActor().getName()+" due time: "+t.getDue_time()+" type:"+t.getType());
+//    System.out.println("Actor:"+t.getActor().getName()+" start time: "+t.getStart_time()+" due time: "+t.getDue_time()+" type:"+t.getType());
 //  }
 }
 
