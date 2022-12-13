@@ -68,7 +68,7 @@ public class testMemoryBoundQuadCore {
     public static void main(String[] args) throws IOException {
       System.out.println("Testing quadcore implementation testcase!");
 
-      Architecture architecture = new Architecture("architecture","Tile_testQuadCore",4,1.0,2);
+      Architecture architecture = new Architecture("architecture","Tile_testQuadCoreMemoryBound",4,1.0,2);
 
       // set the memory sizes
       architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(2000000);
