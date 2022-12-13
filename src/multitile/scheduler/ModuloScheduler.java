@@ -270,6 +270,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
 
   public void schedule(){
     HashMap<Integer,Tile> tiles = architecture.getTiles();
+    this.getScheduledStepActions().clear();
     // 4) set the resource ocupation of all the resources as empty
     resourceOcupation = new HashMap<>();
     for(int i=1; i <= this.lastStep;i++){
@@ -295,6 +296,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       int sizeActions = queueActions.size();
       for(int k =0 ; k < sizeActions; k++){
         Action action = queueActions.remove();
+        action.setStep(i);
         System.out.println("current actor "+action.getActor().getName());
         int actionToTileId = action.getActor().getMappingToTile().getId();
         // get the mapping 
@@ -352,11 +354,17 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           	p.getValue().getScheduler().produceTokensinFifo(action,application.getFifos());
 
           	// managing the tracking of the memories
-         	 	//processors.get(i).getScheduler().setTransfersToMemory();
+       	 	//processors.get(i).getScheduler().setTransfersToMemory();
           	//transfersToMemory.addAll(processors.get(i).getScheduler().getTransfersToMemory());
 
           	p.getValue().getScheduler().getReadTransfers().clear();
           	p.getValue().getScheduler().getWriteTransfers().clear();
+
+                // put the action in the step action
+                if(!this.getScheduledStepActions().containsKey(action.getStep())){
+                  this.getScheduledStepActions().put(action.getStep(),new ArrayList<Action>());
+                }
+                this.getScheduledStepActions().get(action.getStep()).add(action);
           }
         }
       }
@@ -368,6 +376,28 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       }
       resourceOcupation.put(i,currentTilesOccupation);
     }
+  }
+
+  public double getDelaySingleIteration(){
+    // we take into account when k=3 and K=4
+    int start  = this.MII*3+1;
+    int end = this.MII*4+1;
+
+    double startTime = Double.POSITIVE_INFINITY;
+    double endTime  = -1;
+    //System.out.println("Start iteration "+start);
+    for(Action a : this.getScheduledStepActions().get(start)){
+      //System.out.println("ACTION:"+a.getActor().getName());
+      if(a.getStart_time() < startTime)
+        startTime = a.getStart_time();
+    }
+    //System.out.println("End iteration "+end);
+    for(Action a : this.getScheduledStepActions().get(end)){
+      //System.out.println("ACTION:"+a.getActor().getName());
+      if(a.getDue_time() > endTime)
+        endTime = a.getDue_time();
+    }
+    return endTime - startTime;
   }
 
   public int getNextAvailableProcessor(HashMap<Integer,Boolean> processorUtilization){
