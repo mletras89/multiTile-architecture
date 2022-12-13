@@ -92,6 +92,10 @@ public class testQuadCoreModuloScheduling {
       singleCoreArchitecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
       singleCoreArchitecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
 
+      // dumping memory utilization
+      singleCoreArchitecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
+      singleCoreArchitecture.getTiles().get(0).getTileLocalMemory().saveMemoryUtilizationStats(".");;
+
       System.out.println("Testing singlecore implementation testcase done and modulo scheduling!");
 
       System.out.println("Testing dualcore implementation testcase and modulo scheduling!");
@@ -121,6 +125,11 @@ public class testQuadCoreModuloScheduling {
       dualCoreArchitecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
       dualCoreArchitecture.getTiles().get(0).getProcessors().get(1).getScheduler().saveScheduleStats(".");
       dualCoreArchitecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
+      // dumping memory utilization
+      dualCoreArchitecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
+      dualCoreArchitecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
+      dualCoreArchitecture.getTiles().get(0).getTileLocalMemory().saveMemoryUtilizationStats(".");
 
       System.out.println("Testing dualcore implementation testcase done and modulo scheduling!");
 
@@ -152,6 +161,13 @@ public class testQuadCoreModuloScheduling {
         p.getValue().getScheduler().saveScheduleStats(".");
       }
       architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
+
+      // dumping memory utilization
+      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
+      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
+      architecture.getTiles().get(0).getProcessors().get(2).getLocalMemory().saveMemoryUtilizationStats(".");
+      architecture.getTiles().get(0).getProcessors().get(3).getLocalMemory().saveMemoryUtilizationStats(".");
+      architecture.getTiles().get(0).getTileLocalMemory().saveMemoryUtilizationStats(".");
 
       System.out.println("Testing quadcore implementation testcase done!");
     }
