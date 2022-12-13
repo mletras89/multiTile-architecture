@@ -1,11 +1,11 @@
 DIR_SRC=./src/multitile/tests
 PACKAGE_TEST=src.multitile.tests
 
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check QuadCoreMemoryBound_check ModuloScheduling_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound ModuloScheduling
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run ModuloScheduling_run
 
 clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean testCompositeChannel_clean DualCore_clean QuadCore_clean
 
@@ -17,10 +17,10 @@ ModuloScheduling:
 
 ModuloScheduling_run:
 	java -ea $(PACKAGE_TEST).testQuadCoreModuloScheduling;
-#	./python/merge-csv-files.py crossbar-utilization-crossbar_Tile_testQuadCore.csv processor-utilization-Tile_testQuadCore_Processor3.csv processor-utilization-Tile_testQuadCore_Processor2.csv processor-utilization-Tile_testQuadCore_Processor1.csv  processor-utilization-Tile_testQuadCore_Processor0.csv -o testQuadCore-unbounded-memory.csv
+	./python/merge-csv-files.py processor-utilization-ModuloSchedulingQuad_Processor0.csv processor-utilization-ModuloSchedulingQuad_Processor1.csv processor-utilization-ModuloSchedulingQuad_Processor2.csv processor-utilization-ModuloSchedulingQuad_Processor3.csv crossbar-utilization-crossbar_ModuloSchedulingQuad.csv -o testcase-ModuloScheduling.csv
 
-#QuadCoreMemoryBound_check:
-#	diff testQuadCore-unbounded-memory.csv golden-cases/testQuadCore-unbounded-memory-golden.csv;
+ModuloScheduling_check:
+	diff testcase-ModuloScheduling.csv  golden-cases/testcase-ModuloScheduling-golden.csv;
         
 #QuadCoreMemoryBound_clean:
 #	echo "Cleaning Test QuadCoreMemoryBound"; ./clean.sh
