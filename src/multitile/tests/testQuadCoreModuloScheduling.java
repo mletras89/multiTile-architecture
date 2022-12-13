@@ -79,11 +79,13 @@ public class testQuadCoreModuloScheduling {
       singleCoreScheduler.setApplication(singleCoreApplication);
       singleCoreScheduler.setArchitecture(singleCoreArchitecture);
 
-      singleCoreScheduler.setMaxIterations(4);
+      singleCoreScheduler.setMaxIterations(5);
       singleCoreScheduler.calculateModuloSchedule();
       singleCoreScheduler.printKernelBody();
       singleCoreScheduler.findSchedule();
       singleCoreScheduler.schedule();
+
+      System.out.println("Single iteration delay: "+singleCoreScheduler.getDelaySingleIteration());
 
       System.out.println("The MMI is: "+singleCoreScheduler.getMII());
 
@@ -107,12 +109,13 @@ public class testQuadCoreModuloScheduling {
       dualCoreScheduler.setApplication(dualCoreApplication);
       dualCoreScheduler.setArchitecture(dualCoreArchitecture);
 
-      dualCoreScheduler.setMaxIterations(4);
+      dualCoreScheduler.setMaxIterations(5);
       dualCoreScheduler.calculateModuloSchedule();
       dualCoreScheduler.printKernelBody();
       dualCoreScheduler.findSchedule();
       dualCoreScheduler.schedule();
 
+      System.out.println("Single iteration delay: "+dualCoreScheduler.getDelaySingleIteration());
       System.out.println("The MMI is: "+dualCoreScheduler.getMII());
 
       dualCoreArchitecture.getTiles().get(0).getProcessors().get(0).getScheduler().saveScheduleStats(".");
@@ -135,11 +138,13 @@ public class testQuadCoreModuloScheduling {
       scheduler.setApplication(app);
       scheduler.setArchitecture(architecture);
 			
-      scheduler.setMaxIterations(4);
+      scheduler.setMaxIterations(5);
       scheduler.calculateModuloSchedule();
       //scheduler.printKernelBody();
       scheduler.findSchedule();
       scheduler.schedule();
+
+      System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
 
       System.out.println("The MMI is: "+scheduler.getMII());
       
