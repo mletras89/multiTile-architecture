@@ -80,6 +80,7 @@ public class Scheduler{
   private Processor owner;
 
   private double lastEventinProcessor;
+  private double lastTemporalEventinProcessor;
   private int numberIterations;
   private int runIterations;
   private String name;
@@ -90,6 +91,7 @@ public class Scheduler{
     this.readTransfers = new HashMap<>();
     this.writeTransfers = new HashMap<>();
     this.lastEventinProcessor = 0.0;
+    this.lastTemporalEventinProcessor = 0.0;
     this.numberIterations = 1;
     this.runIterations = 0;
     this.name = name;
@@ -105,11 +107,39 @@ public class Scheduler{
     this.readTransfers.clear();
     this.writeTransfers.clear();
     this.lastEventinProcessor = 0.0;
+    this.lastTemporalEventinProcessor = 0.0;
     this.runIterations = 0;
     this.readTransfersToMemory.clear();
     this.writeTransfersToMemory.clear();
     this.transfersToMemory.clear();
   } 
+
+  public void syncLastEventinProcessor(){
+    this.lastTemporalEventinProcessor = lastEventinProcessor;
+  }
+
+  public void reverseLastEventinProcessor(){
+    this.lastEventinProcessor = this.lastTemporalEventinProcessor;
+  }
+
+  public void reverseScheduledStep(int step){
+    boolean done = false;
+    while(!done){
+      int index = 0;
+      boolean found = false;
+      for(int i=0; i < this.scheduledActions.size();i++){
+        if (this.scheduledActions.get(i).getStep() == step){
+          index = i;
+          found =true;
+          break;
+        }
+      }
+      if (found)
+        this.scheduledActions.remove(index);
+      else
+        done = true;
+    }
+  }
 
   public Processor getOwner(){
     return this.owner;
@@ -362,14 +392,14 @@ public class Scheduler{
       double timeLastReadToken = fifos.get(fifo.getId()).readTimeProducedToken(cons);
       // I scheduled read of data by token reads
       for(int n = 0 ; n<cons;n++) {
-        if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
-          (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
-          !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
+//        if(fifo.getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+//          (fifo.getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
+//          !fifo.getMapping().getEmbeddedToProcessor().equals(commitAction.getActor().getMapping()))){
           // then the read must be scheduled in the crossbar
           Transfer readTransfer = new Transfer(commitAction.getActor(),fifo,Collections.max(Arrays.asList(this.lastEventinProcessor,timeLastReadToken)),Transfer.TRANSFER_TYPE.READ);
           reads.add(readTransfer);
           //System.out.println("2)Actor: "+commitAction.getActor().getName()+" reading from "+fifo.getName()); 
-        }
+//        }
       }
     }
     readTransfers.put(commitAction.getActor(),reads);
