@@ -140,8 +140,19 @@ public class testQuadCoreModuloScheduling {
       ArchitectureManagement.resetCounters();
 
       Architecture architecture = new Architecture("architecture","ModuloSchedulingQuad", 4, 1.0, 2);
-      TestApplicationQuadCore sampleApplication = new TestApplicationQuadCore(architecture.getTiles().get(0));  
+      // set the memory sizes
+      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(0).getProcessors().get(2).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(0).getProcessors().get(3).getLocalMemory().setCapacity(2000000);
+
+      TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
+      ApplicationManagement.assingFifoMapping(app,architecture); 
+
+      for(Map.Entry<Integer,Fifo> f : app.getFifos().entrySet()){
+        System.out.println("Fifo "+f.getValue().getName()+" mapped to proc "+f.getValue().getMapping().getEmbeddedToProcessor().getName()+" on memory "+f.getValue().getMapping().getName());
+      }
 
       ModuloScheduler scheduler = new ModuloScheduler();
       scheduler.setApplication(app);
