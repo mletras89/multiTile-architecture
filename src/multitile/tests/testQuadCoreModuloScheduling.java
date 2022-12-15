@@ -141,7 +141,7 @@ public class testQuadCoreModuloScheduling {
 
       Architecture architecture = new Architecture("architecture","ModuloSchedulingQuad", 4, 1.0, 2);
       // set the memory sizes
-      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(1000000);
       architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapacity(2000000);
       architecture.getTiles().get(0).getProcessors().get(2).getLocalMemory().setCapacity(2000000);
       architecture.getTiles().get(0).getProcessors().get(3).getLocalMemory().setCapacity(2000000);
