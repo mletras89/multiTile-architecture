@@ -324,35 +324,32 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           	Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
           	t.getValue().getCrossbar().cleanQueueTransfers();
           	for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
-            	t.getValue().getCrossbar().insertTransfers(entry.getValue());
+            	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
           	}
           	//commit the read transfers
           	t.getValue().getCrossbar().commitTransfersinQueue();
           	// update the read transfers of each processor with the correct due time
           	Map<Actor,List<Transfer>> processorReadTransfers = t.getValue().getCrossbar().getScheduledReadTransfers(p.getValue());
-
           	// commit the action in the processor
           	p.getValue().getScheduler().setReadTransfers(processorReadTransfers);
           	p.getValue().getScheduler().commitSingleAction(action); // modificar este
-
           	// finally, schedule the write of tokens
           	p.getValue().getScheduler().commitWritesToCrossbar(action);
           	// put writing transfers to crossbar
           	// get write transfers from the scheduler
           	Map<Actor,List<Transfer>> writeTransfers = p.getValue().getScheduler().getWriteTransfers();
           	for(Map.Entry<Actor,List<Transfer>> entry: writeTransfers.entrySet()){
-            	t.getValue().getCrossbar().insertTransfers(entry.getValue());
+            	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
           	}
           	// commit write transfers in the crossbar
           	t.getValue().getCrossbar().commitTransfersinQueue();
           	// update the write transfers of each processor with the correct start and due time
           	Map<Actor,List<Transfer>> processorWriteTransfers = t.getValue().getCrossbar().getScheduledWriteTransfers(p.getValue());
           	p.getValue().getScheduler().setWriteTransfers(processorWriteTransfers);
-        		// update the last event in processor, taking into the account the processorWriteTransfers
+       		// update the last event in processor, taking into the account the processorWriteTransfers
           	p.getValue().getScheduler().updateLastEventAfterWrite(action);
           	// insert the time of the produced tokens by acton into the correspondent fifos
           	p.getValue().getScheduler().produceTokensinFifo(action,application.getFifos());
-
           	// managing the tracking of the memories
        	 	p.getValue().getScheduler().setTransfersToMemory();
           	transfersToMemory.addAll(p.getValue().getScheduler().getTransfersToMemory());
