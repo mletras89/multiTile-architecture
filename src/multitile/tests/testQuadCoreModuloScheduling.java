@@ -30,7 +30,7 @@
   @date   03 December 2022
   @version 1.1
   @ brief
-     Example of a single tile architecture with a single processor with local
+     Example of a single tile architecture with four processors with local
      memory, crossbar and tile local memory running a modulo scheduluer
 --------------------------------------------------------------------------
 */
