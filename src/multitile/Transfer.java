@@ -54,6 +54,9 @@ public class Transfer {
   private Fifo fifo;
   // depending on the type of the operation: {READ, WRITE}
   private TRANSFER_TYPE type;
+
+  private int step;
+
   public static enum TRANSFER_TYPE {
           READ,
           WRITE
@@ -67,6 +70,7 @@ public class Transfer {
       this.setType(TRANSFER_TYPE.WRITE);
       this.fifo = fifo;
       this.actor = actor;
+      this.step = 0;
   }
 
   public Transfer(Actor actor,Fifo fifo,Double startTime, TRANSFER_TYPE typeTransfer) {
@@ -76,6 +80,7 @@ public class Transfer {
       this.setType(typeTransfer);
       this.fifo = fifo;
       this.actor = actor;
+      this.step = 0;
   }
 
 
@@ -86,6 +91,15 @@ public class Transfer {
     this.setActor(other.getActor());
     this.setFifo(other.getFifo());
     this.setType(other.getType());
+    this.setStep(other.getStep());
+  }
+
+  public int getStep(){
+    return this.step;
+  }
+
+  public void setStep(int step){
+    this.step = step;
   }
 
   public boolean isOccupied() {
