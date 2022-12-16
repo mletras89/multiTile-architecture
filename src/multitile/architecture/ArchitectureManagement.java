@@ -39,6 +39,7 @@
 
 package src.multitile.architecture;
 
+import src.multitile.application.Fifo;
 import java.util.*;
 
 public class ArchitectureManagement{
@@ -53,6 +54,22 @@ public class ArchitectureManagement{
     crossbarIdCounter = 0;
     tileIdCounter = 0;
   }
+
+  public static Memory getMemoryToBeRelocated(Fifo fifo,Architecture architecture){
+    Memory mappedMemory = fifo.getMapping();
+    Tile mappedTile = fifo.getMappingToTile();
+    Memory newMapping;
+    switch(mappedMemory.getType()){
+      case LOCAL_MEM:
+        newMapping = architecture.getTiles().get(mappedTile.getId()).getTileLocalMemory();
+        break;
+      default:
+        newMapping = architecture.getGlobalMemory();
+        break;
+    }
+    return newMapping;
+  }
+  
 
   public static void resetCounters(){
     processorIdCounter = 0;
