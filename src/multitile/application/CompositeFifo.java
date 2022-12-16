@@ -105,6 +105,10 @@ public class CompositeFifo extends Fifo implements Buffer{
     }
   }
 
+  public boolean canFifoReadFromMemory(){
+    return this.getMapping().canRemoveDataFromMemory(this.getConsRate()*this.getTokenSize());
+  }
+
   public void fifoReadFromMemory(Transfer transfer){
     this.numberOfReads++;
     if(this.canFlushData()){
@@ -135,7 +139,6 @@ public class CompositeFifo extends Fifo implements Buffer{
 
   public boolean fifoCanBeWritten(){
     //System.out.println("Checking composite fifo");
-
     for(Map.Entry<Integer,Fifo> reader : readers.entrySet()){
       if(reader.getValue().get_capacity() < reader.getValue().get_tokens() + reader.getValue().getProdRate())
         return false;
