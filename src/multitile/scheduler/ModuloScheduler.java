@@ -47,6 +47,8 @@ import src.multitile.Transfer;
 import src.multitile.architecture.Processor;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Architecture;
+import src.multitile.architecture.ArchitectureManagement;
+import src.multitile.architecture.Memory;
 
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
@@ -374,26 +376,54 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           p.getValue().getScheduler().setLastEventinProcessor(maxTimeP);
         }
       }
-      // update the state of the fifos
-      for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
-        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
-          p.getValue().getScheduler().fireCommitedActions(application.getFifos());
-          p.getValue().getScheduler().getTransfersToMemory().clear();
-        }
-      }
       // commit the reads/writes to memory
       SchedulerManagement.sort(transfersToMemory);
-      
+      Transfer ReMapTransfer = null;
+      boolean successMemoryOperations = true; 
       for(Transfer t: transfersToMemory){
-        if(t.getType()==Transfer.TRANSFER_TYPE.READ)
+        if(t.getType()==Transfer.TRANSFER_TYPE.READ){
+          // check if we can read
+          if(!t.getFifo().canFifoReadFromMemory()){
+            ReMapTransfer = t;
+            successMemoryOperations = false;
+            break;
+          }
           t.getFifo().fifoReadFromMemory(t);
-        else
+        }else{
+          if(!t.getFifo().canFifoWriteToMemory()){
+            ReMapTransfer = t;
+            successMemoryOperations = false;
+            break;
+          }
           t.getFifo().fifoWriteToMemory(t);
+        }
       }
+      if(successMemoryOperations){
+        // commit the scheduled actions in this step
+      	// update the state of the fifos
+      	for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
+      	  for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+      	    p.getValue().getScheduler().fireCommitedActions(application.getFifos());
+      	    p.getValue().getScheduler().getTransfersToMemory().clear();
+      	  }
+      	}
+        resourceOcupation.put(i,currentTilesOccupation);
+        architecture.syncronizeStateOfArchitecture();
+        i++;
+      }else{
+        System.out.println("MEMORY NEEDS TO BE RELOCATED");
+        System.out.println("FIFO "+ReMapTransfer.getFifo().getName()+"wants to "+ReMapTransfer.getType()+" to memory "+ReMapTransfer.getFifo().getMapping().getName());
+        Memory newMapping = ArchitectureManagement.getMemoryToBeRelocated(ReMapTransfer.getFifo(),architecture);
+        System.out.println("new Mapping "+newMapping.getName());
+        
+        architecture.reverseStateOfArchitecture(i);
+        assert true: "MEMORY NEED TO BE RELOCATED";
+      }
+
       transfersToMemory.clear();
 
-      resourceOcupation.put(i,currentTilesOccupation);
-      i++;
+
+
     }
   }
 
