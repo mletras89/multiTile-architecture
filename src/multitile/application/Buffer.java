@@ -52,6 +52,6 @@ interface Buffer{
   // methods for handling the writes/reads to/from memory 
   //public void fifoWriteToMemory(Transfer transfer);
   public void fifoReadFromMemory(Transfer transfer);
-
+  public boolean canFifoReadFromMemory();
 }
 
