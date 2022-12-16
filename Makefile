@@ -11,6 +11,13 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+MemoryRelocation:
+	javac $(DIR_SRC)/testModuloSchedulingMemoryRelocation.java
+
+MemoryRelocation_run:
+		java -ea $(PACKAGE_TEST).testModuloSchedulingMemoryRelocation;
+		./python/merge-csv-files.py processor-utilization-MemoryRelocation_Processor0.csv processor-utilization-MemoryRelocation_Processor1.csv processor-utilization-MemoryRelocation_Processor2.csv processor-utilization-MemoryRelocation_Processor3.csv crossbar-utilization-crossbar_MemoryRelocation.csv -o testcase-architecture-util-memory-relocation.csv;
+		./python/merge-csv-files.py memory-utilization-MemoryRelocation_Processor0_localMemory.csv memory-utilization-MemoryRelocation_Processor1_localMemory.csv memory-utilization-MemoryRelocation_Processor2_localMemory.csv memory-utilization-MemoryRelocation_Processor3_localMemory.csv memory-utilization-TileLocalMemory_MemoryRelocation.csv -o testcase-memory-relocation-mem-utilization.csv;
 
 ModuloScheduling:
 	javac $(DIR_SRC)/testQuadCoreModuloScheduling.java
