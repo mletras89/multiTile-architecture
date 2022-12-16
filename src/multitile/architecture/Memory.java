@@ -60,6 +60,7 @@ public class Memory{
   private String name;
   private double capacity;
   private Map<Double,Double> memoryUtilization = new TreeMap<Double, Double>();
+  private Map<Double,Double> temporalMemoryUtilization = new TreeMap<Double, Double>();
   private MEMORY_TYPE type;
   private Processor embeddedToProcessor;
 
@@ -143,8 +144,18 @@ public class Memory{
     // KEY is when and Value is the current utilization
     memoryUtilization.clear();
     this.memoryUtilization.put(0.0, 0.0);
+    this.temporalMemoryUtilization.clear();
+    this.temporalMemoryUtilization.put(0.0,0.0);
   }
   
+  public void syncMemoryUtilitazion(){
+    this.temporalMemoryUtilization = this.memoryUtilization;
+  }
+
+  public void reverseMemoryUtilization(){
+    this.memoryUtilization = this.temporalMemoryUtilization;
+  }
+
   public Map<Double,Double> getMemoryUtilization() {
     return this.memoryUtilization;
   }
@@ -209,6 +220,13 @@ public class Memory{
     memoryUtilization.put(when, currentBytes-amountBytes);
   }
 
+  public boolean canRemoveDataFromMemory(int amountBytes){
+    double currentAmountBytes = this.getCurrentAmountofBytes();
+    if(currentAmountBytes - amountBytes >= 0)
+      return true;
+    return false;
+  }
+
   public boolean canPutDataInMemory(int amountBytes) {
     List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
     double last_inserted_key = listKeys.get(listKeys.size()-1);
@@ -216,7 +234,7 @@ public class Memory{
     double currentBytes = memoryUtilization.get(last_inserted_key);
     //System.err.println("Storing "+currentBytes+" amount bytes "+amountBytes);
     if (currentBytes + amountBytes <= this.getCapacity())
-            return true;
+      return true;
     return false;
   }
 
