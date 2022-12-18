@@ -50,6 +50,7 @@ import src.multitile.architecture.Architecture;
 import src.multitile.architecture.ArchitectureManagement;
 import src.multitile.architecture.Memory;
 
+import src.multitile.application.ApplicationManagement;
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
 import src.multitile.application.Actor;
@@ -409,6 +410,8 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       	}
         resourceOcupation.put(i,currentTilesOccupation);
         architecture.syncronizeStateOfArchitecture();
+	application.synchronizeStateOfApplication();
+
         i++;
       }else{
         System.out.println("MEMORY NEEDS TO BE RELOCATED");
@@ -417,7 +420,12 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
         System.out.println("new Mapping "+newMapping.getName());
         
         architecture.reverseStateOfArchitecture(i);
-        assert true: "MEMORY NEED TO BE RELOCATED";
+	application.reverseStateOfApplication();
+        //assert true: "MEMORY NEED TO BE RELOCATED";
+	// do the ReMapping
+	Memory reMappingMemory = ArchitectureManagement.getMemoryToBeRelocated(ReMapTransfer.getFifo(),architecture);
+	ApplicationManagement.remapFifo(ReMapTransfer.getFifo(),application, reMappingMemory);
+	System.out.println("ALREADY REMAP AND REVERSED");
       }
 
       transfersToMemory.clear();

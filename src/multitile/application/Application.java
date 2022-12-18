@@ -58,6 +58,18 @@ public class Application{
     this.actors = actors;
   }
 
+  public void synchronizeStateOfApplication(){
+    for(Map.Entry<Integer,Fifo> f : fifos.entrySet()){
+      f.getValue().syncTimeProducedToken();
+    }
+  }
+
+  public void reverseStateOfApplication(){
+    for(Map.Entry<Integer,Fifo> f : fifos.entrySet()){
+      f.getValue().reverseTimeProducedToken();
+    }
+  }
+
   public void setActorsFromList(List<Actor> actorsList){
     this.actors = new HashMap<>();
     for(Actor actor:actorsList){

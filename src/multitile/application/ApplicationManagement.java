@@ -45,6 +45,7 @@ import java.util.*;
 import src.multitile.architecture.Architecture;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Processor;
+import src.multitile.architecture.Memory;
 
 import src.multitile.application.Actor;
 import src.multitile.application.Application;
@@ -52,6 +53,10 @@ import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 
 public class ApplicationManagement{
+
+	public static void remapFifo(Fifo fifo,Application application, Memory newMapping){
+			application.getFifos().get(fifo.getId()).setMapping(newMapping);
+	}
 
   // this method assign the mapping of each fifo according the type
   public static void assingFifoMapping(Application application, Architecture architecture){

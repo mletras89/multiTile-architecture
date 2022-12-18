@@ -191,12 +191,18 @@ public class Fifo implements Buffer{
   }
 
   public void syncTimeProducedToken(){
-    this.temporalTimeProducedToken = this.timeProducedToken;
+    this.temporalTimeProducedToken.clear();
+    for(Transfer t : this.timeProducedToken){
+      this.temporalTimeProducedToken.add(new Transfer(t));
+    }
     this.temporalNumberOfReadsTimeProduced = this.numberOfReadsTimeProduced;
   }
 
   public void reverseTimeProducedToken(){
-    this.timeProducedToken = this.temporalTimeProducedToken;
+    this.timeProducedToken.clear();
+    for(Transfer t: this.temporalTimeProducedToken){
+      this.timeProducedToken.add(new Transfer(t));
+    }
     this.numberOfReadsTimeProduced = this.temporalNumberOfReadsTimeProduced;
   }
 
