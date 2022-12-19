@@ -272,6 +272,16 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
   }
 
   public void schedule(){
+    architecture.resetArchitecture();
+    application.resetApplication();
+    while(!scheduleModulo()){
+      architecture.resetArchitecture();
+      application.resetApplication();
+    }
+
+  }
+
+  public boolean scheduleModulo(){
     HashMap<Integer,Tile> tiles = architecture.getTiles();
     this.getScheduledStepActions().clear();
     // 4) set the resource ocupation of all the resources as empty
@@ -292,6 +302,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
     int i = 1;
     List<Transfer> transfersToMemory = new ArrayList<>();
     while(i<=this.lastStep){
+      this.cleanQueue();
       this.getSchedulableActors(application.getActors(),application.getFifos(),i,this.kernel);
       //LinkedList<Action> stepScheduledActions = new LinkedList<Action>();
       // key is tile id
@@ -324,7 +335,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           for(Action action : actions){
                 // first schedule the reads
           	p.getValue().getScheduler().commitReadsToCrossbar(action,application.getFifos());
-          	Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
+                Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
           	t.getValue().getCrossbar().cleanQueueTransfers();
           	for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
             	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
@@ -409,30 +420,17 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       	  }
       	}
         resourceOcupation.put(i,currentTilesOccupation);
-        architecture.syncronizeStateOfArchitecture();
-	application.synchronizeStateOfApplication();
-
         i++;
       }else{
-        System.out.println("MEMORY NEEDS TO BE RELOCATED");
-        System.out.println("FIFO "+ReMapTransfer.getFifo().getName()+"wants to "+ReMapTransfer.getType()+" to memory "+ReMapTransfer.getFifo().getMapping().getName());
         Memory newMapping = ArchitectureManagement.getMemoryToBeRelocated(ReMapTransfer.getFifo(),architecture);
-        System.out.println("new Mapping "+newMapping.getName());
-        
-        architecture.reverseStateOfArchitecture(i);
-	application.reverseStateOfApplication();
-        //assert true: "MEMORY NEED TO BE RELOCATED";
 	// do the ReMapping
 	Memory reMappingMemory = ArchitectureManagement.getMemoryToBeRelocated(ReMapTransfer.getFifo(),architecture);
 	ApplicationManagement.remapFifo(ReMapTransfer.getFifo(),application, reMappingMemory);
-	System.out.println("ALREADY REMAP AND REVERSED");
+        return false;
       }
-
       transfersToMemory.clear();
-
-
-
     }
+    return true;
   }
 
   public double getDelaySingleIteration(){
