@@ -94,6 +94,12 @@ public class Transfer {
     this.setStep(other.getStep());
   }
 
+  // Overriding toStrin() method of String class
+  @Override
+  public String toString(){
+    return "Transfer: starts["+this.start_time+"] ends ["+this.due_time+"] actor ["+this.actor.getName()+"] fifo["+this.fifo.getName()+"] type["+this.type+"]";
+  }
+
   public int getStep(){
     return this.step;
   }
