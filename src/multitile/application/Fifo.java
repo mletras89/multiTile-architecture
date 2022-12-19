@@ -190,6 +190,10 @@ public class Fifo implements Buffer{
 
   }
 
+  public Queue<Transfer> getTimeProducedToken(){
+    return this.timeProducedToken;
+  }
+
   public void syncTimeProducedToken(){
     this.temporalTimeProducedToken.clear();
     for(Transfer t : this.timeProducedToken){
@@ -301,7 +305,7 @@ public class Fifo implements Buffer{
   }
 
   public void insertTimeProducedToken(Transfer transfer) {
-	  this.timeProducedToken.add(new Transfer(transfer));
+    this.timeProducedToken.add(new Transfer(transfer));
   }
  
   public double readTimeProducedToken(int n){
@@ -318,7 +322,6 @@ public class Fifo implements Buffer{
     Transfer status;
     //System.out.println("FIFOS: "+this.getName());
     this.numberOfReadsTimeProduced++;
-    
     status = this.timeProducedToken.remove();
     return status.getDue_time();
   }
