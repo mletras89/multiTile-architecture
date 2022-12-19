@@ -254,55 +254,6 @@ public class Crossbar{
     }
   }
 
-  public boolean reverseStepFromList(int idList, int step){
-    boolean done = false;
-    while(!done){
-      int index = 0;
-      boolean found = false;
-      for(int i=0;i<this.scheduledActions.get(idList).size();i++){
-        if(this.scheduledActions.get(idList).get(i).getStep() == step){
-          index = i;
-          found = true;
-          break;
-        }
-      }
-      if(found){
-        this.scheduledActions.get(idList).remove(index);
-        return true;
-      }
-      else
-        done = true;
-    }
-    return false;
-  }
-
-  public void reverseScheduledStep(int step){
-    boolean done = false;
-    int i = 0;
-    while(i<scheduledActions.size()){
-      boolean state = reverseStepFromList(i,step);
-      if (!state)
-        i++;
-    }
-    
-    while(!done){
-      int index = 0;
-      boolean found =false;
-      for(i=0;i<this.scheduledActions.size();i++){
-        if(this.scheduledActions.get(i).isEmpty()){
-          index = i;
-          found = true;
-          break;
-        }
-      }
-      if(found)
-        this.scheduledActions.remove(index);
-      else
-        done = true;
-    }
-
-  }
-
   public void commitTransfersinQueue(){
     // then commit all the transfers in the Queue
     int elementsinQueue = queueTransfers.size();
@@ -334,12 +285,6 @@ public class Crossbar{
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
       // then add the scheduled transfers accordingly, with the scheduled due time
-
-
-
-
-
-
       this.addScheduledTransfer(commitTransfer);
     }
   }
