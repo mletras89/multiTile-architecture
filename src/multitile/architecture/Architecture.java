@@ -115,31 +115,13 @@ public class Architecture{
     this.globalMemory.resetMemoryUtilization();
   }
 
-  public void syncronizeStateOfArchitecture(){
-
-    for(HashMap.Entry<Integer,Tile> t : this.tiles.entrySet()){
-      for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
-        // syncronize the memories in each processor
-        p.getValue().getLocalMemory().syncMemoryUtilitazion();
-        p.getValue().getScheduler().syncLastEventinProcessor();
-      }
-      t.getValue().getTileLocalMemory().syncMemoryUtilitazion();
-    }
-  }
-
-  public void reverseStateOfArchitecture(int step){
-  
+  public void printArchitectureState(){
     for(HashMap.Entry<Integer,Tile> t: this.tiles.entrySet()){
       for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
-        // reverse the state of memories and processors in the architecture
-        p.getValue().getLocalMemory().reverseMemoryUtilization();
-        p.getValue().getScheduler().reverseLastEventinProcessor();
-        p.getValue().getScheduler().reverseScheduledStep(step);
+        p.getValue().getLocalMemory().printMemoryState();
       }
-      t.getValue().getTileLocalMemory().reverseMemoryUtilization();
-      t.getValue().getCrossbar().reverseScheduledStep(step);
+      t.getValue().getTileLocalMemory().printMemoryState();
     }
-
   }
 
 }
