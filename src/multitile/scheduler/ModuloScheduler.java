@@ -312,7 +312,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       for(int k =0 ; k < sizeActions; k++){
         Action action = queueActions.remove();
         action.setStep(i);
-        System.out.println("current actor "+action.getActor().getName());
+        //System.out.println("current actor "+action.getActor().getName());
         int actionToTileId = action.getActor().getMappingToTile().getId();
         // get the mapping 
         HashMap<Integer,Boolean> processorUtilization = currentTilesOccupation.get(actionToTileId);
