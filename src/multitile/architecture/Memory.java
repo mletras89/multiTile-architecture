@@ -60,7 +60,6 @@ public class Memory{
   private String name;
   private double capacity;
   private Map<Double,Double> memoryUtilization = new TreeMap<Double, Double>();
-  private Map<Double,Double> temporalMemoryUtilization = new TreeMap<Double, Double>();
   private MEMORY_TYPE type;
   private Processor embeddedToProcessor;
 
@@ -144,16 +143,6 @@ public class Memory{
     // KEY is when and Value is the current utilization
     memoryUtilization.clear();
     this.memoryUtilization.put(0.0, 0.0);
-    this.temporalMemoryUtilization.clear();
-    this.temporalMemoryUtilization.put(0.0,0.0);
-  }
-  
-  public void syncMemoryUtilitazion(){
-    this.temporalMemoryUtilization = this.memoryUtilization;
-  }
-
-  public void reverseMemoryUtilization(){
-    this.memoryUtilization = this.temporalMemoryUtilization;
   }
 
   public Map<Double,Double> getMemoryUtilization() {
@@ -276,5 +265,15 @@ public class Memory{
       myWriter.write(this.getName()+"\t"+element+"\t"+memoryUtilization.get(element)+"\n");
     }
   }
+
+  public void printMemoryState(){
+    Map<Double,Double> memoryUtilization = this.getMemoryUtilization();
+    System.out.println("PRINTING MEMORY UTILIZATION: "+this.getName());
+    List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
+    for(double e : listKeys){
+      System.out.println("\t time ["+e+"] memory util. ["+memoryUtilization.get(e)+"]");
+    }
+  }
+
 
 }
