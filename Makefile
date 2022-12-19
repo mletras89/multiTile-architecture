@@ -1,11 +1,11 @@
 DIR_SRC=./src/multitile/tests
 PACKAGE_TEST=src.multitile.tests
 
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check QuadCoreMemoryBound_check ModuloScheduling_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check QuadCoreMemoryBound_check ModuloScheduling_check MemoryRelocation_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound ModuloScheduling
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound ModuloScheduling MemoryRelocation
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run ModuloScheduling_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run ModuloScheduling_run MemoryRelocation_run
 
 clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean testCompositeChannel_clean DualCore_clean QuadCore_clean
 
@@ -15,9 +15,13 @@ MemoryRelocation:
 	javac $(DIR_SRC)/testModuloSchedulingMemoryRelocation.java
 
 MemoryRelocation_run:
-		java -ea $(PACKAGE_TEST).testModuloSchedulingMemoryRelocation;
-		./python/merge-csv-files.py processor-utilization-MemoryRelocation_Processor0.csv processor-utilization-MemoryRelocation_Processor1.csv processor-utilization-MemoryRelocation_Processor2.csv processor-utilization-MemoryRelocation_Processor3.csv crossbar-utilization-crossbar_MemoryRelocation.csv -o testcase-architecture-util-memory-relocation.csv;
-		./python/merge-csv-files.py memory-utilization-MemoryRelocation_Processor0_localMemory.csv memory-utilization-MemoryRelocation_Processor1_localMemory.csv memory-utilization-MemoryRelocation_Processor2_localMemory.csv memory-utilization-MemoryRelocation_Processor3_localMemory.csv memory-utilization-TileLocalMemory_MemoryRelocation.csv -o testcase-memory-relocation-mem-utilization.csv;
+	java -ea $(PACKAGE_TEST).testModuloSchedulingMemoryRelocation;
+	./python/merge-csv-files.py processor-utilization-MemoryRelocation_Processor0.csv processor-utilization-MemoryRelocation_Processor1.csv processor-utilization-MemoryRelocation_Processor2.csv processor-utilization-MemoryRelocation_Processor3.csv crossbar-utilization-crossbar_MemoryRelocation.csv -o testcase-architecture-util-memory-relocation.csv;
+	./python/merge-csv-files.py memory-utilization-MemoryRelocation_Processor0_localMemory.csv memory-utilization-MemoryRelocation_Processor1_localMemory.csv memory-utilization-MemoryRelocation_Processor2_localMemory.csv memory-utilization-MemoryRelocation_Processor3_localMemory.csv memory-utilization-TileLocalMemory_MemoryRelocation.csv -o testcase-memory-relocation-mem-utilization.csv;
+
+MemoryRelocation_check:
+	diff testcase-architecture-util-memory-relocation.csv golden-cases/testcase-architecture-util-memory-relocation-golden.csv;
+	diff testcase-memory-relocation-mem-utilization.csv golden-cases/testcase-memory-relocation-mem-utilization-golden.csv
 
 ModuloScheduling:
 	javac $(DIR_SRC)/testQuadCoreModuloScheduling.java
