@@ -205,7 +205,8 @@ public class Memory{
     System.err.println("Reading memory "+this.getName()+ " storing "+currentBytes+" reading "+amountBytes+" at "+when);
     assert currentBytes-amountBytes >= 0;
     // I can only insert events from the last insert element, no insertions in the past
-    assert last_inserted_key <= when;
+    //System.out.println("Last inserted key "+last_inserted_key);
+    //assert last_inserted_key <= when; => THIS ASSERT MÌGHT BE NECESSARY
     memoryUtilization.put(when, currentBytes-amountBytes);
   }
 
