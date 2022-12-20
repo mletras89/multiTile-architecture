@@ -55,6 +55,10 @@ public class ArchitectureManagement{
     tileIdCounter = 0;
   }
 
+  public void updateLastEventInProcessor(Architecture architecture, Processor processor, double time){
+    architecture.getProcessors().get(processor.getId()).getScheduler().setLastEventinProcessor(time);
+  }
+
   public static Memory getMemoryToBeRelocated(Fifo fifo,Architecture architecture){
     Memory mappedMemory = fifo.getMapping();
     Tile mappedTile = fifo.getMappingToTile();
