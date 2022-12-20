@@ -427,6 +427,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
 	Memory reMappingMemory = ArchitectureManagement.getMemoryToBeRelocated(ReMapTransfer.getFifo(),architecture);
 	ApplicationManagement.remapFifo(ReMapTransfer.getFifo(),application, reMappingMemory);
         return false;
+        // return after doing the remaping, to run again the scheduler
       }
       transfersToMemory.clear();
     }
