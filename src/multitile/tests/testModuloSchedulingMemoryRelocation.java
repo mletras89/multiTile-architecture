@@ -90,7 +90,7 @@ public class testModuloSchedulingMemoryRelocation {
       scheduler.setApplication(app);
       scheduler.setArchitecture(architecture);
 			
-      scheduler.setMaxIterations(5);
+      scheduler.setMaxIterations(10);
       scheduler.calculateModuloSchedule();
       //scheduler.printKernelBody();
       scheduler.findSchedule();
