@@ -321,11 +321,18 @@ public class Scheduler{
 
   public void syncTimeOfSrcActors(Action commitAction, Architecture architecture){
     List<Transfer>  transfers = this.readTransfers.get(commitAction.getActor());
-    for(Transfer t: transfers){
-      if(t.getType() == Transfer.TRANSFER_TYPE.WRITE && t.getActor().getInputFifos().size() == 0){
-        // update the processor after reading the token
-        double timeProcessor = t.getDue_time();
-        ArchitectureManagement.updateLastEventInProcessor(architecture,t.getActor().getMapping(),timeProcessor);
+    if(transfers != null){
+      //System.out.println("Number of read transfers: "+transfers.size());
+      for(Transfer t: transfers){
+        //System.out.println(t);
+        Actor actorWriting = t.getFifo().getSource();
+        if(actorWriting.getInputFifos().size() == 0){
+          // update the processor after reading the token
+          //System.out.println("ACTOR ACTOR: "+actorWriting.getName());
+          //assert true;
+          double timeProcessor = t.getDue_time();
+          ArchitectureManagement.updateLastEventInProcessor(architecture,actorWriting.getMapping(),timeProcessor);
+        }
       }
     }
   }
@@ -344,6 +351,23 @@ public class Scheduler{
     this.scheduledActions.addLast(commitAction);
     //System.out.println("\tScheduling actor "+commitAction.getActor().getName()+ " start time "+commitAction.getStart_time()+" due time "+commitAction.getDue_time());
   }
+
+  public void commitSingleAction(Action commitAction,Architecture architecture){
+    // proceed to schedule the Action
+    double ActionTime = commitAction.getProcessing_time();
+    double startTime = Collections.max(Arrays.asList(this.lastEventinProcessor,commitAction.getStart_time(),this.getTimeLastReadofActor(commitAction.getActor())));
+    double endTime = startTime + ActionTime;
+    // update now the commit Action
+    commitAction.setStart_time(startTime);
+    commitAction.setDue_time(endTime);
+    // update the last event in processor
+    this.lastEventinProcessor = endTime;
+    // commit the Action
+    this.scheduledActions.addLast(commitAction);
+    System.out.println("COMITTING:"+commitAction.getActor().getName());
+    this.syncTimeOfSrcActors(commitAction,architecture);
+  }
+
 
   public void commitActionsinQueue(){
     // then commit all the schedulable Actions in the queue
