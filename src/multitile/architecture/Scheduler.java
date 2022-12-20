@@ -80,7 +80,6 @@ public class Scheduler{
   private Processor owner;
 
   private double lastEventinProcessor;
-  private double lastTemporalEventinProcessor;
   private int numberIterations;
   private int runIterations;
   private String name;
@@ -91,7 +90,6 @@ public class Scheduler{
     this.readTransfers = new HashMap<>();
     this.writeTransfers = new HashMap<>();
     this.lastEventinProcessor = 0.0;
-    this.lastTemporalEventinProcessor = 0.0;
     this.numberIterations = 1;
     this.runIterations = 0;
     this.name = name;
@@ -107,39 +105,11 @@ public class Scheduler{
     this.readTransfers.clear();
     this.writeTransfers.clear();
     this.lastEventinProcessor = 0.0;
-    this.lastTemporalEventinProcessor = 0.0;
     this.runIterations = 0;
     this.readTransfersToMemory.clear();
     this.writeTransfersToMemory.clear();
     this.transfersToMemory.clear();
   } 
-
-  public void syncLastEventinProcessor(){
-    this.lastTemporalEventinProcessor = lastEventinProcessor;
-  }
-
-  public void reverseLastEventinProcessor(){
-    this.lastEventinProcessor = this.lastTemporalEventinProcessor;
-  }
-
-  public void reverseScheduledStep(int step){
-    boolean done = false;
-    while(!done){
-      int index = 0;
-      boolean found = false;
-      for(int i=0; i < this.scheduledActions.size();i++){
-        if (this.scheduledActions.get(i).getStep() == step){
-          index = i;
-          found =true;
-          break;
-        }
-      }
-      if (found)
-        this.scheduledActions.remove(index);
-      else
-        done = true;
-    }
-  }
 
   public Processor getOwner(){
     return this.owner;
@@ -347,6 +317,17 @@ public class Scheduler{
     //System.out.println("Last Write:"+lastWrite);
     if (lastWrite > this.lastEventinProcessor)
       this.lastEventinProcessor = lastWrite;
+  }
+
+  public syncTimeOfSrcActors(Action commitAction, Architecture architecture){
+    List<Transfer>  transfers = readTransfers.get(action.getActor());
+    for(Transfer t: transfers){
+      if(t.getType() == WRITE && t.getActor().getInputFifos() == 0){
+        // update the processor after reading the token
+        double timeProcessor = t.getDue_time();
+        ArchitectureManagement.updateLastEventInProcessor(architecture,t.getActor().getMapping(),timeProcessor);
+      }
+    }
   }
 
   public void commitSingleAction(Action commitAction){
