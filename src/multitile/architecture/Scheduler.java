@@ -319,10 +319,10 @@ public class Scheduler{
       this.lastEventinProcessor = lastWrite;
   }
 
-  public syncTimeOfSrcActors(Action commitAction, Architecture architecture){
-    List<Transfer>  transfers = readTransfers.get(action.getActor());
+  public void syncTimeOfSrcActors(Action commitAction, Architecture architecture){
+    List<Transfer>  transfers = this.readTransfers.get(commitAction.getActor());
     for(Transfer t: transfers){
-      if(t.getType() == WRITE && t.getActor().getInputFifos() == 0){
+      if(t.getType() == Transfer.TRANSFER_TYPE.WRITE && t.getActor().getInputFifos().size() == 0){
         // update the processor after reading the token
         double timeProcessor = t.getDue_time();
         ArchitectureManagement.updateLastEventInProcessor(architecture,t.getActor().getMapping(),timeProcessor);
