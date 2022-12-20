@@ -346,7 +346,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           	Map<Actor,List<Transfer>> processorReadTransfers = t.getValue().getCrossbar().getScheduledReadTransfers(p.getValue());
           	// commit the action in the processor
           	p.getValue().getScheduler().setReadTransfers(processorReadTransfers);
-          	p.getValue().getScheduler().commitSingleAction(action); // modificar este
+          	p.getValue().getScheduler().commitSingleAction(action,architecture); // modificar este
           	// finally, schedule the write of tokens
           	p.getValue().getScheduler().commitWritesToCrossbar(action);
           	// put writing transfers to crossbar
@@ -379,14 +379,14 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           }
         }
         // when, I finish the tile update last event in each processor with the maximum of all the processors
-        double maxTimeP = 0.0;
+        /*double maxTimeP = 0.0;
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           if (maxTimeP < p.getValue().getScheduler().getLastEventinProcessor())
             maxTimeP = p.getValue().getScheduler().getLastEventinProcessor();
           }
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           p.getValue().getScheduler().setLastEventinProcessor(maxTimeP);
-        }
+        }*/
       }
       // commit the reads/writes to memory
       SchedulerManagement.sort(transfersToMemory);
