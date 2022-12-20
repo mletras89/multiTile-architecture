@@ -54,7 +54,6 @@ public class Fifo implements Buffer{
   private int             consRate;
   private int             prodRate;
   private Queue<Transfer> timeProducedToken;  // each transfer transport a token, thus the due time is the produced token time
-  private Queue<Transfer> temporalTimeProducedToken;  
 
   private Memory mapping=null;   // map to memory 
   private Tile mappingToTile;  // mapping to the Tile
@@ -68,7 +67,6 @@ public class Fifo implements Buffer{
   private int numberOfReadsReMapping; 
 
   public int numberOfReadsTimeProduced;
-  public int temporalNumberOfReadsTimeProduced;
   public int numberOfReads;
 
   private Vector<Integer> memory_footprint;
@@ -95,7 +93,6 @@ public class Fifo implements Buffer{
     this.setDestination(dst);
     this.setNumberOfReadsTimeProduced(0);
     this.timeProducedToken = new LinkedList<>();
-    this.temporalTimeProducedToken = new LinkedList<>();
     this.numberOfReads = 0;
     this.ReMapping = new LinkedList<>();
     this.setNumberOfReadsReMapping(0);
@@ -116,7 +113,6 @@ public class Fifo implements Buffer{
     this.setDestination(dst);
     this.setNumberOfReadsTimeProduced(0);
     this.timeProducedToken = new LinkedList<>();
-    this.temporalTimeProducedToken = new LinkedList<>();
     this.numberOfReads = 0;
     this.ReMapping = new LinkedList<>();
     this.setNumberOfReadsReMapping(0);
@@ -136,8 +132,6 @@ public class Fifo implements Buffer{
 
     this.setNumberOfReadsTimeProduced(0);
     this.timeProducedToken = new LinkedList<>();
-    this.temporalTimeProducedToken = new LinkedList<>();
-
     this.numberOfReads = 0;
 
     this.ReMapping = new LinkedList<>();
@@ -157,8 +151,6 @@ public class Fifo implements Buffer{
 
     this.setNumberOfReadsTimeProduced(0);
     this.timeProducedToken = new LinkedList<>();
-    this.temporalTimeProducedToken = new LinkedList<>();
-
     this.numberOfReads = 0;
 
     this.ReMapping = new LinkedList<>();
@@ -181,8 +173,6 @@ public class Fifo implements Buffer{
     this.setDestination(another.getDestination());
 
     this.timeProducedToken = new LinkedList<>();
-    this.temporalTimeProducedToken = new LinkedList<>();
-
     this.setNumberOfReadsTimeProduced(another.getNumberOfReadsTimeProduced());
     this.numberOfReads = 0;
     this.setNumberOfReadsReMapping(another.getNumberOfReadsReMapping());
@@ -192,22 +182,6 @@ public class Fifo implements Buffer{
 
   public Queue<Transfer> getTimeProducedToken(){
     return this.timeProducedToken;
-  }
-
-  public void syncTimeProducedToken(){
-    this.temporalTimeProducedToken.clear();
-    for(Transfer t : this.timeProducedToken){
-      this.temporalTimeProducedToken.add(new Transfer(t));
-    }
-    this.temporalNumberOfReadsTimeProduced = this.numberOfReadsTimeProduced;
-  }
-
-  public void reverseTimeProducedToken(){
-    this.timeProducedToken.clear();
-    for(Transfer t: this.temporalTimeProducedToken){
-      this.timeProducedToken.add(new Transfer(t));
-    }
-    this.numberOfReadsTimeProduced = this.temporalNumberOfReadsTimeProduced;
   }
 
   public Tile getMappingToTile(){
@@ -349,7 +323,6 @@ public class Fifo implements Buffer{
     this.timeProducedToken.clear();
     this.numberOfReads = 0;
     this.numberOfReadsTimeProduced = 0;
-    this.temporalNumberOfReadsTimeProduced = 0;
     this.numberOfReadsReMapping = 0;
     this.ReMapping.clear();
   }
