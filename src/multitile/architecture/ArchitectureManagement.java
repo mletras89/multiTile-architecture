@@ -56,8 +56,10 @@ public class ArchitectureManagement{
   }
 
   public static void updateLastEventInProcessor(Architecture architecture, Processor processor, double time){
-
-    architecture.getTiles().get(processor.getOwnerTile().getId()).getProcessors().get(processor.getId()).getScheduler().setLastEventinProcessor(time);
+    double timeEvent = architecture.getTiles().get(processor.getOwnerTile().getId()).getProcessors().get(processor.getId()).getScheduler().getLastEventinProcessor(); 
+    if (time>timeEvent)
+      timeEvent = time;
+    architecture.getTiles().get(processor.getOwnerTile().getId()).getProcessors().get(processor.getId()).getScheduler().setLastEventinProcessor(timeEvent);
   }
 
   public static Memory getMemoryToBeRelocated(Fifo fifo,Architecture architecture){
