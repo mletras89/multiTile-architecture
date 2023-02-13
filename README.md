@@ -13,6 +13,16 @@ E.g., the following figure presents the dataflow of an implementation of the sob
 
 ![Application Graph](img/DFG.png)
 
+To define a application graph, you can declare an actor as:
+
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
+
+
+
 ## Target Architecture
 
 ![Target Architecture overview](img/targetArch.png)
