@@ -22,6 +22,7 @@ a1.setInputs(0);
 a1.setOutputs(1);  
 ```
 
+It is required to specify the execution time on a given actor.
 
 
 ## Target Architecture
