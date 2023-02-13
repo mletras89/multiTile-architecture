@@ -15,10 +15,12 @@ E.g., the following figure presents the dataflow of an implementation of the sob
 
 To define a application graph, you can declare an actor as:
 
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
+```c
+Actor a1 = new Actor("a1");                                                                                   
+a1.setId(1) ;                                                                                                 
+a1.setExecutionTime(10000);                                                                                   
+a1.setInputs(0);                                                                                              
+a1.setOutputs(1);  
 ```
 
 
