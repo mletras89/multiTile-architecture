@@ -10,10 +10,11 @@ The application is defined as a dataflow graph. A dataflow graph consists of a c
 In the context of this repository, the communication channels are implemented as First-In-First-Out (FIFO) buffers.
 Actors model the functionality of the application under observation.
 E.g., the following figure presents the dataflow of an implementation of the sobel algorithm.
+
 ![Application Graph](img/DFG.png)
 
 ## Target Architecture
 
-![Target Architecture overview](img/targetArch.png=250x250)
+![Target Architecture overview](img/targetArch.png)
 
 ## Scheduler
