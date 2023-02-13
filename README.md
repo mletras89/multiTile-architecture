@@ -9,6 +9,8 @@ The simulator takes as inputs the target architecture, the application and the s
 The application is defined as a dataflow graph. A dataflow graph consists of a collection of actors that are connected via communication channels.
 In the context of this repository, the communication channels are implemented as First-In-First-Out (FIFO) buffers.
 
+![Application Graph](img/DFG.png)
+
 ## Target Architecture
 
 ![Target Architecture overview](img/targetArch.png)
