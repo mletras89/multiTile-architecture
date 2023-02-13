@@ -14,6 +14,6 @@ E.g., the following figure presents the dataflow of an implementation of the sob
 
 ## Target Architecture
 
-![Target Architecture overview](img/targetArch.png)
+![Target Architecture overview](img/targetArch.png=250x250)
 
 ## Scheduler
