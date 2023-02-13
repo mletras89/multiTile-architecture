@@ -25,7 +25,9 @@ a1.setOutputs(1);
 It is required to specify the execution time on a given actor used during scheduling and simulation. Also, the number of input and output ports are required. In the example, **a1** has no inputs and has one output port.
 
 ```c
-public Fifo(String name, int tokens, int capacity, int tokenSize,Memory mapping,int consRate, int prodRate, Actor src, Actor dst)
+public Fifo(String name, int tokens, int capacity, int tokenSize,
+            Memory mapping,int consRate, int prodRate, Actor src, 
+            Actor dst)
 ```
 ## Target Architecture
 
