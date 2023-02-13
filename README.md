@@ -22,7 +22,7 @@ a1.setInputs(0);
 a1.setOutputs(1);  
 ```
 
-It is required to specify the execution time on a given actor.
+It is required to specify the execution time on a given actor used during scheduling and simulation. Also, the number of input and output ports are required. In the example, **a1** has no inputs and has one output port.
 
 
 ## Target Architecture
