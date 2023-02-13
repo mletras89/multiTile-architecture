@@ -13,11 +13,10 @@ E.g., the following figure presents the dataflow of an implementation of the sob
 
 ![Application Graph](img/DFG.png)
 
-To define a application graph, you can declare an actor as:
+To define a application graph, you can declare an actor using the **Actor** class as:
 
 ```c
 Actor a1 = new Actor("a1");                                                                                   
-a1.setId(1) ;                                                                                                 
 a1.setExecutionTime(10000);                                                                                   
 a1.setInputs(0);                                                                                              
 a1.setOutputs(1);  
