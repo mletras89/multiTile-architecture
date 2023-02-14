@@ -131,7 +131,7 @@ Also, the memory tracks the number of bytes stored in memory at any simulation t
 ![Memory Utilization Example](img/memUtilEx.png)
 Memory might be read and written along simulation. The memory capacity must be specified in terms of bytes.
 
-###Crossbar
+### Crossbar
 
 ![Target Architecture overview](img/targetArch.png)
 
