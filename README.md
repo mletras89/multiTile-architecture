@@ -91,6 +91,19 @@ for(int i=0; i<this.numberProcessors;i++){
 }
 ```
 
+When declaring a processor, the name of the processor is required in the constructor, however, during the construction of a processor the scratchpad local memory is created and connected to the processor.
+
+```c
+public Processor(String name) {
+    this.setName(name);
+    this.setId(ArchitectureManagement.getProcessorId());
+    localMemory = new LocalMemory(this.name+"_localMemory");
+    scheduler = new Scheduler(name,this);
+    scheduler.setNumberIterations(1);
+    // connecting local memory to processor
+    this.localMemory.setEmbeddedToProcessor(this);
+  }
+```
 
 ![Target Architecture overview](img/targetArch.png)
 
