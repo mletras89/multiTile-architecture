@@ -149,9 +149,14 @@ public class Tile{
   private TileLocalMemory tileLocalMemory;
 ...
 ```
-
 ### Multi-tile Architecture
 
 ![Target Architecture overview](img/targetArch.png)
 
-## Scheduler
+### Network-on-Chip
+
+## Modulo Scheduling
+
+### Algorithm
+
+### Memory Relocation Strategy
