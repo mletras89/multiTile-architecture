@@ -74,9 +74,10 @@ Architecture singleCoreArchitecture = new Architecture("architecture","Tile1", 4
 The previous listing declares a architecture name "architecure" with a tile named "Tile1", with four processors with a crossbar interconnect with two channels at 1.0 Gbps.
 The crossbar also connects the four cores to the global memory as in the next figure.
 
-###Processor 
-
 ![Target Architecture overview](img/targetQuadCore.png)
+
+####Processor 
+
 
 ![Target Architecture overview](img/targetArch.png)
 
