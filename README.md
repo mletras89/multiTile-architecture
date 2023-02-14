@@ -68,10 +68,11 @@ For creating a symmetric multicore architecture, you must use the following cons
 ```c
 public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar)
 
-Architecture singleCoreArchitecture = new Architecture("architecture","Tile1", 1, 1.0, 2);
+Architecture singleCoreArchitecture = new Architecture("architecture","Tile1", 4, 1.0, 2);
 ```
 
-The previous listing declares a architecture name "architecure" with a tile named "Tile1", with only one processor with a crossbar interconnect with two channels at 1.0 Gbps.
+The previous listing declares a architecture name "architecure" with a tile named "Tile1", with four processors with a crossbar interconnect with two channels at 1.0 Gbps.
+The crossbar also connects the four cores to the global memory as in the next figure.
 
 ![Target Architecture overview](img/targetQuadCore.png)
 
