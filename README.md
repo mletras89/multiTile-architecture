@@ -76,7 +76,7 @@ The crossbar also connects the four cores to the global memory as in the next fi
 
 ![Target Architecture overview](img/targetQuadCore.png)
 
-###### Processor 
+### Processor 
 
 
 ![Target Architecture overview](img/targetArch.png)
