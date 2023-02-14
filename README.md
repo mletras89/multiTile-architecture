@@ -29,9 +29,8 @@ The definition of communication channels as FIFOs can be done using the FIFO cla
 public Fifo(String name, int tokens, int capacity, int tokenSize,
             Memory mapping,int consRate, int prodRate, Actor src, 
             Actor dst)
-
 Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2); 
-``
+```
 
 The important parameters of a FIFO are
 
