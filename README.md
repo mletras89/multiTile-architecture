@@ -33,6 +33,7 @@ Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);
 ```
 
 The relation between FIFOs and Actors is specified by the actor's methods **setOutputFifos** and **setInputFifos**.
+E.g., in the following listing, the actor **a1** has one output connected to FIFO **c1**, whereas the actor **a2** has one input connected to the FIFO **c1**. Actors **a1** and **a2** communicate via channel **c1**.
 
 ```c
 Vector<Fifo> v1 = new Vector<Fifo>();
