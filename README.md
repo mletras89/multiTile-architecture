@@ -34,6 +34,15 @@ Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2);
 
 The relation between FIFOs and Actors is specified by the actor's methods **setOutputFifos** and **setInputFifos**.
 
+```c
+Vector<Fifo> v1 = new Vector<Fifo>();
+v1.addElement(c1);
+a1.setOutputFifos(v1);
+
+Vector<Fifo> v2 = new Vector<Fifo>();
+v2.addElement(new Fifo(c1));
+a2.setInputFifos(v2);
+```
 
 
 You must use the class **Application** to define an application as follows:
