@@ -63,6 +63,14 @@ In the context of this repository, we consider two target architectures 1) Symme
 E.g., the following figure presents the Symmetric Quad-Core target architecture.
 Each processor has a local scratchpad memory, and its turn each processor is connected to a bus which also connects a global memory. Here, the global memory is used to communicate the different processors.
 
+For creating a symmetric multicore architecture, you must use the following constructor:
+
+```c
+public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar)
+
+Architecture singleCoreArchitecture = new Architecture("architecture","ModuloSchedulingSingle", 1, 1.0, 2);
+```
+
 ![Target Architecture overview](img/targetQuadCore.png)
 
 ![Target Architecture overview](img/targetArch.png)
