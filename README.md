@@ -1,4 +1,4 @@
-# Module Scheduling Simulator for Multicore Architectures
+# Modulo Scheduling Simulator for Multicore Architectures
 
 This repository presents the implementation of a system level simulator.
 Here, the simulation of an application to a many core architecture is performed.
