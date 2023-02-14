@@ -78,7 +78,7 @@ The crossbar also connects the four cores to the global memory as in the next fi
 
 ### Processor 
 
-When declaring an architecture an specifying the number of processors, the corresponding processors are declared in the constructor of the tile  as:
+When declaring an architecture and specifying the number of processors, the corresponding processors are declared in the constructor of the tile  as:
 
 ```c
 this.numberProcessors = numberProcessors;
