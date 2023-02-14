@@ -32,9 +32,9 @@ public Fifo(String name, int tokens, int capacity, int tokenSize,
 Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2); 
 ```
 
-The important parameters of a FIFO are
+The relation between FIFOs and Actors is specified by the actor's methods **setOutputFifos** and **setInputFifos**.
 
-Once a FIFO is defined, you must to specifiy the input and output
+
 
 You must use the class **Application** to define an application as follows:
 
