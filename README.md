@@ -129,7 +129,7 @@ An important feature of this simulator is the flexibility of simulate without me
 
 Also, the memory tracks the number of bytes stored in memory at any simulation time **private Map<Double,Double> memoryUtilization**. The next figure, shows the output of a memory trace during simulation.
 
-
+![Memory Utilization Example](img/memUtilEx.pn}g
 
 
 ![Target Architecture overview](img/targetArch.png)
