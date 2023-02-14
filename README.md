@@ -131,6 +131,8 @@ Also, the memory tracks the number of bytes stored in memory at any simulation t
 
 ![Memory Utilization Example](img/memUtilEx.png)
 
+Memory might be read and written along simulation.
+
 
 ![Target Architecture overview](img/targetArch.png)
 
