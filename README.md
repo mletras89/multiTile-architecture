@@ -135,6 +135,21 @@ Memory might be read and written along simulation. The memory capacity must be s
 ```c
 public Crossbar(String name, double bandwidth, int numberofParallelChannels)
 ```
+
+### Tile
+
+```c
+public class Tile{
+  private int id;
+  private String name;
+  private int numberProcessors;
+  // the key is the id
+  private HashMap<Integer,Processor> processors;
+  private Crossbar crossbar;
+  private TileLocalMemory tileLocalMemory;
+...
+```
+
 ### Multi-tile Architecture
 
 ![Target Architecture overview](img/targetArch.png)
