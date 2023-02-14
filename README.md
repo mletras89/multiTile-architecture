@@ -49,7 +49,12 @@ You must use the class **Application** to define an application as follows:
 
 ```c
 Application sampleApplication = new Application();
+sampleApplication.setActorsFromList(actors);
+sampleApplication.setFifos(fifoMap);
 ```
+
+Here, it is required to pass the actors and the FIFOS that composed the application after constructing the application itself.
+
 
 ## Target Architecture
 
