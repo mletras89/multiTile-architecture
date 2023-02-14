@@ -81,12 +81,14 @@ The crossbar also connects the four cores to the global memory as in the next fi
 When declaring an architecture an specifying the number of processors, the corresponding processors are declared in the constructor as:
 
 ```c
-tiles = new HashMap<>();
-for(int i=0; i < nTiles; i++){
-  Tile t = new Tile("Tile"+(i+1), nProcPerTile, BWCrossbars, channelsCrossbar);
-  tiles.put(t.getId(),t);
+this.numberProcessors = numberProcessors;
+this.processors = new HashMap<>();
+//System.out.println("Here!");
+for(int i=0; i<this.numberProcessors;i++){
+  Processor processor = new Processor(this.name+"_Processor"+i);
+  processor.setOwnerTile(this);
+  processors.put(processor.getId(),processor);
 }
-globalMemory = new GlobalMemory("GlobalMemory");
 ```
 
 
