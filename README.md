@@ -22,13 +22,27 @@ a1.setInputs(0);
 a1.setOutputs(1);  
 ```
 
-It is required to specify the execution time on a given actor used during scheduling and simulation. Also, the number of input and output ports are required. In the example, **a1** has no inputs and has one output port.
+It is required to specify the execution time of a given actor used during scheduling and simulation. Also, the number of input and output ports are required. In the example, **a1** has no inputs and has one output port.
 
+The definition of communication channels as FIFOs can be done using the FIFO class:
 ```c
 public Fifo(String name, int tokens, int capacity, int tokenSize,
             Memory mapping,int consRate, int prodRate, Actor src, 
             Actor dst)
-```
+
+Fifo c1 = new Fifo("c1",0,1,1000000,memory1,1,1,a1,a2); 
+``
+
+The important parameters of a FIFO are
+
+Once a FIFO is defined, you must to specifiy the input and output
+
+You must use the class **Application** to define an application as follows:
+
+```c
+Application sampleApplication = new Application();
+
+``
 ## Target Architecture
 
 ![Target Architecture overview](img/targetArch.png)
