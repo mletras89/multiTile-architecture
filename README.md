@@ -45,13 +45,12 @@ v2.addElement(new Fifo(c1));
 a2.setInputFifos(v2);
 ```
 
-
 You must use the class **Application** to define an application as follows:
 
 ```c
 Application sampleApplication = new Application();
+```
 
-``
 ## Target Architecture
 
 ![Target Architecture overview](img/targetArch.png)
