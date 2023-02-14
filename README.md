@@ -103,6 +103,20 @@ public Processor(String name) {
   }
 ```
 
+### Memory 
+An important element of the architecture is the memory. There might be three types of memories:
+
+```c
+public static enum MEMORY_TYPE {
+  LOCAL_MEM,
+  TILE_LOCAL_MEM,
+  GLOBAL_MEM
+}
+```
+
+The scratchpad memory (LOCAL_MEM) has been already introduced as a member of a processor.
+
+
 ![Target Architecture overview](img/targetArch.png)
 
 ## Scheduler
