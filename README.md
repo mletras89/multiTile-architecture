@@ -58,7 +58,7 @@ Here, it is required to pass the actors and the FIFOS that composed the applicat
 
 ## Target Architecture
 
-![Target Architecture overview](img/targetQuadcore.png)
+![Target Architecture overview](img/targetQuadCore.png)
 
 ![Target Architecture overview](img/targetArch.png)
 
