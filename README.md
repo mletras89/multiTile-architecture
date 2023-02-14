@@ -115,7 +115,7 @@ public static enum MEMORY_TYPE {
 ```
 
 The scratchpad memory (LOCAL_MEM) has been already introduced as a member of a processor. Further details about the other memories will be given in next sections.
-An important feature of this simulator is the flexibility of simulate without memory constraints (assuming memory boundless just for simulation purposes). If a memory size constraint is violated the memory will notify this situation and memory relocation strategies might be also implemented. 
+An important feature of this simulator is the flexibility of simulate without memory constraints (assuming memory boundless just for simulation purposes). If a memory size constraint is violated the memory will notify this situation and memory relocation strategies might be also implemented. During the construction, all memories are set capacity to **Double.POSITIVE_INFINITY** however the capacity can be changed via the method **setCapacity(double capacity)**.
 
 ```c
   public Memory(String name){
