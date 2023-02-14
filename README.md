@@ -58,6 +58,9 @@ Here, it is required to pass the actors and the FIFOS that composed the applicat
 
 ## Target Architecture
 
+The second part of the input specification is the definition of the target architecture.
+In the context of this repository, we consider two target architectures 1) Symmetric Quad-Core Architecture and 2) Multi-tile Many-cores architecture. 
+E.g., the following figure presents the Symmetric Quad-Core target architecture.
 ![Target Architecture overview](img/targetQuadCore.png)
 
 ![Target Architecture overview](img/targetArch.png)
