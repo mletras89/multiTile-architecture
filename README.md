@@ -1,4 +1,4 @@
-# Multi-tile Architecture Simulator
+# Module Scheduling Simulator for Multicore Architectures
 
 This repository presents the implementation of a system level simulator.
 Here, the simulation of an application to a many core architecture is performed.
@@ -61,6 +61,8 @@ Here, it is required to pass the actors and the FIFOS that composed the applicat
 The second part of the input specification is the definition of the target architecture.
 In the context of this repository, we consider two target architectures 1) Symmetric Quad-Core Architecture and 2) Multi-tile Many-cores architecture. 
 E.g., the following figure presents the Symmetric Quad-Core target architecture.
+Each processor has a local scratchpad memory, and its turn each processor is connected to a bus which also connects a global memory. Here, the global memory is used to communicate the different processors.
+
 ![Target Architecture overview](img/targetQuadCore.png)
 
 ![Target Architecture overview](img/targetArch.png)
