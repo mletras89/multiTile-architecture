@@ -132,6 +132,10 @@ Also, the memory tracks the number of bytes stored in memory at any simulation t
 Memory might be read and written along simulation. The memory capacity must be specified in terms of bytes.
 
 ### Crossbar
+```c
+public Crossbar(String name, double bandwidth, int numberofParallelChannels)
+```
+### Multi-tile Architecture
 
 ![Target Architecture overview](img/targetArch.png)
 
