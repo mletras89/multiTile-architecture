@@ -144,7 +144,7 @@ private List<LinkedList<Transfer>> scheduledActions;
 private Map<Actor,List<Transfer>> scheduledReadTransfers;
 private Map<Actor,List<Transfer>> scheduledWriteTransfers;
 ```
-A transfer can be categorized as **READ** or **WRITE*.
+A transfer can be categorized as **READ** or **WRITE**.
 ```c
 public static enum TRANSFER_TYPE {
           READ,
