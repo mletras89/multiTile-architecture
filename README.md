@@ -187,9 +187,17 @@ The previous declared a tile named "Tile1" with 4 processors and a crossbar with
 ### Multi-tile Architecture
 The class architecture offers the flexibility to declare multi-tile architectures.
 The trivial case is single tile architecture as already presented. However, non-symmetric architectures might also be able to define as in the following figure.
-
 ![Target Architecture overview](img/targetArch.png)
-
+The basic elements of the architecture class are:
+```c
+public class Architecture{
+  // the key is the id
+  private String name;
+  private HashMap<Integer,Tile> tiles;
+  //private NoC noc;
+  private GlobalMemory globalMemory;
+```
+In the architecture class, a collection of tiles communicates to a Global Memory connected via a Network-on-Chip (NoC).
 ### Network-on-Chip
 
 Work in Progress
