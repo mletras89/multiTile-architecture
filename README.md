@@ -138,6 +138,19 @@ The crossbar is the element used to connect the processors in a tile. The crossb
 public Crossbar(String name, double bandwidth, int numberofParallelChannels)
 ```
 
+The crossbar tracks the transfers of data of any processor to the tile local memory placed in each tile.
+```c
+private List<LinkedList<Transfer>> scheduledActions;
+private Map<Actor,List<Transfer>> scheduledReadTransfers;
+private Map<Actor,List<Transfer>> scheduledWriteTransfers;
+```
+A transfer can be categorized as **READ** or **WRITE*.
+```c
+public static enum TRANSFER_TYPE {
+          READ,
+          WRITE
+  }
+```
 ### Tile
 
 ```c
