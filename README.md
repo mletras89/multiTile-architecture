@@ -185,6 +185,8 @@ Tile t1 = new Tile("Tile1",4,1.0,2);
 ```
 The previous declared a tile named "Tile1" with 4 processors and a crossbar with 2 channels at 1.0 Gbps.
 ### Multi-tile Architecture
+The class architecture offers the flexibility to declare multi-tile architectures.
+The trivial case is single tile architecture as already presented. However, non symmetric architectures might also be able to define as in the following figure.
 
 ![Target Architecture overview](img/targetArch.png)
 
