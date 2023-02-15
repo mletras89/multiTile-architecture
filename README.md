@@ -166,6 +166,9 @@ Here, the elements involved are an actor that reads or writes to a given FIFO. T
 
 ### Tile
 
+The class that glues of the previous presented elements is the class Tile.
+A tile is composed of a collection of processors, a crossbar and a tile local memory.
+
 ```c
 public class Tile{
   private int id;
