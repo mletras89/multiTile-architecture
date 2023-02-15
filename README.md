@@ -165,10 +165,8 @@ public class Transfer {
 Here, the elements involved are an actor that reads or writes to a given FIFO. The **start_time** of the Transfer must be specified. The length of the transfer is calculated using the number of tokens produced/consumed by the actor and the bandwidth of the crossbar used to perform the transfer.
 
 ### Tile
-
 The class that glues of the previous presented elements is the class Tile.
 A tile is composed of a collection of processors, a crossbar and a tile local memory.
-
 ```c
 public class Tile{
   private int id;
@@ -180,6 +178,12 @@ public class Tile{
   private TileLocalMemory tileLocalMemory;
 ...
 ```
+The declarion of a tile is as follows:
+```c
+// creaate one tile in the architecture
+Tile t1 = new Tile("Tile1",4,1.0,2);
+```
+
 ### Multi-tile Architecture
 
 ![Target Architecture overview](img/targetArch.png)
