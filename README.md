@@ -132,6 +132,8 @@ Also, the memory tracks the number of bytes stored in memory at any simulation t
 Memory might be read and written along simulation. The memory capacity must be specified in terms of bytes.
 
 ### Crossbar
+
+The crossbar is the element used to connect the processors in a tile. The crossbar is defined as follows:
 ```c
 public Crossbar(String name, double bandwidth, int numberofParallelChannels)
 ```
