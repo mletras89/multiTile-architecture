@@ -183,7 +183,7 @@ The declarion of a tile is as follows:
 // creaate one tile in the architecture
 Tile t1 = new Tile("Tile1",4,1.0,2);
 ```
-
+The previous declared a tile named "Tile1" with 4 processors and a crossbar with 2 channels at 1.0 Gbps.
 ### Multi-tile Architecture
 
 ![Target Architecture overview](img/targetArch.png)
