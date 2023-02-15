@@ -151,6 +151,19 @@ public static enum TRANSFER_TYPE {
           WRITE
   }
 ```
+The elements stored in a TRANSFER are:
+```c
+public class Transfer {
+  private double start_time;
+  private double due_time;
+  // in a transfer, an actor and a Fifo are involved
+  private Actor actor;
+  private Fifo fifo;
+  // depending on the type of the operation: {READ, WRITE}
+  private TRANSFER_TYPE type;
+```
+Here, the elements involved are an actor that reads or writes to a given FIFO. The **start_time** of the Transfer must be specified. The length of the transfer is calculated using the number of tokens produced/consumed by the actor and the bandwidth of the crossbar used to perform the transfer.
+
 ### Tile
 
 ```c
