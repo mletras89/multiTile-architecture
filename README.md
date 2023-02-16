@@ -242,3 +242,5 @@ d) Presents a feasible modulo schedule with an MII=2. e) Presents an infeasible 
 ### Algorithm
 
 ### Memory Relocation Strategy
+
+![Modulo scheduling example](img/repositoryContent.png)
