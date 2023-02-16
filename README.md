@@ -231,7 +231,7 @@ Calling the function **scheduler.calculateModuloSchedule()** calculates the modu
 In: Padua, D. (eds) Encyclopedia of Parallel Computing. 
 Springer, Boston, MA. https://doi.org/10.1007/978-0-387-09766-4_65
 
-![Modulo scheduling example](img/moduloeScheduling.png)
+![Modulo scheduling example](img/moduloScheduling.png)
 
 ### Algorithm
 
