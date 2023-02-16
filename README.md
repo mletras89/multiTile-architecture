@@ -227,7 +227,7 @@ scheduler.schedule();
 ```
 Calling the function **scheduler.calculateModuloSchedule()** calculates the modulo schedule of the given application on the target architecture as presented in:
 
-Kejariwal, A., Nicolau, A. (2011). Modulo Scheduling and Loop Pipelining. 
+[1] Kejariwal, A., Nicolau, A. (2011). **Modulo Scheduling and Loop Pipelining.** 
 In: Padua, D. (eds) Encyclopedia of Parallel Computing. 
 Springer, Boston, MA. https://doi.org/10.1007/978-0-387-09766-4_65
 
