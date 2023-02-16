@@ -239,7 +239,15 @@ The modulo schedule determines the Minimum Initialization Interval of a given ap
 
 d) Presents a feasible modulo schedule with an MII=2. e) Presents an infeasible schedule with MII=1, here we can observe that in the third control step, we have v3 and v2 at the same time. This situation is infeasible due that there is only one multiplier in the architecture.
 
-### Algorithm
+The next figure presents the output of modulo scheduling the sobel application to single core, dual core and quad core architectures.
+
+#### Modulo Scheduling for single core implementation of sobel
+
+#### Modulo Scheduling for dual core implementation of sobel
+
+#### Modulo Scheduling for quad core implementation of sobel
+
+
 
 ### Memory Relocation Strategy
 
