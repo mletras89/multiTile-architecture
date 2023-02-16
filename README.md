@@ -212,11 +212,18 @@ Work in Progress
 
 ## Modulo Scheduling
 To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler** specifying the application and the architecture.
-
 ```c
 ModuloScheduler scheduler = new ModuloScheduler();
 scheduler.setApplication(app);
 scheduler.setArchitecture(architecture);
+```
+On top of the application 
+```c
+scheduler.setMaxIterations(5);
+scheduler.calculateModuloSchedule();
+//scheduler.printKernelBody();
+scheduler.findSchedule();
+scheduler.schedule();
 ```
 
 ### Algorithm
