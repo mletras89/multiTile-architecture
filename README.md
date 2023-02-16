@@ -231,6 +231,7 @@ Calling the function **scheduler.calculateModuloSchedule()** calculates the modu
 In: Padua, D. (eds) Encyclopedia of Parallel Computing. 
 Springer, Boston, MA. https://doi.org/10.1007/978-0-387-09766-4_65
 ![Modulo scheduling example](img/imageModulo1.png)
+
 E.g., the previous figure presents an example of the modulo scheduling. a) An input application.
 b) The available resources to run the application (1 adder and 1 multiplier). c) The data dependency graph obtained from a), in the context of this repository a DDG match to the concept of Dataflow graph.
 The modulo schedule determines the Minimum Initialization Interval of a given application. That means that overlapping iterations can start every MII period.
