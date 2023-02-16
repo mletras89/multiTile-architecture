@@ -242,12 +242,11 @@ d) Presents a feasible modulo schedule with an MII=2. e) Presents an infeasible 
 The next figure presents the output of modulo scheduling the sobel application to single core, dual core and quad core architectures.
 
 #### Modulo Scheduling for single core implementation of sobel
-
+![Single core Modulo scheduling example](img/moduloSingleCore.png)
 #### Modulo Scheduling for dual core implementation of sobel
-
+![Dual core Modulo scheduling example](img/moduloDualCore.png)
 #### Modulo Scheduling for quad core implementation of sobel
-
-
+![Quad core Modulo scheduling example](img/moduloQuadCore.png)
 
 ### Memory Relocation Strategy
 
