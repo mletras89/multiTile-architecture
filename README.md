@@ -209,6 +209,12 @@ Architecture architecture = new Architecture("architecture",3, 4, 1.0, 2);
 Work in Progress
 
 ## Modulo Scheduling
+To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler**
+```c
+ModuloScheduler scheduler = new ModuloScheduler();
+scheduler.setApplication(app);
+scheduler.setArchitecture(architecture);
+```
 
 ### Algorithm
 
