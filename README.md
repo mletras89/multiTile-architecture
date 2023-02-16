@@ -217,7 +217,7 @@ ModuloScheduler scheduler = new ModuloScheduler();
 scheduler.setApplication(app);
 scheduler.setArchitecture(architecture);
 ```
-On top of the application 
+On top of the application and the architecture, it is required to specify the maximum number of iterations, as default is 5. 
 ```c
 scheduler.setMaxIterations(5);
 scheduler.calculateModuloSchedule();
@@ -225,6 +225,11 @@ scheduler.calculateModuloSchedule();
 scheduler.findSchedule();
 scheduler.schedule();
 ```
+Calling the function **scheduler.calculateModuloSchedule()** calculates the modulo schedule of the given application on the target architecture as presented in:
+
+Kejariwal, A., Nicolau, A. (2011). Modulo Scheduling and Loop Pipelining. 
+In: Padua, D. (eds) Encyclopedia of Parallel Computing. 
+Springer, Boston, MA. https://doi.org/10.1007/978-0-387-09766-4_65
 
 ### Algorithm
 
