@@ -235,6 +235,7 @@ E.g., the previous figure presents an example of the modulo scheduling. a) An in
 b) The available resources to run the application (1 adder and 1 multiplier). c) The data dependency graph obtained from a), in the context of this repository a DDG match to the concept of Dataflow graph.
 The modulo schedule determines the Minimum Initialization Interval of a given application. That means that overlapping iterations can start every MII period.
 ![Modulo scheduling example](img/modulosSchedule2.png)
+
 d) Presents a feasible modulo schedule with an MII=2. e) Presents an infeasible schedule with MII=1, here we can observe that in the third control step, we have v3 and v2 at the same time. This situation is infeasible due that there is only one multiplier in the architecture.
 
 ### Algorithm
