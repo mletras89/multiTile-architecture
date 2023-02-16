@@ -208,8 +208,11 @@ Architecture architecture = new Architecture("architecture",3, 4, 1.0, 2);
 
 Work in Progress
 
+## Mapping Definition
+
 ## Modulo Scheduling
-To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler**
+To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler** specifying the application and the architecture.
+
 ```c
 ModuloScheduler scheduler = new ModuloScheduler();
 scheduler.setApplication(app);
