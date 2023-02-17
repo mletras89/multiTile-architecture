@@ -13,11 +13,12 @@ To build the project, open a terminal and type:
 make all
 ```
 ## Project Test
-This repository also includes several tests to check the correct functionality. To check the project run:<br>
+This repository also includes several test applications to check the correct functionality. To check the project run:<br>
 ```bash
 make check_all
 ```
-This will run all the tests and compare their outputs to preloaded golden cases.
+This will run all the tests and compare their outputs to preloaded golden cases.<br>
+To visualize the output of a test application, the python folder includes two scripts: 1) print-gantt-chart-runtime.py and 2) print-memory-utilization.py.
 
 ## Application
 The application is defined as a dataflow graph. A dataflow graph consists of a collection of actors that are connected via communication channels.
