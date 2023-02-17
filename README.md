@@ -352,7 +352,18 @@ By including MRBs instead of multicast actors, a memory footprint can be induces
 
 ![Replacement of multicast actors](img/memReduction.png)
 
+The semantics of an MRB in brief are, that a token in the buffer can not be flushed until all the readers actors read it.
+In consequence, we are trading the memory footprint saved by MRBs at the expense of scheduling overhead.
 
+The way to declare a multicast actor is as follows:
+```c
+Actor a2 = new Actor("a2");  // is a multicast actor                                     
+a2.setExecutionTime(10000);                                                              
+a2.setInputs(1);                                                                         
+a2.setOutputs(2);                                                                        
+a2.setMapping(cpu1);                                                                     
+a2.setType(Actor.ACTOR_TYPE.MULTICAST);                                                  
+```
 
 ## Citation
 
