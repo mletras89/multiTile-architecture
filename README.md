@@ -18,7 +18,7 @@ This repository also includes several test applications to check the correct fun
 make check_all
 ```
 This will run all the tests and compare their outputs to preloaded golden cases.<br>
-To visualize the output of a test application, the python folder includes two scripts: 1) print-gantt-chart-runtime.py and 2) print-memory-utilization.py.
+To visualize the output of a test application, the python folder includes two scripts: 1) **print-gantt-chart-runtime.py** and 2) **print-memory-utilization.py**.
 
 ## Application
 The application is defined as a dataflow graph. A dataflow graph consists of a collection of actors that are connected via communication channels.
