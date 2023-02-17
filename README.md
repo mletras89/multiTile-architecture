@@ -261,7 +261,7 @@ architecture.getTiles().get(0).getProcessors().get(3).getLocalMemory().setCapaci
 ```
 To perform the memory relocation strategy, the following replace strategy is performed:<br>
 LOCAL_MEMORY -> TILE_LOCAL_MEMORY <br>
-TILE_LOCAL_MEMORY -> GLOBAL_MEMORY
-
+TILE_LOCAL_MEMORY -> GLOBAL_MEMORY <br>
+For instance, if a communication channel **c** is mapped to a local memory **SPM1** and during simulation there is no available space to place **c** into **SPM1**.
 
 ![Modulo scheduling example](img/repositoryContent.png)
