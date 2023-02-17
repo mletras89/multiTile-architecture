@@ -19,6 +19,7 @@ make check_all
 ```
 This will run all the tests and compare their outputs to preloaded golden cases.<br>
 To visualize the output of a test application, the python folder includes two scripts: 1) **print-gantt-chart-runtime.py** and 2) **print-memory-utilization.py**.
+The schedules presented here were generated using these scripts.
 
 ## Application
 The application is defined as a dataflow graph. A dataflow graph consists of a collection of actors that are connected via communication channels.
