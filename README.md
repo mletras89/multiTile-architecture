@@ -259,8 +259,8 @@ architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapaci
 architecture.getTiles().get(0).getProcessors().get(2).getLocalMemory().setCapacity(1000000);
 architecture.getTiles().get(0).getProcessors().get(3).getLocalMemory().setCapacity(2000000);
 ```
-To perform the memory relocation strategy, the following replace strategy is performed:
-LOCAL_MEMORY -> TILE_LOCAL_MEMORY
+To perform the memory relocation strategy, the following replace strategy is performed:<br>
+LOCAL_MEMORY -> TILE_LOCAL_MEMORY <br>
 TILE_LOCAL_MEMORY -> GLOBAL_MEMORY
 
 
