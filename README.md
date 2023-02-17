@@ -231,6 +231,13 @@ It is possible to define two types of mappings: <br>
 
 ![Mapping of actors to processors](img/actorMapping.png)
 
+Any actor might be mapped to any processor in the architecture. The following shows how to bind an actor to a processor.
+
+```c
+a1.setMapping(cpu1);
+a1.setMappingToTile(t1); 
+```
+
 * Mapping of communication channels to memories
 
 ![Mapping of communication channels](img/channelMapping.png)
