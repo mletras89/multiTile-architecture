@@ -242,7 +242,7 @@ a1.setMappingToTile(t1);
 
 ![Mapping of communication channels](img/channelMapping.png)
 
-In principle, any communication channel can be mapped to any memory in the architecture. However, make no sense to put a communication channel to a scratchpad memory that has no relation with the producer or consumer processor. Because of that, the memory mapping is defined as:
+In principle, any communication channel can be mapped to any memory in the architecture. However, make no sense to put a communication channel to a scratchpad memory that has no relation with the producer or consumer processor. Accordingly, the memory mapping is constraint as:
 
 ```c
 public static enum FIFO_MAPPING_TYPE {
