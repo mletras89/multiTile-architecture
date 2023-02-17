@@ -217,7 +217,8 @@ public class Architecture{
 In the architecture class, a collection of tiles communicates to a Global Memory connected via a Network-on-Chip (NoC).
 The already presented multi-tile architecture can be defined as:
 ```c
-public Architecture(String name, int nTiles, int nProcPerTile, double BWCrossbars, int channelsCrossbar)
+public Architecture(String name, int nTiles, int nProcPerTile, 
+                    double BWCrossbars, int channelsCrossbar)
 
 Architecture architecture = new Architecture("architecture",3, 4, 1.0, 2);
 ```
