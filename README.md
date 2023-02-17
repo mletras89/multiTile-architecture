@@ -265,7 +265,7 @@ TILE_LOCAL_MEMORY -> GLOBAL_MEMORY <br>
 For instance, if a communication channel **c** is mapped to a local memory **SPM1** and during simulation there is no available space to place **c** into **SPM1**. <br>
 Then, the communication channel **c** is relocated to its tile local memory **TMEM1**. If **TMEM1** is not sufficient to allocate **c**, then the communication channel **c** is placed onto the GLOBAL_MEMORY. Here, we assume to have enough space in the global memory to store any communication channel.
 
-![Modulo scheduling example](img/memRelocation.png)
+![Schedule Memory Relocation example](img/memRelocation.png)
 
 The next figure shows the memory utilization of the four local memories and the global local memory.
 The mappings are:
@@ -284,5 +284,8 @@ Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.SOURCE);
 Fifo c4 = new Fifo("c4",0,1,1000000,1,1,a3,a5,FIFO_MAPPING_TYPE.SOURCE);  
 Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.SOURCE);  
 ```
-Here, all local memory can store up to 1000000 bytes, however FIFOs **c2** and **c3** are mapped to the local scratchpad memory placed in **cpu2**.
+Here, all local memory can store up to 1000000 bytes, however FIFOs **c2** and **c3** are mapped to the local scratchpad memory placed in **cpu2** which can only store 1000000 bytes.
+The following figure presents the memory utilization of the feasible schedule previously presented.
+Note that a communication channel was relocated to the TILE_LOCAL_MEMORY.
 
+![Memory Utilization of Memory Relocation example](img/memoryUtilRelocation.png)
