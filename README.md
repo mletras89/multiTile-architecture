@@ -340,6 +340,10 @@ Note that a communication channel was relocated to the TILE_LOCAL_MEMORY.
 
 ## Memory Footprint Reduction of Multicast Actors
 
+The applications that can be modelled offers the chance to define multicast actors.
+Multicast actors are dummy actors that replicate the input data at their outputs.
+
+
 ![Memory footprint of multicast actors](img/memOverhead.png)
 
 
