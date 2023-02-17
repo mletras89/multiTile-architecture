@@ -82,7 +82,8 @@ Each processor has a local scratchpad memory, and its turn each processor is con
 For creating a symmetric multicore architecture, you must use the following constructor:
 
 ```c
-public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar)
+public Architecture(String name, String nameTile, int nProcPerTile, 
+                    double BWCrossbars, int channelsCrossbar)
 
 Architecture singleCoreArchitecture = new Architecture("architecture","Tile1", 4, 1.0, 2);
 ```
