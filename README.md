@@ -230,10 +230,10 @@ It is possible to define two types of mappings: <br>
 Markup : -Mapping of actors to processors
          -Mapping of communication channels to memories
 
- Markup : * Bullet list
-              * Nested bullet
-                  * Sub-nested bullet etc
-          * Bullet list item 2
+* Bullet list
+    * Nested bullet
+        * Sub-nested bullet etc
+* Bullet list item 2
 
 Markup : <details>
            <summary>Title 1</summary>
