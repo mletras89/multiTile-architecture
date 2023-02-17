@@ -266,3 +266,20 @@ For instance, if a communication channel **c** is mapped to a local memory **SPM
 Then, the communication channel **c** is relocated to its tile local memory **TMEM1**. If **TMEM1** is not sufficient to allocate **c**, then the communication channel **c** is placed onto the GLOBAL_MEMORY. Here, we assume to have enough space in the global memory to store any communication channel.
 
 ![Modulo scheduling example](img/memRelocation.png)
+
+The next figure shows the memory utilization of the four local memories and the global local memory.
+The mappings are:
+
+```c
+// Mappings of actors to cpus 
+a1.setMapping(cpu1);
+a2.setMapping(cpu2); 
+a3.setMapping(cpu3);  
+a4.setMapping(cpu3);
+// Mappings of fifos to local memory of cpus
+Fifo c1 = new Fifo("c1",0,1,1000000,1,1,a1,a2,FIFO_MAPPING_TYPE.SOURCE);  // channels connected to writer
+Fifo c2 = new Fifo("c2",0,1,1000000,1,1,a2,a3,FIFO_MAPPING_TYPE.SOURCE);  
+Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.SOURCE);  
+Fifo c4 = new Fifo("c4",0,1,1000000,1,1,a3,a5,FIFO_MAPPING_TYPE.SOURCE);  
+Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.SOURCE);  
+```
