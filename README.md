@@ -343,5 +343,5 @@ Note that a communication channel was relocated to the TILE_LOCAL_MEMORY.
 If you want to cite this project please cite:
 
 * Letras M., Falk J., Teich J.:
-Throughput and Memory Optimization for Parallel Implementations of Dataflow Networks using Multi-Reader Buffers
+**Throughput and Memory Optimization for Parallel Implementations of Dataflow Networks using Multi-Reader Buffers**
 Fourth Workshop on Next Generation Real-Time Embedded Systems (Toulouse, 18. Januar 2023 - 18. Januar 2023)
