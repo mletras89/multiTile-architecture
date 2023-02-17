@@ -234,7 +234,7 @@ Springer, Boston, MA. https://doi.org/10.1007/978-0-387-09766-4_65
 
 E.g., the previous figure presents an example of the modulo scheduling. a) An input application.
 b) The available resources to run the application (1 adder and 1 multiplier). c) The data dependency graph obtained from a), in the context of this repository a DDG match to the concept of Dataflow graph.
-The modulo schedule determines the Minimum Initialization Interval of a given application. That means that overlapping iterations can start every MII period.
+The modulo schedule determines the Minimum Initialization Interval of a given application. That means that overlapping iterations can start every MII period.<br>
 ![Modulo scheduling example](img/modulosSchedule2.png)
 
 d) Presents a feasible modulo schedule with an MII=2. e) Presents an infeasible schedule with MII=1, here we can observe that in the third control step, we have v3 and v2 at the same time. This situation is infeasible due that there is only one multiplier in the architecture.
@@ -284,3 +284,5 @@ Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.SOURCE);
 Fifo c4 = new Fifo("c4",0,1,1000000,1,1,a3,a5,FIFO_MAPPING_TYPE.SOURCE);  
 Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.SOURCE);  
 ```
+Here, all local memory can store up to 1000000 bytes, however FIFOs **c2** and **c3** are mapped to the local scratchpad memory placed in **cpu2**.
+
