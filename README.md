@@ -338,6 +338,13 @@ Note that a communication channel was relocated to the TILE_LOCAL_MEMORY.
 
 ![Memory Utilization of Memory Relocation example](img/memoryUtilRelocation.png)
 
+## Memory Footprint Reduction of Multicast Actors
+
+![Memory footprint of multicast actors](img/memOverhead.png)
+
+
+![Replacement of multicast actors](img/memReduction.png)
+
 ## Citation
 
 If you want to cite this project please cite:
