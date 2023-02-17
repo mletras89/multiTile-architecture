@@ -13,9 +13,12 @@ To build the project, open a terminal and type:
 make all
 ```
 ## Project Test
+This repository also includes several tests to check the correct functionality. To check the project run:<br>
 ```bash
 make check_all
 ```
+This will run all the tests and compare their outputs to preloaded golden cases.
+
 ## Application
 The application is defined as a dataflow graph. A dataflow graph consists of a collection of actors that are connected via communication channels.
 In the context of this repository, the communication channels are implemented as First-In-First-Out (FIFO) buffers.
