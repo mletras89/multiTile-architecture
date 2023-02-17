@@ -342,9 +342,11 @@ Note that a communication channel was relocated to the TILE_LOCAL_MEMORY.
 
 Multicast actors are dummy actors that replicate the input data at their outputs.
 These kind of operations are required in many signal processing applications.
+The memory footprint of an application can be calculated as:
 
 ![Memory footprint of multicast actors](img/memOverhead.png)
 
+From the previous, we can observe that there exists a memory footprint overhead induced by the multicast actor.
 
 ![Replacement of multicast actors](img/memReduction.png)
 
