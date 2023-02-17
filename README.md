@@ -227,18 +227,9 @@ Work in Progress
 ## Mapping Definition
 
 It is possible to define two types of mappings: <br>
-Markup : -Mapping of actors to processors
-         -Mapping of communication channels to memories
+* Mapping of actors to processors
+* Mapping of communication channels to memories
 
-* Bullet list
-    * Nested bullet
-        * Sub-nested bullet etc
-* Bullet list item 2
-
-Markup : <details>
-           <summary>Title 1</summary>
-           <p>Content 1 Content 1 Content 1 Content 1 Content 1</p>
-         </details>
 
 ## Modulo Scheduling
 To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler** specifying the application and the architecture.
