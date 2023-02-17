@@ -242,6 +242,19 @@ a1.setMappingToTile(t1);
 
 ![Mapping of communication channels](img/channelMapping.png)
 
+In principle, any communication channel can be mapped to any memory in the architecture. However, make no sense to put a communication channel to a scratchpad memory that has no relation with the producer or consumer processor. Because of that, the memory mapping is defined as:
+
+```c
+public static enum FIFO_MAPPING_TYPE {
+  SOURCE,
+  DESTINATION,
+  TILE_LOCAL,
+  GLOBAL
+}
+```                      
+
+Then, a communication channel can be mapped to the global memory, the tile local memory or to the scratchpad local memory belonging to the consumer or producer processor.
+
 ## Modulo Scheduling
 To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler** specifying the application and the architecture.
 ```c
