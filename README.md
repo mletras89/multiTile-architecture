@@ -228,8 +228,12 @@ Work in Progress
 
 It is possible to define two types of mappings: <br>
 * Mapping of actors to processors
+
+![Mapping of actors to processors](img/actorMapping.png)
+
 * Mapping of communication channels to memories
 
+![Mapping of communication channels](img/channelMapping.png)
 
 ## Modulo Scheduling
 To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler** specifying the application and the architecture.
