@@ -230,6 +230,11 @@ It is possible to define two types of mappings: <br>
 Markup : -Mapping of actors to processors
          -Mapping of communication channels to memories
 
+Markup : <details>
+           <summary>Title 1</summary>
+           <p>Content 1 Content 1 Content 1 Content 1 Content 1</p>
+         </details>
+
 ## Modulo Scheduling
 To implement the scheduling of a given application to a give architecture, we need to use the class **ModuloScheduler** specifying the application and the architecture.
 ```c
