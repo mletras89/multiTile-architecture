@@ -32,10 +32,10 @@ E.g., the following figure presents the dataflow of an implementation of the sob
 To define a application graph, you can declare an actor using the **Actor** class as:
 
 ```c
-Actor a1 = new Actor("a1");                                                                                   
-a1.setExecutionTime(10000);                                                                                   
-a1.setInputs(0);                                                                                              
-a1.setOutputs(1);  
+Actor a1 = new Actor("a1");
+a1.setExecutionTime(10000);
+a1.setInputs(0); 
+a1.setOutputs(1); 
 ```
 
 It is required to specify the execution time of a given actor used during scheduling and simulation. Also, the number of input and output ports are required. In the example, **a1** has no inputs and has one output port.
