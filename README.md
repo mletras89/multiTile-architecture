@@ -365,6 +365,23 @@ a2.setMapping(cpu1);
 a2.setType(Actor.ACTOR_TYPE.MULTICAST);                                                  
 ```
 
+The class **ApplicationManagement** provides the following methods for 1) set all the multicast as mergeable and 2) for replacing the multicast actor by a MRB.
+```c
+public static void setAllMulticastActorsAsMergeable(Application app)
+
+public static void collapseMergeableMulticastActors(Application app)
+```                                                                                      
+
+The following schedules the example sobel application as it is (the multicast actor is not replaced)
+
+![Before MRB](img/beforeMRB.png)
+
+Whereas, the following schedule is obtained after replacing the multicast actor **a2** by a MRB.
+
+![After MRB](img/afterMRB.png)
+
+You can observe, that in this case, the replacing of the multicast by an MRB delivers an application with better performance. This might not be the case always.
+
 ## Citation
 
 If you want to cite this project please cite:
