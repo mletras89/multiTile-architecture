@@ -340,7 +340,7 @@ Note that a communication channel was relocated to the TILE_LOCAL_MEMORY.
 
 ## Memory Footprint Reduction of Multicast Actors
 
-Multicast actors are dummy actors that replicate the input data at their outputs.
+Multicast actors are dummy actors that replicate the input data to their outputs.
 These kind of operations are required in many signal processing applications.
 The memory footprint of an application can be calculated as:
 
