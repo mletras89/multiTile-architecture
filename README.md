@@ -265,4 +265,4 @@ TILE_LOCAL_MEMORY -> GLOBAL_MEMORY <br>
 For instance, if a communication channel **c** is mapped to a local memory **SPM1** and during simulation there is no available space to place **c** into **SPM1**. <br>
 Then, the communication channel **c** is relocated to its tile local memory **TMEM1**. If **TMEM1** is not sufficient to allocate **c**, then the communication channel **c** is placed onto the GLOBAL_MEMORY. Here, we assume to have enough space in the global memory to store any communication channel.
 
-![Modulo scheduling example](img/repositoryContent.png)
+![Modulo scheduling example](img/memRelocation.png)
