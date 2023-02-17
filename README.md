@@ -347,6 +347,7 @@ The memory footprint of an application can be calculated as:
 ![Memory footprint of multicast actors](img/memOverhead.png)
 
 From the previous, we can observe that there exists a memory footprint overhead induced by the multicast actor.
+We replace a multicast actors and the channels connected to it by a **Multi-Reader Buffer (MRB)**.
 
 ![Replacement of multicast actors](img/memReduction.png)
 
