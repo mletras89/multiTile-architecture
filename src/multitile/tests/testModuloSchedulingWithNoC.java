@@ -100,17 +100,23 @@ public class testModuloSchedulingWithNoC {
 
       System.out.println("The MMI is: "+scheduler.getMII());
       
-      for(HashMap.Entry<Integer,Processor> p: architecture.getTiles().get(0).getProcessors().entrySet()){
-        p.getValue().getScheduler().saveScheduleStats(".");
+      for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
+        for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
+          p.getValue().getScheduler().saveScheduleStats(".");
+	  p.getValue().getLocalMemory().saveMemoryUtilizationStats(".");
+        }
+        t.getValue().getCrossbar().saveCrossbarUtilizationStats(".");
+        t.getValue().getTileLocalMemory().saveMemoryUtilizationStats(".");
       }
-      architecture.getTiles().get(0).getCrossbar().saveCrossbarUtilizationStats(".");
 
+      architecture.getNoC().saveNoCUtilizationStats(".");
+      architecture.getGlobalMemory().saveMemoryUtilizationStats(".");
       // dumping memory utilization
-      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
-      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
-      architecture.getTiles().get(0).getProcessors().get(2).getLocalMemory().saveMemoryUtilizationStats(".");
-      architecture.getTiles().get(0).getProcessors().get(3).getLocalMemory().saveMemoryUtilizationStats(".");
-      architecture.getTiles().get(0).getTileLocalMemory().saveMemoryUtilizationStats(".");
+//      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
+//      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
+//      architecture.getTiles().get(1).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
+//      architecture.getTiles().get(1).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
+//      architecture.getTiles().get(0).getTileLocalMemory().saveMemoryUtilizationStats(".");
 
       System.out.println("Testing quadcore implementation testcase done!");
     }
