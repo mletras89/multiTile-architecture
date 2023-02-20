@@ -297,7 +297,7 @@ The next figure presents the output of modulo scheduling the sobel application t
 
 ### Memory Relocation Strategy
 
-In case a memory constraint exits, first the memory has to be constraint as follows (the method receives an integer number describing the number of stored bytes in the memory):
+In case a memory constraint exists, first the memory has to be constraint as follows (the method receives an integer number describing the number of stored bytes in the memory):
 ```c
 Architecture architecture = new Architecture("architecture","MemoryRelocation", 4, 1.0, 2);
 // set the memory sizes
