@@ -107,7 +107,6 @@ public class NoC{
     }
   }
 
-
   public String getName(){
     return this.name;
   }
