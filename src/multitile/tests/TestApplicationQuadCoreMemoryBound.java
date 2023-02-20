@@ -125,11 +125,11 @@ public class TestApplicationQuadCoreMemoryBound{
       a5.setMappingToTile(cpu4.getOwnerTile());
 
       Fifo c1 = new Fifo("c1",0,1,1000000,1,1,a1,a2,FIFO_MAPPING_TYPE.TILE_LOCAL);  // channel connected to writer
-      Fifo c2 = new Fifo("c2",0,1,1000000,1,1,a2,a3,FIFO_MAPPING_TYPE.SOURCE);      // channels connected to readers
-      Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.SOURCE);      // channels connected to readers
+      Fifo c2 = new Fifo("c2",0,1,1000000,1,1,a2,a3,FIFO_MAPPING_TYPE.GLOBAL);      // channels connected to readers
+      Fifo c3 = new Fifo("c3",0,1,1000000,1,1,a2,a4,FIFO_MAPPING_TYPE.GLOBAL);      // channels connected to readers
 
       Fifo c4 = new Fifo("c4",0,1,1000000,1,1,a3,a5,FIFO_MAPPING_TYPE.SOURCE);
-      Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.GLOBAL);
+      Fifo c5 = new Fifo("c5",0,1,1000000,1,1,a4,a5,FIFO_MAPPING_TYPE.SOURCE);
 
       c1.setMappingToTile(t1);
       c2.setMappingToTile(t1);
