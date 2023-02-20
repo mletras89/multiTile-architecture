@@ -16,6 +16,8 @@ ArchitectureWithNoC:
 
 ArchitectureWithNoC_run:
 	java -ea $(PACKAGE_TEST).testModuloSchedulingWithNoC;
+	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv processor-utilization-Tile1_Processor1.csv crossbar-utilization-crossbar_Tile1.csv processor-utilization-Tile2_Processor0.csv processor-utilization-Tile2_Processor1.csv crossbar-utilization-crossbar_Tile2.csv NoC-utilization-NoC.csv -o testcase-architecture-with-NoC.csv;
+	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GlobalMemory.csv -o testcase-architecture-with-NoC-mem-utilization.csv;
 
 ArchitectureWithNoC_check:
 	echo "Check NoC"
