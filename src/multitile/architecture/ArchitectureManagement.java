@@ -47,12 +47,14 @@ public class ArchitectureManagement{
   private static int memoryIdCounter;
   private static int crossbarIdCounter;  
   private static int tileIdCounter;
+  private static int nocIdCounter;  
 
   static{
     processorIdCounter = 0;
     memoryIdCounter = 0;
     crossbarIdCounter = 0;
     tileIdCounter = 0;
+    nocIdCounter = 0;
   }
 
   public static void updateLastEventInProcessor(Architecture architecture, Processor processor, double time){
@@ -83,6 +85,7 @@ public class ArchitectureManagement{
     memoryIdCounter = 0;
     crossbarIdCounter = 0;
     tileIdCounter = 0;
+    nocIdCounter = 0;
   }
 
   public static int getTileId(){
@@ -101,4 +104,7 @@ public class ArchitectureManagement{
     return crossbarIdCounter++;
   }
 
+  public static int getNoCId(){
+    return nocIdCounter++;
+  }
 }
