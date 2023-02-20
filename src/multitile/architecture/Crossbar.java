@@ -95,7 +95,7 @@ public class Crossbar{
     this.scheduledReadTransfers = new HashMap<>();
     this.scheduledWriteTransfers = new HashMap<>();
   }
-  // creating memory from given parameters
+  // creating crossbar from given parameters
   public Crossbar(String name, double bandwidth, int numberofParallelChannels){
     this.name = name;
     this.id   = ArchitectureManagement.getCrossbarId();
