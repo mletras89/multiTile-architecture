@@ -73,15 +73,15 @@ public class TestApplicationQuadCoreMemoryBound{
       LocalMemory tile1LocalMemory2 	= t1.getProcessors().get(1).getLocalMemory();
 
       TileLocalMemory tileLocalMemory2 	= t2.getTileLocalMemory();
-      LocalMemory tile2LocalMemory1 	= t2.getProcessors().get(0).getLocalMemory();
-      LocalMemory tile2LocalMemory2 	= t2.getProcessors().get(1).getLocalMemory();
+      LocalMemory tile2LocalMemory1 	= t2.getProcessors().get(2).getLocalMemory();
+      LocalMemory tile2LocalMemory2 	= t2.getProcessors().get(3).getLocalMemory();
 
 
       Processor cpu1 = t1.getProcessors().get(0);
       Processor cpu2 = t1.getProcessors().get(1);
 
-      Processor cpu3 = t2.getProcessors().get(0);
-      Processor cpu4 = t2.getProcessors().get(1);
+      Processor cpu3 = t2.getProcessors().get(2);
+      Processor cpu4 = t2.getProcessors().get(3);
 
       Actor a1 = new Actor("a1");
       a1.setId(1) ;

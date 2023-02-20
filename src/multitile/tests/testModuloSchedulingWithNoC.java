@@ -75,30 +75,40 @@ public class testModuloSchedulingWithNoC {
       FifoManagement.resetCounters();
       ArchitectureManagement.resetCounters();
 
-      Architecture architecture = new Architecture("architecture","tile",2, 1.0, 2);
+      Architecture architecture = new Architecture("architecture",2,2, 1.0, 2);
+
+      for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
+				System.out.println("Tile name:"+t.getValue().getName());
+        for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
+     			System.out.println("\tProcessor name:"+p.getValue().getName()+" with id "+p.getValue().getId());
+					System.out.println("\tOwner tile:"+p.getValue().getOwnerTile().getName());
+     			System.out.println("\t\tAttached to local memory:"+p.getValue().getLocalMemory().getName());
+        }			
+      }
+
       // set the memory sizes
       architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(2000000);
       architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapacity(2000000);
-      architecture.getTiles().get(1).getProcessors().get(0).getLocalMemory().setCapacity(2000000);
-      architecture.getTiles().get(1).getProcessors().get(1).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(1).getProcessors().get(2).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(1).getProcessors().get(3).getLocalMemory().setCapacity(2000000);
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0), architecture.getTiles().get(1),architecture.getGlobalMemory());  
       Application app = sampleApplication.getSampleApplication();
       ApplicationManagement.assingFifoMapping(app,architecture); 
 
       ModuloScheduler scheduler = new ModuloScheduler();
-      scheduler.setApplication(app);
-      scheduler.setArchitecture(architecture);
-			
-      scheduler.setMaxIterations(10);
-      scheduler.calculateModuloSchedule();
-      //scheduler.printKernelBody();
-      scheduler.findSchedule();
-      scheduler.schedule();
-
-      System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
-
-      System.out.println("The MMI is: "+scheduler.getMII());
+//      scheduler.setApplication(app);
+//      scheduler.setArchitecture(architecture);
+//			
+//      scheduler.setMaxIterations(10);
+//      scheduler.calculateModuloSchedule();
+//      //scheduler.printKernelBody();
+//      scheduler.findSchedule();
+//      scheduler.schedule();
+//
+//      System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
+//
+//      System.out.println("The MMI is: "+scheduler.getMII());
       
       for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
         for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
