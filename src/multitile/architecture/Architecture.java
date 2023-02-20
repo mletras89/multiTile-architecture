@@ -78,6 +78,8 @@ public class Architecture{
       tiles.put(t.getId(),t);  
     }
     globalMemory = new GlobalMemory("GlobalMemory");
+    // declaring NoC for multitile architecture
+    noc = new NoC();   
   }
 
   public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
@@ -113,6 +115,8 @@ public class Architecture{
     }
     // refresh the global memory
     this.globalMemory.resetMemoryUtilization();
+    // reset the NoC
+    this.noc.restartNoC();
   }
 
   public void printArchitectureState(){
