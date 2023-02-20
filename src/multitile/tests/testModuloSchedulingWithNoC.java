@@ -97,18 +97,21 @@ public class testModuloSchedulingWithNoC {
       ApplicationManagement.assingFifoMapping(app,architecture); 
 
       ModuloScheduler scheduler = new ModuloScheduler();
-//      scheduler.setApplication(app);
-//      scheduler.setArchitecture(architecture);
-//			
-//      scheduler.setMaxIterations(10);
-//      scheduler.calculateModuloSchedule();
-//      //scheduler.printKernelBody();
-//      scheduler.findSchedule();
-//      scheduler.schedule();
-//
-//      System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
-//
-//      System.out.println("The MMI is: "+scheduler.getMII());
+      scheduler.setApplication(app);
+      scheduler.setArchitecture(architecture);
+			
+      scheduler.setMaxIterations(10);
+      scheduler.calculateModuloSchedule();
+      //scheduler.printKernelBody();
+      scheduler.findSchedule();
+      scheduler.schedule();
+
+      System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
+
+      System.out.println("The MMI is: "+scheduler.getMII());
+
+
+      // dumping system utilization statistics
       
       for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
         for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
@@ -121,12 +124,6 @@ public class testModuloSchedulingWithNoC {
 
       architecture.getNoC().saveNoCUtilizationStats(".");
       architecture.getGlobalMemory().saveMemoryUtilizationStats(".");
-      // dumping memory utilization
-//      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
-//      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
-//      architecture.getTiles().get(1).getProcessors().get(0).getLocalMemory().saveMemoryUtilizationStats(".");
-//      architecture.getTiles().get(1).getProcessors().get(1).getLocalMemory().saveMemoryUtilizationStats(".");
-//      architecture.getTiles().get(0).getTileLocalMemory().saveMemoryUtilizationStats(".");
 
       System.out.println("Testing quadcore implementation testcase done!");
     }
