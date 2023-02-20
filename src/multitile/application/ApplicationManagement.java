@@ -75,7 +75,7 @@ public class ApplicationManagement{
           application.getFifos().get(f.getKey()).setMapping(p.getLocalMemory());
           break;
         case TILE_LOCAL:
-          System.out.println("Type:"+type);
+          //System.out.println("Type:"+type);
           Tile t = f.getValue().getMappingToTile();
           f.getValue().setMapping(t.getTileLocalMemory());
           application.getFifos().put(f.getKey(),f.getValue());
