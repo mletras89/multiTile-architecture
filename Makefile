@@ -11,6 +11,15 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+ArchitectureWithNoC:
+	javac $(DIR_SRC)/testModuloSchedulingWithNoC.java
+
+ArchitectureWithNoC_run:
+	java -ea $(PACKAGE_TEST).testModuloSchedulingWithNoC;
+
+ArchitectureWithNoC_check:
+	echo "Check NoC"
+
 MemoryRelocation:
 	javac $(DIR_SRC)/testModuloSchedulingMemoryRelocation.java
 
