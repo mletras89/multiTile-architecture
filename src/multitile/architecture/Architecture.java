@@ -56,7 +56,7 @@ public class Architecture{
   // the key is the id
   private String name;
   private HashMap<Integer,Tile> tiles;
-  //private NoC noc;
+  private NoC noc;
   private GlobalMemory globalMemory;
   
   public Architecture(String name){
