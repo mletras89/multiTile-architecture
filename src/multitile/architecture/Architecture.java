@@ -92,7 +92,12 @@ public class Architecture{
 
     globalMemory = new GlobalMemory("GlobalMemory");
   }
+ 
   
+  public NoC getNoC(){
+    return this.noc;
+  }
+ 
   public String getName(){
   	return this.name;
   }
