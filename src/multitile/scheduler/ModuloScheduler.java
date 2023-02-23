@@ -341,7 +341,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
             	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
           	}
           	//commit the read transfers
-          	t.getValue().getCrossbar().commitTransfersinQueue();
+          	t.getValue().getCrossbar().commitTransfersinQueue(architecture);
           	// update the read transfers of each processor with the correct due time
           	Map<Actor,List<Transfer>> processorReadTransfers = t.getValue().getCrossbar().getScheduledReadTransfers(p.getValue());
           	// commit the action in the processor
@@ -356,7 +356,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
             	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
           	}
           	// commit write transfers in the crossbar
-          	t.getValue().getCrossbar().commitTransfersinQueue();
+          	t.getValue().getCrossbar().commitTransfersinQueue(architecture);
           	// update the write transfers of each processor with the correct start and due time
           	Map<Actor,List<Transfer>> processorWriteTransfers = t.getValue().getCrossbar().getScheduledWriteTransfers(p.getValue());
           	p.getValue().getScheduler().setWriteTransfers(processorWriteTransfers);
