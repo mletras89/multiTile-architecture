@@ -74,7 +74,7 @@ public class NoC{
     this.name = "NoC";
     this.queueTransfers = new ArrayList<>();
     this.numberofParallelChannels = 4; // 4 as default
-    this.setBandwidth(4,25);
+    this.setBandwidth(4,10);
 
     this.timeEachChannel  = new ArrayList<>();
     this.channels = new ArrayList<>();
@@ -143,7 +143,6 @@ public class NoC{
     this.queueTransfers = queueTransfers;
   }
 
-
   public double getBandwidth(){
     return this.bandwidth;
   }
@@ -205,6 +204,49 @@ public class NoC{
     }
   }
 
+ // functions to manage the crossbar
+  public Transfer putTransferInNoC(Transfer t){
+    // at this point I have to move data from global memory to the crossbar
+    // RETURN the time when the data is available in the Crossbar
+    // proceed to schedule the transfer
+    int availChannelIndex = getAvailableChannel();  
+    Transfer commitTransfer = new Transfer(t);
+    double timeLastAction = this.timeEachChannel.get(availChannelIndex);
+    double transferTime = this.calculateTransferTime(commitTransfer);
+    double startTime = (commitTransfer.getStart_time() > timeLastAction) ? commitTransfer.getStart_time() : timeLastAction;
+    double endTime  = startTime + transferTime;
+    commitTransfer.setStart_time(startTime);
+    commitTransfer.setDue_time(endTime);
+    // update the channel time
+    this.timeEachChannel.set(availChannelIndex,endTime);
+    // commit transfer in NoC
+    channels.get(availChannelIndex).addLast(commitTransfer);
+    return commitTransfer; 
+   }
+  
+  public int getAvailableChannel(){
+    int availChannelIndex = 0;
+    int numberScheduledActions = Integer.MAX_VALUE;
+    for (int i=0; i<this.numberofParallelChannels;i++){
+      if (channels.get(i).size() < numberScheduledActions){
+        availChannelIndex = i;
+        numberScheduledActions  = channels.get(i).size(); 
+      }
+    }
+    return availChannelIndex;
+  }
+  
+  public double calculateTransferTime(Transfer transfer){
+    int numberofBytes = transfer.getBytes();
+    double processingTime = ((( BytesToGigabytes(numberofBytes) / this.bandwidthPerChannel))*1000000); // 8 bits in a byte, 100 000 to convert from secs to microseconds
+    return processingTime;
+  }
 
+  double BytesToGigabytes(int bytes) {
+    double ToKylo = bytes/1024;
+    double ToMega = ToKylo/1024;
+    double ToGiga = ToMega/1024;
+    return ToGiga;
+  }
 
 }
