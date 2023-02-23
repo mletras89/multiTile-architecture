@@ -103,6 +103,8 @@ public class testModuloSchedulingWithNoC {
       scheduler.setMaxIterations(10);
       scheduler.calculateModuloSchedule();
       //scheduler.printKernelBody();
+			// once the kernell is done, reassign the actor Mapping and then reassing the fifoMapping
+
       scheduler.findSchedule();
       scheduler.schedule();
 

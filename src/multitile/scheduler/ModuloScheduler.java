@@ -337,7 +337,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           	p.getValue().getScheduler().commitReadsToCrossbar(action,application.getFifos());
                 Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
           	t.getValue().getCrossbar().cleanQueueTransfers();
-          	for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
+                for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
             	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
           	}
           	//commit the read transfers
@@ -346,6 +346,13 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           	Map<Actor,List<Transfer>> processorReadTransfers = t.getValue().getCrossbar().getScheduledReadTransfers(p.getValue());
           	// commit the action in the processor
           	p.getValue().getScheduler().setReadTransfers(processorReadTransfers);
+          }
+        }
+      }
+      for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
+        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+          Queue<Action> actions = p.getValue().getScheduler().getQueueActions();
+          for(Action action : actions){
           	p.getValue().getScheduler().commitSingleAction(action,architecture); // modificar este
           	// finally, schedule the write of tokens
           	p.getValue().getScheduler().commitWritesToCrossbar(action);
@@ -378,16 +385,12 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
                 this.getScheduledStepActions().get(action.getStep()).add(action);
           }
         }
-        // when, I finish the tile update last event in each processor with the maximum of all the processors
-        /*double maxTimeP = 0.0;
-        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
-          if (maxTimeP < p.getValue().getScheduler().getLastEventinProcessor())
-            maxTimeP = p.getValue().getScheduler().getLastEventinProcessor();
-          }
-        for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
-          p.getValue().getScheduler().setLastEventinProcessor(maxTimeP);
-        }*/
       }
+
+
+
+
+
       // commit the reads/writes to memory
       SchedulerManagement.sort(transfersToMemory);
       Transfer ReMapTransfer = null;

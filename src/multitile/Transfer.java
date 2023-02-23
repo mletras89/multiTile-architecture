@@ -49,6 +49,7 @@ import src.multitile.application.Fifo;
 public class Transfer {
   private double start_time;
   private double due_time;
+  private double endOverall;
   // in a transfer, an actor and a Fifo are involved
   private Actor actor;
   private Fifo fifo;
@@ -92,6 +93,14 @@ public class Transfer {
     this.setFifo(other.getFifo());
     this.setType(other.getType());
     this.setStep(other.getStep());
+  }
+
+  public double getEndOverall(){
+    return this.endOverall;
+  }
+
+  public void setEndOverall(double end){
+    this.endOverall = end;
   }
 
   // Overriding toStrin() method of String class

@@ -266,7 +266,6 @@ public class Crossbar{
     
     for(int i=0;i<elementsinQueue;i++){
       Transfer commitTransfer = queueTransfers.remove(0);
-      // proceed to schedule the transfer
       int availChannelIndex = getAvailableChannel();
       //System.out.println("avail index "+availChannelIndex);
       double timeLastAction = this.timeEachChannel.get(availChannelIndex);
@@ -285,8 +284,8 @@ public class Crossbar{
            commitTransfer.getType() == Transfer.TRANSFER_TYPE.READ){
           // just allocate the reads from GLOBAL MEMORY that travels via the NoC
           Transfer t = architecture.getNoC().putTransferInNoC(commitTransfer);
-  //        availChannelIndex = getAvailableChannel();
-  //        timeLastAction = this.timeEachChannel.get(availChannelIndex);
+          availChannelIndex = getAvailableChannel();
+          timeLastAction = this.timeEachChannel.get(availChannelIndex);
           startTime = (t.getDue_time() > timeLastAction) ? t.getDue_time() : timeLastAction;
           endTime = startTime + transferTime;
         }
@@ -300,6 +299,15 @@ public class Crossbar{
       commitTransfer.setDue_time(endTime);
       // update the channel time 
       this.timeEachChannel.set(availChannelIndex,endTime);
+      commitTransfer.setEndOverall(commitTransfer.getDue_time()); 
+      // put the data in the NoC if it is a write
+      if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM && 
+         commitTransfer.getType() == Transfer.TRANSFER_TYPE.WRITE){
+         Transfer t = new Transfer(commitTransfer);
+         t.setStart_time(commitTransfer.getDue_time());
+         t = architecture.getNoC().putTransferInNoC(t);
+         commitTransfer.setEndOverall(t.getDue_time()); 
+      }
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
       // then add the scheduled transfers accordingly, with the scheduled due time
