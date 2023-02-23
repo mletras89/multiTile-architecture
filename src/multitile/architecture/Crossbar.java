@@ -67,8 +67,8 @@ public class Crossbar{
   private List<Double> timeEachChannel;
   private int numberofParallelChannels;
   private double bandwidth;  // each crossbar has a bandwidht in Gbps
-
   final int GigabitPerSecondToBytePerSecond = 125000000;
+  //private Tile ownerTile;
 
   // initializing empty crossbar
   public Crossbar() {
@@ -94,6 +94,7 @@ public class Crossbar{
     this.setBandwidth(other.getBandwidth());
     this.scheduledReadTransfers = new HashMap<>();
     this.scheduledWriteTransfers = new HashMap<>();
+    //this.ownerTile = other.getOwnerTile();
   }
   // creating crossbar from given parameters
   public Crossbar(String name, double bandwidth, int numberofParallelChannels){
@@ -111,7 +112,12 @@ public class Crossbar{
     this.bandwidth= bandwidth;
     this.scheduledReadTransfers = new HashMap<>();
     this.scheduledWriteTransfers = new HashMap<>();
+    //this.ownerTile = owner;
   }
+
+//  public Tile getOwnerTile(){
+//    return this.ownerTile;
+//  }
 
   public void restartCrossbar(){
     this.queueTransfers.clear();
@@ -254,7 +260,7 @@ public class Crossbar{
     }
   }
 
-  public void commitTransfersinQueue(){
+  public void commitTransfersinQueue(Architecture architecture){
     // then commit all the transfers in the Queue
     int elementsinQueue = queueTransfers.size();
     
@@ -269,9 +275,21 @@ public class Crossbar{
       double endTime  = startTime + transferTime;
 
       if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
+         commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM ||
         (commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
         !commitTransfer.getFifo().getMapping().getEmbeddedToProcessor().equals(commitTransfer.getActor().getMapping()))){
-      	endTime = startTime + transferTime;  
+        //endTime = startTime + transferTime;  
+        // if the transaction has to travel only from the NoC GLOBAL MEMORY
+        // I have to recalculate the start/end times
+        if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM && 
+           commitTransfer.getType() == Transfer.TRANSFER_TYPE.READ){
+          // just allocate the reads from GLOBAL MEMORY that travels via the NoC
+          Transfer t = architecture.getNoC().putTransferInNoC(commitTransfer);
+  //        availChannelIndex = getAvailableChannel();
+  //        timeLastAction = this.timeEachChannel.get(availChannelIndex);
+          startTime = (t.getDue_time() > timeLastAction) ? t.getDue_time() : timeLastAction;
+          endTime = startTime + transferTime;
+        }
       }
       else{
         endTime = startTime;
@@ -293,6 +311,7 @@ public class Crossbar{
     int availChannelIndex = 0;
     int numberScheduledActions = Integer.MAX_VALUE;
     for (int i=0; i<this.numberofParallelChannels;i++){
+       System.out.println("SIZE CHANNEL:"+scheduledActions.get(i).size()+ " CROSSBAR "+this.getName());
       if (scheduledActions.get(i).size() < numberScheduledActions){
         availChannelIndex = i;
         numberScheduledActions  = scheduledActions.get(i).size(); 
