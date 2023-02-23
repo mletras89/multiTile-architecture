@@ -73,13 +73,15 @@ public class Architecture{
   public Architecture(String name, int nTiles, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
     this.name = name;
     tiles = new HashMap<>(); 
-    for(int i=0; i < nTiles; i++){
+    // declaring NoC for multitile architecture
+    noc = new NoC();      
+		for(int i=0; i < nTiles; i++){
       Tile t = new Tile("Tile"+(i+1), nProcPerTile, BWCrossbars, channelsCrossbar);
       tiles.put(t.getId(),t);  
     }
     globalMemory = new GlobalMemory("GlobalMemory");
-    // declaring NoC for multitile architecture
-    noc = new NoC();   
+
+
   }
 
   public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
