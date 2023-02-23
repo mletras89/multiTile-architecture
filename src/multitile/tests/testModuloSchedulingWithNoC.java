@@ -87,10 +87,10 @@ public class testModuloSchedulingWithNoC {
       }
 
       // set the memory sizes
-      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(2000000);
-      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapacity(2000000);
-      architecture.getTiles().get(1).getProcessors().get(2).getLocalMemory().setCapacity(2000000);
-      architecture.getTiles().get(1).getProcessors().get(3).getLocalMemory().setCapacity(2000000);
+      architecture.getTiles().get(0).getProcessors().get(0).getLocalMemory().setCapacity(5000000);
+      architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapacity(5000000);
+      architecture.getTiles().get(1).getProcessors().get(2).getLocalMemory().setCapacity(5000000);
+      architecture.getTiles().get(1).getProcessors().get(3).getLocalMemory().setCapacity(5000000);
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0), architecture.getTiles().get(1),architecture.getGlobalMemory());  
       Application app = sampleApplication.getSampleApplication();
