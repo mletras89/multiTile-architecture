@@ -38,6 +38,7 @@
 package src.multitile.architecture;
 
 public class TileLocalMemory extends Memory{
+  private Tile owner;  
 
   public TileLocalMemory(){
     super();
@@ -58,6 +59,14 @@ public class TileLocalMemory extends Memory{
     super(name);
     this.setType(MEMORY_TYPE.TILE_LOCAL_MEM);
     this.setEmbeddedToProcessor(null);
+  }
+
+  private void setOwnerTile(Tile owner){
+    this.onwer = owner;
+  }
+
+  private Tile getOwnerTile(){
+    return this.owner;
   }
 
 }
