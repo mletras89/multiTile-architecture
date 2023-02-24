@@ -306,7 +306,9 @@ public class Crossbar{
          Transfer t = new Transfer(commitTransfer);
          t.setStart_time(commitTransfer.getDue_time());
          t = architecture.getNoC().putTransferInNoC(t);
-         commitTransfer.setEndOverall(t.getDue_time()); 
+         //commitTransfer.setEndOverall(t.getDue_time());
+      	 // update the channel time 
+      	 this.timeEachChannel.set(availChannelIndex,endTime);
       }
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
