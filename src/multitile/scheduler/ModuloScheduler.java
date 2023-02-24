@@ -333,9 +333,26 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
         for(HashMap.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
           Queue<Action> actions = p.getValue().getScheduler().getQueueActions();
           for(Action action : actions){
-                // first schedule the reads
+            // first schedule the reads
+						// 1) get the reads from the processor
           	p.getValue().getScheduler().commitReadsToCrossbar(action,application.getFifos());
-                Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
+            Map<Actor,List<Transfer>> readTransfers = p.getValue().getScheduler().getReadTransfers();
+						// 2) for each read transfer calculate the path that has to travel, might be comming from the tile local crossbar,
+						//    or the transfer has to travel across several interconnect elements, a read comming from NoC has to travel 
+						//    NoC -> TileLocal Crossbar -> Processor
+						//    other example es when the transfer source is a local memory of other processor placed in a different tile
+						//    Processor1 -> Tile local Crossbar of Processor 1 -> NoC -> TileLocal Crossbar of Processor 2 -> Processor 2
+            for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
+							Queue<PassTransferOverArchitecture> routing = calculatePathOfTransfer();
+							int routingLength = routing.size();
+							for(int m=0; m<routingLength;m++){
+								// proceed to schedule the routing passes
+							}
+						}
+
+
+
+
           	t.getValue().getCrossbar().cleanQueueTransfers();
                 for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
             	  t.getValue().getCrossbar().insertTransfers(entry.getValue());
@@ -386,11 +403,6 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
           }
         }
       }
-
-
-
-
-
       // commit the reads/writes to memory
       SchedulerManagement.sort(transfersToMemory);
       Transfer ReMapTransfer = null;
