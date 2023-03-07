@@ -43,6 +43,8 @@ import src.multitile.Transfer;
 import src.multitile.architecture.Processor;
 import src.multitile.architecture.Tile;
 import src.multitile.architecture.Architecture;
+import src.multitile.architecture.Memory;
+import src.multitile.architecture.TileLocalMemory;
 
 import src.multitile.application.Application;
 import src.multitile.application.Actor;
@@ -94,19 +96,15 @@ public class BaseScheduler{
     this.queueActions.clear();
   }
 
-
   public Transfer schedulePassOfTransfer(Transfer t, PassTransferOverArchitecture routing){
     Transfer schedTransfer = null;
-    switch(routing.getType()){
-      case PASS_TYPE.NOC:
-        // schedule transfer in the NoC
-        schedTransfer = architecture.getNoC().putTransferInNoC(t);
-      break;
-      case PASS_TYPE.CROSSBAR:
-        // schedule transfer in the crossbar
-        schedTransfer = architecture.getCrossbar(routing.getCrossbar().getId()).putTransferInCrossbar(t);
-      break;
-    }
+    if (routing.getType() == PassTransferOverArchitecture.PASS_TYPE.NOC)
+      // schedule transfer in the NoC
+      schedTransfer = architecture.getNoC().putTransferInNoC(t);
+    else if(routing.getType() == PassTransferOverArchitecture.PASS_TYPE.CROSSBAR)
+      // schedule transfer in the crossbar
+      schedTransfer = architecture.getCrossbar(routing.getCrossbar().getId()).putTransferInCrossbar(t);
+
     return schedTransfer;
   }
 
@@ -121,39 +119,39 @@ public class BaseScheduler{
       Processor destination   = transfer.getActor().getMapping();
       Tile destinationTile    = destination.getOwnerTile();
       switch(source.getType()){
-        case MEMORY_TYPE.GLOBAL_MEM:
+        case GLOBAL_MEM:
           // this is the easiest case, the sequence es GlobalMemory -> NoC -> Tile local crossbar -> processor
-          sequence.add(new passTransferOverArchitecture(architecture.getNoC()));
-          sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar()));
+          sequence.add(new PassTransferOverArchitecture(architecture.getNoC()));
+          sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
         break;
     
-        case MEMORY_TYPE.TILE_LOCAL_MEM:
-          Tile sourceTile         = source.getOwner();
+        case TILE_LOCAL_MEM:
+          Tile sourceTile         = ((TileLocalMemory)source).getOwnerTile();
           // here is a bit more complex, if both the source and the destination are in the same tile
           // TILE_LOCAL_MEM -> CROSSBAR TILE LOCAL -> processor
           if (sourceTile.equals(destinationTile)){
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar()));  
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));  
           }else{
           // if source and destination are not in the same tile
           // TILE_LOCAL_MEM_T1 -> CROSSBAR T1 -> NoC -> CROSSBAR T2 -> processor
-            sequence.add(new passTransferOverArchitecture(sourceTile.getCrossbar()));
-            sequence.add(new passTransferOverArchitecture(architecture.getNoC()));
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar()));
+            sequence.add(new PassTransferOverArchitecture(sourceTile.getCrossbar()));
+            sequence.add(new PassTransferOverArchitecture(architecture.getNoC()));
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
           }
         break;
 
-        case MEMORY_TYPE.LOCAL_MEM:
+        case LOCAL_MEM:
           Processor localMemOwner = source.getEmbeddedToProcessor();
           Tile tileSource = localMemOwner.getOwnerTile();
           // mapped to different processors but in the same tile
           if (!localMemOwner.equals(destination) && destinationTile.equals(tileSource)){
             // the sequence must be MEM_SOURCE -> CROSSBAR -> processor
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar()));
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
           }else if(!localMemOwner.equals(destination) && !destinationTile.equals(tileSource)){
             // the sequence must be MEM_SOURCE -> CROSSBAR_SOURCE -> NoC -> CROSSBAR_DEST -> processor
-            sequence.add(new passTransferOverArchitecture(tileSource.getCrossbar());
-            sequence.add(new passTransferOverArchitecture(architecture.getNoc());
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar());
+            sequence.add(new PassTransferOverArchitecture(tileSource.getCrossbar()));
+            sequence.add(new PassTransferOverArchitecture(architecture.getNoC()));
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
           }
         break;
       } 
@@ -164,40 +162,41 @@ public class BaseScheduler{
       Tile sourceTile     = source.getOwnerTile();
       
       Memory destination  = transfer.getFifo().getMapping();
+      Tile destinationTile;
       switch(destination.getType()){
-        case MEMORY_TYPE.GLOBAL_MEM:
+        case GLOBAL_MEM:
           // SOURCE_CROSSBAR -> Noc -> GLOBAL MEMORY
-          sequence.add(new passTransferOverArchitecture(sourceTile.getCrossbar() ) );
-          sequence.add(new passTransferOverArchitecture(architecture.getNoC()) );
+          sequence.add(new PassTransferOverArchitecture(sourceTile.getCrossbar() ) );
+          sequence.add(new PassTransferOverArchitecture(architecture.getNoC()) );
         break;
 
-        case MEMORY_TYPE.TILE_LOCAL_MEM:
-          Tile destinationTile = destination.getOwner();
+        case TILE_LOCAL_MEM:
+          destinationTile = ((TileLocalMemory)destination).getOwnerTile();
           // here is a bit more complex, if both source and destination are in the same tile
           // source -> source CROSSBAR -> TILE_LOCAL_MEM
-          if(sourceTile.equals(destinationTile())){
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar()));
+          if(sourceTile.equals(destinationTile)){
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
           }else{
             // if source and destination are not in the same tile
             // processor -> CROSSBAR SOURCE -> NoC -> CROSSBAR DESTINATION -> TILE_LOCAL_MEM
-            sequence.add(new passTransferOverArchitecture(tileSource.getCrossbar());
-            sequence.add(new passTransferOverArchitecture(architecture.getNoc());
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar());        
+            sequence.add(new PassTransferOverArchitecture(sourceTile.getCrossbar()));
+            sequence.add(new PassTransferOverArchitecture(architecture.getNoC()));
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));        
           }
         break;
 
-        case MEMORY_TYPE.LOCAL_MEM:
+        case LOCAL_MEM:
           Processor localMemOwner = destination.getEmbeddedToProcessor();
-          Tile destinationTile    = localMemOwner.getOwnerTile();
+          destinationTile    = localMemOwner.getOwnerTile();
           //mapped to different processors but in the same tile          
-          if (!localMemOwner.equals(source) && destinationTile.equals(tileSource)){
+          if (!localMemOwner.equals(source) && destinationTile.equals(sourceTile)){
             // the sequence must be MEM_SOURCE -> CROSSBAR -> processor
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar()));
-          }else if(!localMemOwner.equals(source) && !destinationTile.equals(tileSource)){
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
+          }else if(!localMemOwner.equals(source) && !destinationTile.equals(sourceTile)){
             // the sequence must be MEM_SOURCE -> CROSSBAR_SOURCE -> NoC -> CROSSBAR_DEST -> processor
-            sequence.add(new passTransferOverArchitecture(tileSource.getCrossbar());
-            sequence.add(new passTransferOverArchitecture(architecture.getNoc());
-            sequence.add(new passTransferOverArchitecture(destinationTile.getCrossbar());
+            sequence.add(new PassTransferOverArchitecture(sourceTile.getCrossbar()));
+            sequence.add(new PassTransferOverArchitecture(architecture.getNoC()));
+            sequence.add(new PassTransferOverArchitecture(destinationTile.getCrossbar()));
           } 
         break;
       }
