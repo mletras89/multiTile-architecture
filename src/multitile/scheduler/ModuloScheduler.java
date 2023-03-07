@@ -347,22 +347,22 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
             List<Transfer> listSchedTransfers = new ArrayList<Transfer>();
             for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
               // the iterate over Tranfesrs to calculate the routing
-              for(Transfer t : entry.getValue()){
+              for(Transfer transfer : entry.getValue()){
                 // Here I have to read T from the memory 
-                if(t.getType()==Transfer.TRANSFER_TYPE.READ){
-                  if(t.getFifo().canFifoReadFromMemory()){
-                    t.getFifo().fifoReadFromMemory(t);
+                if(transfer.getType()==Transfer.TRANSFER_TYPE.READ){
+                  if(transfer.getFifo().canFifoReadFromMemory()){
+                    transfer.getFifo().fifoReadFromMemory(transfer);
                   }else
-                    assert: "Something really bad, there must be data in MEMORY!";
+                    assert true: "Something really bad, there must be data in MEMORY!";
                 }else
-                  assert: "Something really bad, here only read transfers must occur!";
-	        Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(t);
+                  assert true: "Something really bad, here only read transfers must occur!";
+	        Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(transfer);
 	        int routingsLength = routings.size();
                 Transfer scheduledTransfer = null;
 	        for(int m=0; m<routingsLength;m++){
 	          // proceed to schedule the routing passes
 	          PassTransferOverArchitecture routing = routings.remove();
-                  scheduledTransfer = schedulePassOfTransfer(t,routing);
+                  scheduledTransfer = schedulePassOfTransfer(transfer,routing);
                 }
                 if(scheduledTransfer != null)
                   listSchedTransfers.add(scheduledTransfer);
@@ -396,14 +396,14 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
             Map<Actor,List<Transfer>> writeTransfers = p.getValue().getScheduler().getWriteTransfers();
             List<Transfer> listSchedTransfers = new ArrayList<Transfer>();
             for(Map.Entry<Actor,List<Transfer>> entry: writeTransfers.entrySet()){
-              for(Transfer t : entry.getValue()){
-                Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(t);
-                int routingsLength = routins.size();
+              for(Transfer transfer : entry.getValue()){
+                Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(transfer);
+                int routingsLength = routings.size();
                 Transfer scheduledTransfer = null;
                 for(int m=0; m < routingsLength; m++ ){
                   // proceed to schedule the routing of transfer
                   PassTransferOverArchitecture routing = routings.remove();
-                  scheduledTransfer = schedulePassOfTransfer(t,routing);
+                  scheduledTransfer = schedulePassOfTransfer(transfer,routing);
                 }
                 if(scheduledTransfer != null)
                   listSchedTransfers.add(scheduledTransfer);
@@ -438,7 +438,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       for(Transfer t: transfersToMemory){
         if(t.getType()==Transfer.TRANSFER_TYPE.READ){
           // at this point all the transfers are writes
-          assert: "Something wrong when updating memories after write!"
+          assert true: "Something wrong when updating memories after write!";
         }else{
           if(!t.getFifo().canFifoWriteToMemory()){
             ReMapTransfer = t;
