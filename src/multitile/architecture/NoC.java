@@ -206,11 +206,8 @@ public class NoC{
 
  // functions to manage the crossbar
   public Transfer putTransferInNoC(Transfer t){
-    // at this point I have to move data from global memory to the crossbar
-    // RETURN the time when the data is available in the Crossbar
-    // proceed to schedule the transfer
-    int availChannelIndex = getAvailableChannel();  
     Transfer commitTransfer = new Transfer(t);
+    int availChannelIndex = getAvailableChannel();  
     double timeLastAction = this.timeEachChannel.get(availChannelIndex);
     double transferTime = this.calculateTransferTime(commitTransfer);
     double startTime = (commitTransfer.getStart_time() > timeLastAction) ? commitTransfer.getStart_time() : timeLastAction;
