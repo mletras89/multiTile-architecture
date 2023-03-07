@@ -94,7 +94,14 @@ public class Architecture{
 
     globalMemory = new GlobalMemory("GlobalMemory");
   }
- 
+
+  public Crossbar getCrossbar(int crossbarId){
+    for(Map.Entry<Integer,Tile> entry : this.tiles.entrySet()){
+      if (entry.getValue().getCrossbar().getId() == crossbarId)
+        return entry.getValue().getCrossbar();
+    }
+    return null;
+  } 
   
   public NoC getNoC(){
     return this.noc;
