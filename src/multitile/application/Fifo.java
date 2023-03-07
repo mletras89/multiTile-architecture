@@ -253,6 +253,10 @@ public class Fifo implements Buffer{
     this.mapping.readDataInMemory(this.consRate*this.tokenSize,transfer.getDue_time());  
   }
 
+  public void fifoReadFromMemory(Transfer transfer,double time){
+    this.mapping.readDataInMemory(this.consRate*this.tokenSize,time);  
+  }
+
   public void fifoWrite(){
     this.set_tokens(this.get_tokens()+this.getProdRate()); 
     assert (this.get_tokens()<= this.get_capacity()): "Error in writing!!!";
