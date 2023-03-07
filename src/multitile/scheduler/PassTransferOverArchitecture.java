@@ -34,7 +34,10 @@
      Auxiliar class to store the pass of a tranfer over the architecture
 --------------------------------------------------------------------------
 */
+package src.multitile.scheduler;
 
+import src.multitile.architecture.Crossbar;
+import src.multitile.architecture.NoC;
 
 public class PassTransferOverArchitecture {
 
@@ -52,20 +55,20 @@ public class PassTransferOverArchitecture {
     this.type = PASS_TYPE.CROSSBAR;
   }
 
-  public passTransferOverArchitecture(NoC noc){
+  public PassTransferOverArchitecture(NoC noc){
     this.noc = noc;
     this.type = PASS_TYPE.NOC;
   }
 
-  public getCrossbar(){
+  public Crossbar getCrossbar(){
     return this.crossbar;
   }
 
-  public getNoC(){
+  public NoC getNoC(){
     return this.noc;
   }
 
-  public getType(){
+  public PASS_TYPE getType(){
     return this.type;
   }
 
