@@ -364,8 +364,12 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
 	          PassTransferOverArchitecture routing = routings.remove();
                   scheduledTransfer = schedulePassOfTransfer(transfer,routing);
                 }
-                if(scheduledTransfer != null)
-                  listSchedTransfers.add(scheduledTransfer);
+                if(scheduledTransfer == null){
+                  // if we reach this part, means that the transfer does not cost and is a writing to processor local memory
+                  scheduledTransfer = new Transfer(transfer);
+                  scheduledTransfer.setDue_time(scheduledTransfer.getStart_time());
+                }
+                listSchedTransfers.add(scheduledTransfer);
               }
               processorReadTransfers.put(action.getActor(),listSchedTransfers);
 	    }
@@ -405,8 +409,12 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
                   PassTransferOverArchitecture routing = routings.remove();
                   scheduledTransfer = schedulePassOfTransfer(transfer,routing);
                 }
-                if(scheduledTransfer != null)
-                  listSchedTransfers.add(scheduledTransfer);
+                if(scheduledTransfer == null){
+                  // if we reach this part, means that the transfer does not cost and is a writing to processor local memory
+                  scheduledTransfer = new Transfer(transfer);
+                  scheduledTransfer.setDue_time(scheduledTransfer.getStart_time());
+                }
+                listSchedTransfers.add(scheduledTransfer);
               }
               processorWriteTransfers.put(action.getActor(),listSchedTransfers);
             }
