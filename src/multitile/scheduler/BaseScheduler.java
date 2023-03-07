@@ -94,6 +94,22 @@ public class BaseScheduler{
     this.queueActions.clear();
   }
 
+
+  public Transfer schedulePassOfTransfer(Transfer t, PassTransferOverArchitecture routing){
+    Transfer schedTransfer = null;
+    switch(routing.getType()){
+      case PASS_TYPE.NOC:
+        // schedule transfer in the NoC
+        schedTransfer = architecture.getNoC().putTransferInNoC(t);
+      break;
+      case PASS_TYPE.CROSSBAR:
+        // schedule transfer in the crossbar
+        schedTransfer = architecture.getCrossbar(routing.getCrossbar().getId()).putTransferInCrossbar(t);
+      break;
+    }
+    return schedTransfer;
+  }
+
   public Queue<PassTransferOverArchitecture> calculatePathOfTransfer(Transfer transfer){
     // this function returns a list of interconnect sequences
     Queue<PassTransferOverArchitecture> sequence = new LinkedList<>();
