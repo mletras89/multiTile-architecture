@@ -61,11 +61,11 @@ public class TileLocalMemory extends Memory{
     this.setEmbeddedToProcessor(null);
   }
 
-  private void setOwnerTile(Tile owner){
-    this.onwer = owner;
+  public void setOwnerTile(Tile owner){
+    this.owner = owner;
   }
 
-  private Tile getOwnerTile(){
+  public Tile getOwnerTile(){
     return this.owner;
   }
 
