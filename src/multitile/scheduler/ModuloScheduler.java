@@ -349,20 +349,23 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
               // the iterate over Tranfesrs to calculate the routing
               for(Transfer transfer : entry.getValue()){
                 // Here I have to read T from the memory 
-                if(transfer.getType()==Transfer.TRANSFER_TYPE.READ){
+                /*if(transfer.getType()==Transfer.TRANSFER_TYPE.READ){
                   if(transfer.getFifo().canFifoReadFromMemory()){
-                    transfer.getFifo().fifoReadFromMemory(transfer);
+                    transfer.getFifo().fifoReadFromMemory(transfer,transfer.getStart_time());
                   }else
                     assert true: "Something really bad, there must be data in MEMORY!";
                 }else
-                  assert true: "Something really bad, here only read transfers must occur!";
+                  assert true: "Something really bad, here only read transfers must occur!";*/
 	        Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(transfer);
 	        int routingsLength = routings.size();
                 Transfer scheduledTransfer = null;
+                Transfer temporalTransfer = new Transfer(transfer);
 	        for(int m=0; m<routingsLength;m++){
 	          // proceed to schedule the routing passes
 	          PassTransferOverArchitecture routing = routings.remove();
-                  scheduledTransfer = schedulePassOfTransfer(transfer,routing);
+                  scheduledTransfer = schedulePassOfTransfer(temporalTransfer,routing);
+                  temporalTransfer = new Transfer(scheduledTransfer);
+                  temporalTransfer.setStart_time(scheduledTransfer.getDue_time());
                 }
                 if(scheduledTransfer == null){
                   // if we reach this part, means that the transfer does not cost and is a writing to processor local memory
@@ -372,6 +375,7 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
                 listSchedTransfers.add(scheduledTransfer);
               }
               processorReadTransfers.put(action.getActor(),listSchedTransfers);
+
 	    }
        	    //t.getValue().getCrossbar().cleanQueueTransfers();
             //for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
@@ -383,6 +387,8 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
             //Map<Actor,List<Transfer>> processorReadTransfers = t.getValue().getCrossbar().getScheduledReadTransfers(p.getValue());
             // commit the action in the processor
             p.getValue().getScheduler().setReadTransfers(processorReadTransfers);
+            p.getValue().getScheduler().setReadTransfersToMemory();
+            //transfersToMemory.addAll(p.getValue().getScheduler().getTransfersToMemory());
           }
         }
       }
@@ -404,10 +410,13 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
                 Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(transfer);
                 int routingsLength = routings.size();
                 Transfer scheduledTransfer = null;
+                Transfer temporalTransfer = new Transfer(transfer);
                 for(int m=0; m < routingsLength; m++ ){
                   // proceed to schedule the routing of transfer
                   PassTransferOverArchitecture routing = routings.remove();
-                  scheduledTransfer = schedulePassOfTransfer(transfer,routing);
+                  scheduledTransfer = schedulePassOfTransfer(temporalTransfer,routing);
+                  temporalTransfer = new Transfer(scheduledTransfer);
+                  temporalTransfer.setStart_time(scheduledTransfer.getDue_time());
                 }
                 if(scheduledTransfer == null){
                   // if we reach this part, means that the transfer does not cost and is a writing to processor local memory
@@ -446,7 +455,13 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
       for(Transfer t: transfersToMemory){
         if(t.getType()==Transfer.TRANSFER_TYPE.READ){
           // at this point all the transfers are writes
-          assert true: "Something wrong when updating memories after write!";
+          //assert true: "Something wrong when updating memories after write!";
+          if(!t.getFifo().canFifoReadFromMemory()){
+            ReMapTransfer = t;
+            successMemoryOperations = false;
+            break;
+          }
+          t.getFifo().fifoReadFromMemory(t);
         }else{
           if(!t.getFifo().canFifoWriteToMemory()){
             ReMapTransfer = t;
