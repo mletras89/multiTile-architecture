@@ -259,6 +259,24 @@ public class Crossbar{
       scheduledWriteTransfers.put(transfer.getActor(),transfers);
     }
   }
+   
+  public Transfer putTransferInCrossbar(Transfer t){
+    Transfer commitTransfer   = new Transfer(t);
+    int availChannelIndex     = getAvailableChannel();
+    double timeLastAction     = this.timeEachChannel.get(availChannelIndex);
+    double transferTime       = this.calculateTransferTime(commitTransfer);
+    double startTime          = (commitTransfer.getStart_time() > timeLastAction) ? commitTransfer.getStart_time() : timeLastAction;
+    double endTime            = startTime + transferTime;
+
+    // update now the commit transfer
+    commitTransfer.setStart_time(startTime);
+    commitTransfer.setDue_time(endTime);
+    // update the channel time 
+    this.timeEachChannel.set(availChannelIndex,endTime);
+    // commit transfer
+    scheduledActions.get(availChannelIndex).addLast(commitTransfer);
+    return commitTransfer;
+  }
 
   public void commitTransfersinQueue(Architecture architecture){
     // then commit all the transfers in the Queue
@@ -294,12 +312,12 @@ public class Crossbar{
         endTime = startTime;
       }
 
-      // update now the commit transfer
-      commitTransfer.setStart_time(startTime);
-      commitTransfer.setDue_time(endTime);
-      // update the channel time 
-      this.timeEachChannel.set(availChannelIndex,endTime);
-      commitTransfer.setEndOverall(commitTransfer.getDue_time()); 
+    // update now the commit transfer
+    commitTransfer.setStart_time(startTime);
+    commitTransfer.setDue_time(endTime);
+    // update the channel time 
+    this.timeEachChannel.set(availChannelIndex,endTime);
+    commitTransfer.setEndOverall(commitTransfer.getDue_time()); 
       // put the data in the NoC if it is a write
       if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM && 
          commitTransfer.getType() == Transfer.TRANSFER_TYPE.WRITE){
