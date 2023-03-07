@@ -202,6 +202,24 @@ public class Scheduler{
     }
   }
 
+  public void setReadTransfersToMemory(){
+    for(Map.Entry<Actor,List<Transfer>> entry : this.readTransfers.entrySet()){
+      // setting the read Transfers
+      for(Transfer t: entry.getValue()){
+        transfersToMemory.add(t);
+      }
+    }   
+  }
+
+  public void setWriteTransfersToMemory(){
+    for(Map.Entry<Actor,List<Transfer>> entry : this.writeTransfers.entrySet()){
+      // setting the read Transfers
+      for(Transfer t: entry.getValue()){
+        transfersToMemory.add(t);
+      }
+    }
+  }
+
   public void setTransfersToMemory(){
     for(Map.Entry<Actor,List<Transfer>> entry : this.readTransfers.entrySet()){
       // setting the read Transfers
