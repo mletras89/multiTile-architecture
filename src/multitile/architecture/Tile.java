@@ -88,7 +88,7 @@ public class Tile{
     crossbar = new Crossbar("crossbar_"+this.name, 1,2);
     tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
     this.totalIterations = 1;
-    tileLocalMemory.setOwner(this);
+    tileLocalMemory.setOwnerTile(this);
   }
 
   public Tile(String name,int numberProcessors,double crossbarBw,int crossbarChannels){
@@ -109,7 +109,7 @@ public class Tile{
     crossbar = new Crossbar("crossbar_"+this.name, crossbarBw,crossbarChannels);
     tileLocalMemory = new TileLocalMemory("TileLocalMemory_"+this.name);
     this.totalIterations = 1;
-    tileLocalMemory.setOwner(this);
+    tileLocalMemory.setOwnerTile(this);
   }
 
   public void setName(String name){
