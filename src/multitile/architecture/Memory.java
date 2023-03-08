@@ -158,7 +158,6 @@ public class Memory{
   }
 
   // methods for memory managing
-
   public double getUtilization(){
     List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
     Collections.sort(listKeys);
