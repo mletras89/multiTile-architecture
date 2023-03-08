@@ -72,6 +72,8 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
   private int MII;
   private int lastStep;
   private HashMap<Integer,List<Integer>> kernel;
+  private int stepStartKernel = 0;
+  private int stepEndKernel = 0;
 
   public ModuloScheduler(){
     super();
@@ -80,6 +82,19 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
     this.resourceOcupation = new HashMap<>();
     this.setMaxIterations(3);
   }
+
+  public HashMap<Integer,List<Integer>> getKernel(){
+    return this.kernel;
+  }
+
+  public int getStepStartKernel(){
+    return this.stepStartKernel;
+  }
+
+  public int getStepEndKernel(){
+    return this.stepEndKernel;
+  }
+  
 
   public void calculateModuloSchedule(){
     HashMap<Integer,Tile> tiles = architecture.getTiles();
@@ -269,6 +284,8 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
         break;
     }
     System.out.println("Kernel starts at: "+stepStartKernel+" and ends at: "+stepEndKernel);
+    this.stepStartKernel = stepStartKernel;
+    this.stepEndKernel   = stepEndKernel;
   }
 
   public void schedule(){
@@ -348,14 +365,6 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
             for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
               // the iterate over Tranfesrs to calculate the routing
               for(Transfer transfer : entry.getValue()){
-                // Here I have to read T from the memory 
-                /*if(transfer.getType()==Transfer.TRANSFER_TYPE.READ){
-                  if(transfer.getFifo().canFifoReadFromMemory()){
-                    transfer.getFifo().fifoReadFromMemory(transfer,transfer.getStart_time());
-                  }else
-                    assert true: "Something really bad, there must be data in MEMORY!";
-                }else
-                  assert true: "Something really bad, here only read transfers must occur!";*/
 	        Queue<PassTransferOverArchitecture> routings = calculatePathOfTransfer(transfer);
 	        int routingsLength = routings.size();
                 Transfer scheduledTransfer = null;
@@ -377,14 +386,6 @@ public class ModuloScheduler extends BaseScheduler implements Schedule{
               processorReadTransfers.put(action.getActor(),listSchedTransfers);
 
 	    }
-       	    //t.getValue().getCrossbar().cleanQueueTransfers();
-            //for(Map.Entry<Actor,List<Transfer>> entry : readTransfers.entrySet()){
-            //  t.getValue().getCrossbar().insertTransfers(entry.getValue());
-            //}
-            //commit the read transfers
-            //t.getValue().getCrossbar().commitTransfersinQueue(architecture);
-            // update the read transfers of each processor with the correct due time
-            //Map<Actor,List<Transfer>> processorReadTransfers = t.getValue().getCrossbar().getScheduledReadTransfers(p.getValue());
             // commit the action in the processor
             p.getValue().getScheduler().setReadTransfers(processorReadTransfers);
             p.getValue().getScheduler().setReadTransfersToMemory();
