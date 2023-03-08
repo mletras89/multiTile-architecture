@@ -115,6 +115,27 @@ public class Crossbar{
     //System.out.println("CROSSBAR BW="+this.bandwidth+" BW PER CHANNEL="+this.bandwidthPerChannel);
   }
 
+  public double calculateCrossbarOverallUtilization(double endTime){
+    ArrayList<Double> utilization = new ArrayList<>();
+    for(int i=0; i<this.numberofParallelChannels;i++){
+      utilization.add(0.0);
+    }
+    // now proceed to count the utilization of each channel
+    for(int i=0; i<this.numberofParallelChannels;i++){
+      for(Transfer t : scheduledActions.get(i)){
+        double preVal = utilization.get(i);
+        utilization.set(i, preVal + (t.getDue_time() - t.getStart_time()));
+      }
+    }
+    // now proceed to calculate the utilization crossbar
+    double fractionPerChannel = (double)1/(double)numberofParallelChannels;
+    double utilizationCrossbar = 0.0;
+    for(int i=0; i<this.numberofParallelChannels;i++){
+      utilizationCrossbar += (utilization.get(i)/endTime)*fractionPerChannel;
+    }
+    return utilizationCrossbar;
+  }
+
   public double getBandwithPerChannel(){
     return this.bandwidthPerChannel;
   }
@@ -341,7 +362,7 @@ public class Crossbar{
     int availChannelIndex = 0;
     int numberScheduledActions = Integer.MAX_VALUE;
     for (int i=0; i<this.numberofParallelChannels;i++){
-       System.out.println("SIZE CHANNEL:"+scheduledActions.get(i).size()+ " CROSSBAR "+this.getName());
+      //System.out.println("SIZE CHANNEL:"+scheduledActions.get(i).size()+ " CROSSBAR "+this.getName());
       if (scheduledActions.get(i).size() < numberScheduledActions){
         availChannelIndex = i;
         numberScheduledActions  = scheduledActions.get(i).size(); 
