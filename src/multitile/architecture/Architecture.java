@@ -94,6 +94,20 @@ public class Architecture{
 
     globalMemory = new GlobalMemory("GlobalMemory");
   }
+  
+  public double getEndTime(){
+    double endTime = 0.0;
+    for(Map.Entry<Integer,Tile> t : tiles.entrySet()){
+      for(Map.Entry<Integer,Processor> p : t.getValue().getProcessors().entrySet()){
+        if(p.getValue().getScheduler().getScheduledActions().size() > 0){
+          double last = p.getValue().getScheduler().getScheduledActions().getLast().getDue_time();
+          if (last > endTime)
+            endTime = last;
+        }
+      }
+    }
+    return endTime;
+  }
 
   public Crossbar getCrossbar(int crossbarId){
     for(Map.Entry<Integer,Tile> entry : this.tiles.entrySet()){
