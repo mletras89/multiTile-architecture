@@ -112,6 +112,14 @@ public class Tile{
     tileLocalMemory.setOwnerTile(this);
   }
 
+  public double averageProcessorUtilization(double endTime){
+    double processorUtilization = 0.0;
+    for(Map.Entry<Integer,Processor> entry : processors.entrySet()){
+      processorUtilization += entry.getValue().calculateOverallProcessorUtilization(endTime);
+    }
+    return processorUtilization/processors.size();
+  }
+
   public void setName(String name){
     this.name = name;
     crossbar.setName("crossbar_"+this.name);
