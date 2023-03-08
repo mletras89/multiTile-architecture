@@ -1,5 +1,3 @@
-/* vim: ts=2 sw=2*/
-
 /*
 --------------------------------------------------------------------------
  Copyright (c) 2022 Hardware-Software-Co-Design, Friedrich-
@@ -52,14 +50,46 @@ import src.multitile.application.Application;
 import src.multitile.application.Fifo;
 import src.multitile.application.CompositeFifo;
 
+import src.multitile.scheduler.ModuloScheduler;
+
 public class ApplicationManagement{
 
 	public static void remapFifo(Fifo fifo,Application application, Memory newMapping){
 			application.getFifos().get(fifo.getId()).setMapping(newMapping);
 	}
 
+  public static void assignActorMapping(Application application,Architecture architecture, ModuloScheduler scheduler){
+    HashMap<Integer,List<Integer>> kernel = scheduler.getKernel();
+    // hashmap tile ID, list of actors ID
+    HashMap<Integer,List<Integer>> tilesToActors = new HashMap<>();
+    for(Map.Entry<Integer,Tile> entry : architecture.getTiles().entrySet()){
+      List<Integer> lActors = new ArrayList<Integer>();
+      tilesToActors.put(entry.getKey(),lActors);
+    }
+    for(int step=scheduler.getStepStartKernel(); step <= scheduler.getStepEndKernel(); step++){
+      // clean list
+      for(Map.Entry<Integer,List<Integer>> entry: tilesToActors.entrySet())
+        entry.getValue().clear();
+      for(int actorId : kernel.get(step)){
+        int mapTile = application.getActors().get(actorId).getMappingToTile().getId();
+        tilesToActors.get(mapTile).add(actorId);
+      }
+      // now, reasign the mapping to the actor
+      for(Map.Entry<Integer,List<Integer>> entry: tilesToActors.entrySet()){
+        // List of processor in tile
+        ArrayList<Processor> processors = new ArrayList<>(architecture.getTiles().get(entry.getKey()).getProcessors().values());
+        int countProcessor = 0;
+        for(int actorId : entry.getValue()){
+          // assigning the new mapping according to the Modulo Scheduler
+          application.getActors().get(actorId).setMapping(processors.get(countProcessor));
+          countProcessor++;
+        }
+      }
+    }
+  }
+
   // this method assign the mapping of each fifo according the type
-  public static void assingFifoMapping(Application application, Architecture architecture){
+  public static void assignFifoMapping(Application application, Architecture architecture){
     for(Map.Entry<Integer,Fifo> f : application.getFifos().entrySet()){
       Fifo.FIFO_MAPPING_TYPE type = f.getValue().getMappingType();
       Processor p;
