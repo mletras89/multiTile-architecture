@@ -78,11 +78,11 @@ public class testModuloSchedulingWithNoC {
       Architecture architecture = new Architecture("architecture",2,2, 1.0, 2);
 
       for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
-				System.out.println("Tile name:"+t.getValue().getName());
+        System.out.println("Tile name:"+t.getValue().getName());
         for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
-     			System.out.println("\tProcessor name:"+p.getValue().getName()+" with id "+p.getValue().getId());
-					System.out.println("\tOwner tile:"+p.getValue().getOwnerTile().getName());
-     			System.out.println("\t\tAttached to local memory:"+p.getValue().getLocalMemory().getName());
+     	  System.out.println("\tProcessor name:"+p.getValue().getName()+" with id "+p.getValue().getId());
+	  System.out.println("\tOwner tile:"+p.getValue().getOwnerTile().getName());
+     	  System.out.println("\t\tAttached to local memory:"+p.getValue().getLocalMemory().getName());
         }			
       }
 
@@ -94,18 +94,22 @@ public class testModuloSchedulingWithNoC {
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0), architecture.getTiles().get(1),architecture.getGlobalMemory());  
       Application app = sampleApplication.getSampleApplication();
-      ApplicationManagement.assingFifoMapping(app,architecture); 
-
+      
       ModuloScheduler scheduler = new ModuloScheduler();
+      // I need to update the actor mapping according to the modulo schedule!!!!!
       scheduler.setApplication(app);
       scheduler.setArchitecture(architecture);
 			
       scheduler.setMaxIterations(10);
       scheduler.calculateModuloSchedule();
+      //System.out.println("PRINTING KERNEL: ");
       //scheduler.printKernelBody();
-			// once the kernell is done, reassign the actor Mapping and then reassing the fifoMapping
-
+      // once the kernell is done, reassign the actor Mapping and then reassing the fifoMapping
       scheduler.findSchedule();
+      ApplicationManagement.assignActorMapping(app,architecture,scheduler);
+      ApplicationManagement.assignFifoMapping(app,architecture); 
+      //app.printFifos();
+ 
       scheduler.schedule();
 
       System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
