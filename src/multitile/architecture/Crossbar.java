@@ -67,8 +67,8 @@ public class Crossbar{
   private List<Double> timeEachChannel;
   private int numberofParallelChannels;
   private double bandwidth;  // each crossbar has a bandwidht in Gbps
-  final int GigabitPerSecondToBytePerSecond = 125000000;
-  //private Tile ownerTile;
+  private double bandwidthPerChannel;
+
 
   // initializing empty crossbar
   public Crossbar() {
@@ -83,7 +83,7 @@ public class Crossbar{
     this.scheduledWriteTransfers = new HashMap<>();
     this.scheduledActions.add(schedActions);
     this.timeEachChannel.add(0.0);
-    this.setBandwidth(16);
+    this.setBandwidth(1,16);
   }
    // cloning crossbar
   public Crossbar(Crossbar other) {
@@ -91,7 +91,7 @@ public class Crossbar{
     this.id   = other.getId();
     this.queueTransfers = new ArrayList<>(other.getQueueTransfers());
     this.scheduledActions = new ArrayList<>(other.getScheduledActions());
-    this.setBandwidth(other.getBandwidth());
+    this.setBandwidth(other.getNumberofParallelChannels(),other.getBandwidth());
     this.scheduledReadTransfers = new HashMap<>();
     this.scheduledWriteTransfers = new HashMap<>();
     //this.ownerTile = other.getOwnerTile();
@@ -109,15 +109,15 @@ public class Crossbar{
       this.scheduledActions.add(schedActions);
       this.timeEachChannel.add(0.0);
     }
-    this.bandwidth= bandwidth;
+    this.setBandwidth(numberofParallelChannels,bandwidth);
     this.scheduledReadTransfers = new HashMap<>();
     this.scheduledWriteTransfers = new HashMap<>();
-    //this.ownerTile = owner;
+    //System.out.println("CROSSBAR BW="+this.bandwidth+" BW PER CHANNEL="+this.bandwidthPerChannel);
   }
 
-//  public Tile getOwnerTile(){
-//    return this.ownerTile;
-//  }
+  public double getBandwithPerChannel(){
+    return this.bandwidthPerChannel;
+  }
 
   public void restartCrossbar(){
     this.queueTransfers.clear();
@@ -182,13 +182,15 @@ public class Crossbar{
     return bandwidth;
   }
 
-  public void setBandwidth(double bandwidth){
+  public void setBandwidth(int numberOfParallelChannels,double bandwidth){
     this.bandwidth = bandwidth;
+    this.numberofParallelChannels = numberOfParallelChannels;
+    this.bandwidthPerChannel = bandwidth/(double)numberOfParallelChannels;
   }
 
   public double calculateTransferTime(Transfer transfer){
     int numberofBytes = transfer.getBytes();
-    double processingTime = ((( BytesToGigabytes(numberofBytes) / this.bandwidth))*1000000); // 8 bits in a byte, 100 000 to convert from secs to microseconds
+    double processingTime = ((( BytesToGigabytes(numberofBytes) / this.bandwidthPerChannel))*1000000); // 8 bits in a byte, 100 000 to convert from secs to microseconds
     return processingTime;
   }
   
