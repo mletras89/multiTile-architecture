@@ -1,4 +1,3 @@
-/* vim: ts=2 sw=2*/
 /*
 --------------------------------------------------------------------------
  Copyright (c) 2022 Hardware-Software-Co-Design, Friedrich-
