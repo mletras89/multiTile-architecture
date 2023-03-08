@@ -61,6 +61,7 @@ public class Processor {
   private LocalMemory localMemory;
   private Tile ownerTile;
 
+
   public Processor(String name) {
     this.setName(name);
     this.setId(ArchitectureManagement.getProcessorId());
@@ -77,6 +78,15 @@ public class Processor {
     this.scheduler = other.scheduler;
     this.localMemory.setEmbeddedToProcessor(this);
   }
+
+  public double calculateOverallProcessorUtilization(double endTime){
+    double processorUtilization = 0.0;
+    for(Action action : this.scheduler.getScheduledActions()){
+      processorUtilization += action.getDue_time() - action.getStart_time(); 
+    }
+    return processorUtilization/endTime;
+  }
+
 
   public boolean equals(Processor processor){
     return this.getId() == processor.getId() && this.getName().equals(processor.getName());
