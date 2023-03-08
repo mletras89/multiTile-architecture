@@ -97,7 +97,7 @@ public class Application{
 
   public void printFifos(){
     for(Map.Entry<Integer,Fifo> fifoEntry : this.fifos.entrySet()){
-      System.out.println("Fifo:"+fifoEntry.getValue().getName()+" is composite?:"+fifoEntry.getValue().isCompositeChannel());
+      System.out.println("Fifo:"+fifoEntry.getValue().getName()+" is composite?:"+fifoEntry.getValue().isCompositeChannel()+" mapped to: "+fifoEntry.getValue().getMapping().getName());
     }
   }
 
