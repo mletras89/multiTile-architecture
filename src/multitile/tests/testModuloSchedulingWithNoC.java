@@ -116,9 +116,7 @@ public class testModuloSchedulingWithNoC {
 
       System.out.println("The MMI is: "+scheduler.getMII());
 
-
       // dumping system utilization statistics
-      
       for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
         for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
           p.getValue().getScheduler().saveScheduleStats(".");
@@ -127,9 +125,24 @@ public class testModuloSchedulingWithNoC {
         t.getValue().getCrossbar().saveCrossbarUtilizationStats(".");
         t.getValue().getTileLocalMemory().saveMemoryUtilizationStats(".");
       }
-
       architecture.getNoC().saveNoCUtilizationStats(".");
       architecture.getGlobalMemory().saveMemoryUtilizationStats(".");
+      
+      // get the end time
+      double endTime=architecture.getEndTime();
+      System.out.println("End time: "+endTime);
+      // print the utilization of each processor and each crossbar
+      for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
+        for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
+          System.out.println("Processor "+p.getValue().getName()+" Utilization: "+p.getValue().calculateOverallProcessorUtilization(endTime));
+          System.out.println("Procesor Local Memory: "+p.getValue().getLocalMemory().getName()+" utilization "+p.getValue().getLocalMemory().getUtilization()); 
+        }
+        System.out.println("Tile "+t.getValue().getName()+" avg. utilization: "+t.getValue().averageProcessorUtilization(endTime));
+        System.out.println("Crossbar "+t.getValue().getCrossbar().getName()+ " crossbar util. "+t.getValue().getCrossbar().calculateCrossbarOverallUtilization(endTime));
+        System.out.println("Tile local memory: "+t.getValue().getTileLocalMemory().getName()+ "utilization "+t.getValue().getTileLocalMemory().getUtilization());
+      }
+      System.out.println("NoC Utilization: "+architecture.getNoC().calculateNoCOverallUtilization(endTime));
+      System.out.println("Global memory: "+architecture.getGlobalMemory().getName()+ " utilization "+architecture.getGlobalMemory().getUtilization());
 
       System.out.println("Testing quadcore implementation testcase done!");
     }
