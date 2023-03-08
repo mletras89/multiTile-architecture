@@ -107,6 +107,27 @@ public class NoC{
     }
   }
 
+  public double calculateNoCOverallUtilization(double endTime){
+    ArrayList<Double> utilization = new ArrayList<>();
+    for(int i=0; i<this.numberofParallelChannels;i++){
+      utilization.add(0.0);
+    }
+    // now proceed to count the utilization of each channel
+    for(int i=0; i<this.numberofParallelChannels;i++){
+      for(Transfer t : channels.get(i)){
+        double preVal = utilization.get(i);
+        utilization.set(i, preVal + (t.getDue_time() - t.getStart_time()));
+      }
+    }
+    // now proceed to calculate the utilization crossbar
+    double fractionPerChannel = (double)1/(double)numberofParallelChannels;
+    double utilizationNoC = 0.0;
+    for(int i=0; i<this.numberofParallelChannels;i++){
+      utilizationNoC += (utilization.get(i)/endTime)*fractionPerChannel;
+    }
+    return utilizationNoC;
+  }
+
   public String getName(){
     return this.name;
   }
