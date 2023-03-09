@@ -301,7 +301,7 @@ public class Crossbar{
     return commitTransfer;
   }
 
-  public void commitTransfersinQueue(Architecture architecture){
+  public void commitTransfersinQueue(){
     // then commit all the transfers in the Queue
     int elementsinQueue = queueTransfers.size();
     
@@ -315,42 +315,20 @@ public class Crossbar{
       double endTime  = startTime + transferTime;
 
       if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.TILE_LOCAL_MEM ||
-         commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM ||
         (commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.LOCAL_MEM &&
         !commitTransfer.getFifo().getMapping().getEmbeddedToProcessor().equals(commitTransfer.getActor().getMapping()))){
-        //endTime = startTime + transferTime;  
-        // if the transaction has to travel only from the NoC GLOBAL MEMORY
-        // I have to recalculate the start/end times
-        if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM && 
-           commitTransfer.getType() == Transfer.TRANSFER_TYPE.READ){
-          // just allocate the reads from GLOBAL MEMORY that travels via the NoC
-          Transfer t = architecture.getNoC().putTransferInNoC(commitTransfer);
-          availChannelIndex = getAvailableChannel();
-          timeLastAction = this.timeEachChannel.get(availChannelIndex);
-          startTime = (t.getDue_time() > timeLastAction) ? t.getDue_time() : timeLastAction;
-          endTime = startTime + transferTime;
-        }
+        endTime = startTime + transferTime;  
       }
       else{
         endTime = startTime;
       }
 
-    // update now the commit transfer
-    commitTransfer.setStart_time(startTime);
-    commitTransfer.setDue_time(endTime);
-    // update the channel time 
-    this.timeEachChannel.set(availChannelIndex,endTime);
-    commitTransfer.setEndOverall(commitTransfer.getDue_time()); 
-      // put the data in the NoC if it is a write
-      if(commitTransfer.getFifo().getMapping().getType() == Memory.MEMORY_TYPE.GLOBAL_MEM && 
-         commitTransfer.getType() == Transfer.TRANSFER_TYPE.WRITE){
-         Transfer t = new Transfer(commitTransfer);
-         t.setStart_time(commitTransfer.getDue_time());
-         t = architecture.getNoC().putTransferInNoC(t);
-         //commitTransfer.setEndOverall(t.getDue_time());
-      	 // update the channel time 
-      	 this.timeEachChannel.set(availChannelIndex,endTime);
-      }
+      // update now the commit transfer
+      commitTransfer.setStart_time(startTime);
+      commitTransfer.setDue_time(endTime);
+      // update the channel time 
+      this.timeEachChannel.set(availChannelIndex,endTime);
+      commitTransfer.setEndOverall(commitTransfer.getDue_time()); 
       // commit transfer
       scheduledActions.get(availChannelIndex).addLast(commitTransfer);
       // then add the scheduled transfers accordingly, with the scheduled due time
