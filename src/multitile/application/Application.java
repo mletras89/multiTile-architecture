@@ -90,7 +90,7 @@ public class Application{
 
   public void printActors(){
     for(Map.Entry<Integer,Actor> actorEntry : this.actors.entrySet()){   
-      System.out.println("Actor:"+actorEntry.getValue().getName()+" is multicast:"+actorEntry.getValue().isMulticastActor()+" is mergeable: "+actorEntry.getValue().isMergeMulticast());
+      System.out.println("Actor:"+actorEntry.getValue().getName()+" is multicast:"+actorEntry.getValue().isMulticastActor()+" is mergeable: "+actorEntry.getValue().isMergeMulticast()+" mapped to "+actorEntry.getValue().getMapping().getName());
     }
   }
 
