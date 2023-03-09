@@ -107,7 +107,7 @@ public class testQuadCoreModuloScheduling {
       Architecture dualCoreArchitecture = new Architecture("architecture","ModuloSchedulingDual", 2, 1.0, 2);
       TestApplicationDualCore testDualApplication = new TestApplicationDualCore(dualCoreArchitecture.getTiles().get(0));
       Application dualCoreApplication = testDualApplication.getSampleApplication();
-      ApplicationManagement.assingFifoMapping(dualCoreApplication,dualCoreArchitecture); 
+      ApplicationManagement.assignFifoMapping(dualCoreApplication,dualCoreArchitecture); 
   
       ModuloScheduler dualCoreScheduler = new ModuloScheduler();
       dualCoreScheduler.setApplication(dualCoreApplication);
@@ -148,7 +148,7 @@ public class testQuadCoreModuloScheduling {
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
-      ApplicationManagement.assingFifoMapping(app,architecture); 
+      ApplicationManagement.assignFifoMapping(app,architecture); 
 
       for(Map.Entry<Integer,Fifo> f : app.getFifos().entrySet()){
         System.out.println("Fifo "+f.getValue().getName()+" mapped to proc "+f.getValue().getMapping().getEmbeddedToProcessor().getName()+" on memory "+f.getValue().getMapping().getName());

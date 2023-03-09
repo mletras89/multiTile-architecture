@@ -72,8 +72,7 @@ public class testDualCoreImplementation {
       
       TestApplicationDualCore sampleApplication = new TestApplicationDualCore(t1);  
       Application app = sampleApplication.getSampleApplication();
-      ApplicationManagement.assingFifoMapping(app,architecture); 
-
+      ApplicationManagement.assignFifoMapping(app,architecture); 
 
       FCFS scheduler = new FCFS();
       scheduler.setApplication(app);
