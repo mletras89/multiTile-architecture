@@ -148,5 +148,6 @@ public class testModuloSchedulingWithNoC {
       System.out.println("Global memory: "+architecture.getGlobalMemory().getName()+ " utilization "+architecture.getGlobalMemory().getUtilization(endTime));
 
       System.out.println("Testing quadcore implementation testcase done!");
+      architecture.saveArchitectureUtilizationStats(".");
     }
 }
