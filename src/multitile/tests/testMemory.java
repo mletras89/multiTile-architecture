@@ -46,9 +46,9 @@ public class testMemory {
       memoryTest2.readDataInMemory(memoryTest2.getCurrentAmountofBytes(),200);
       memoryTest3.readDataInMemory(memoryTest3.getCurrentAmountofBytes(),200);
 
-      System.out.println("The memory 1 utilization over the execution was: "+memoryTest.getUtilization());
-      System.out.println("The memory 2 utilization over the execution was: "+memoryTest2.getUtilization());
-      System.out.println("The memory 3 utilization over the execution was: "+memoryTest3.getUtilization());
+      System.out.println("The memory 1 utilization over the execution was: "+memoryTest.getUtilization(250));
+      System.out.println("The memory 2 utilization over the execution was: "+memoryTest2.getUtilization(250));
+      System.out.println("The memory 3 utilization over the execution was: "+memoryTest3.getUtilization(250));
 
       try{
           File memUtilStatics = new File("testMemory.csv");
