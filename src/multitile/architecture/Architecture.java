@@ -68,6 +68,7 @@ public class Architecture{
     tiles.put(t1.getId(),t1);
     
     globalMemory = new GlobalMemory("GlobalMemory");
+    noc = new NoC();
   }
 
   public Architecture(String name, int nTiles, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
@@ -91,6 +92,7 @@ public class Architecture{
     tiles.put(t.getId(),t);  
 
     globalMemory = new GlobalMemory("GlobalMemory");
+    noc = new NoC();
   }
   
   public double getEndTime(){
