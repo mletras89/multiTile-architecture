@@ -193,7 +193,7 @@ public class Architecture{
     for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){ 
       myWriter.write("Tile "+t.getValue().getName()+" avg. processor utilization: "+t.getValue().averageProcessorUtilization(endTime)+"\n");
       myWriter.write("Crossbar "+t.getValue().getCrossbar().getName()+ " crossbar util. "+t.getValue().getCrossbar().calculateCrossbarOverallUtilization(endTime)+"\n");
-      myWriter.write("Tile local memory: "+t.getValue().getTileLocalMemory().getName()+ "utilization "+t.getValue().getTileLocalMemory().getUtilization(endTime)+"\n");
+      myWriter.write("Tile local memory: "+t.getValue().getTileLocalMemory().getName()+ " utilization "+t.getValue().getTileLocalMemory().getUtilization(endTime)+"\n");
     }
     myWriter.write("Global memory: "+this.getGlobalMemory().getName()+ " utilization "+this.getGlobalMemory().getUtilization(endTime)+"\n");
     myWriter.close();
