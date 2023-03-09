@@ -91,6 +91,9 @@ public class testModuloSchedulingWithNoC {
       architecture.getTiles().get(0).getProcessors().get(1).getLocalMemory().setCapacity(5000000);
       architecture.getTiles().get(1).getProcessors().get(2).getLocalMemory().setCapacity(5000000);
       architecture.getTiles().get(1).getProcessors().get(3).getLocalMemory().setCapacity(5000000);
+      architecture.getTiles().get(0).getTileLocalMemory().setCapacity(10000000);
+      architecture.getTiles().get(1).getTileLocalMemory().setCapacity(10000000);
+      architecture.getGlobalMemory().setCapacity(50000000);
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0), architecture.getTiles().get(1),architecture.getGlobalMemory());  
       Application app = sampleApplication.getSampleApplication();
@@ -135,14 +138,14 @@ public class testModuloSchedulingWithNoC {
       for(HashMap.Entry<Integer,Tile> t: architecture.getTiles().entrySet()){
         for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
           System.out.println("Processor "+p.getValue().getName()+" Utilization: "+p.getValue().calculateOverallProcessorUtilization(endTime));
-          System.out.println("Procesor Local Memory: "+p.getValue().getLocalMemory().getName()+" utilization "+p.getValue().getLocalMemory().getUtilization()); 
+          System.out.println("Procesor Local Memory: "+p.getValue().getLocalMemory().getName()+" utilization "+p.getValue().getLocalMemory().getUtilization(endTime)); 
         }
         System.out.println("Tile "+t.getValue().getName()+" avg. utilization: "+t.getValue().averageProcessorUtilization(endTime));
         System.out.println("Crossbar "+t.getValue().getCrossbar().getName()+ " crossbar util. "+t.getValue().getCrossbar().calculateCrossbarOverallUtilization(endTime));
-        System.out.println("Tile local memory: "+t.getValue().getTileLocalMemory().getName()+ "utilization "+t.getValue().getTileLocalMemory().getUtilization());
+        System.out.println("Tile local memory: "+t.getValue().getTileLocalMemory().getName()+ "utilization "+t.getValue().getTileLocalMemory().getUtilization(endTime));
       }
-      System.out.println("NoC Utilization: "+architecture.getNoC().calculateNoCOverallUtilization(endTime));
-      System.out.println("Global memory: "+architecture.getGlobalMemory().getName()+ " utilization "+architecture.getGlobalMemory().getUtilization());
+      //System.out.println("NoC Utilization: "+architecture.getNoC().calculateNoCOverallUtilization(endTime));
+      System.out.println("Global memory: "+architecture.getGlobalMemory().getName()+ " utilization "+architecture.getGlobalMemory().getUtilization(endTime));
 
       System.out.println("Testing quadcore implementation testcase done!");
     }
