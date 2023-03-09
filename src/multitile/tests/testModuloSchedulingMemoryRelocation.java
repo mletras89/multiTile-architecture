@@ -84,7 +84,7 @@ public class testModuloSchedulingMemoryRelocation {
 
       TestApplicationQuadCoreMemoryBound sampleApplication = new TestApplicationQuadCoreMemoryBound(architecture.getTiles().get(0));  
       Application app = sampleApplication.getSampleApplication();
-      ApplicationManagement.assingFifoMapping(app,architecture); 
+      ApplicationManagement.assignFifoMapping(app,architecture); 
 
       ModuloScheduler scheduler = new ModuloScheduler();
       scheduler.setApplication(app);
@@ -94,7 +94,13 @@ public class testModuloSchedulingMemoryRelocation {
       scheduler.calculateModuloSchedule();
       //scheduler.printKernelBody();
       scheduler.findSchedule();
+      ApplicationManagement.assignActorMapping(app,architecture,scheduler);
+      ApplicationManagement.assignFifoMapping(app,architecture);
+      app.printActors();
+      app.printFifos();
       scheduler.schedule();
+      System.out.println("After scheduling and memory relocation!");
+      app.printFifos();
 
       System.out.println("Single iteration delay: "+scheduler.getDelaySingleIteration());
 
