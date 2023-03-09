@@ -80,8 +80,6 @@ public class Architecture{
       tiles.put(t.getId(),t);  
     }
     globalMemory = new GlobalMemory("GlobalMemory");
-
-
   }
 
   public Architecture(String name, String nameTile, int nProcPerTile, double BWCrossbars, int channelsCrossbar){
@@ -154,6 +152,51 @@ public class Architecture{
       }
       t.getValue().getTileLocalMemory().printMemoryState();
     }
+  }
+
+  // DUMPING the architecture utilization stats
+  // processor and local memory Utilization
+  // average processor utilization per tile
+  // average local memory utilization per tile
+  // tile local memory utilization
+  // NoC utilization
+  // global memory utilization
+
+  public void saveArchitectureUtilizationStats(String path) throws IOException{
+    double endTime=this.getEndTime();
+    try{
+        File archUtilStatics = new File(path+"/architecture-utilization-"+this.getName()+".dat");
+        if (archUtilStatics.createNewFile()) {
+          System.out.println("File created: " + archUtilStatics.getName());
+        } else {
+          System.out.println("File already exists.");
+        }
+    }
+    catch (IOException e) {
+        System.out.println("An error occurred.");
+        e.printStackTrace();
+    }
+    FileWriter myWriter = new FileWriter(path+"/architecture-utilization-"+this.getName()+".dat");  
+    myWriter.write("Processors:\n");
+    for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
+      for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
+        myWriter.write("Processor "+p.getValue().getName()+" Utilization: "+p.getValue().calculateOverallProcessorUtilization(endTime)+"\n");
+      }
+    }
+    myWriter.write("Memories:\n");
+    for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){
+      for(HashMap.Entry<Integer,Processor> p: t.getValue().getProcessors().entrySet()){
+        myWriter.write("Procesor Local Memory: "+p.getValue().getLocalMemory().getName()+" utilization "+p.getValue().getLocalMemory().getUtilization(endTime)+"\n");
+      }
+    }
+    myWriter.write("Tiles:\n");
+    for(HashMap.Entry<Integer,Tile> t: tiles.entrySet()){ 
+      myWriter.write("Tile "+t.getValue().getName()+" avg. processor utilization: "+t.getValue().averageProcessorUtilization(endTime)+"\n");
+      myWriter.write("Crossbar "+t.getValue().getCrossbar().getName()+ " crossbar util. "+t.getValue().getCrossbar().calculateCrossbarOverallUtilization(endTime)+"\n");
+      myWriter.write("Tile local memory: "+t.getValue().getTileLocalMemory().getName()+ "utilization "+t.getValue().getTileLocalMemory().getUtilization(endTime)+"\n");
+    }
+    myWriter.write("Global memory: "+this.getGlobalMemory().getName()+ " utilization "+this.getGlobalMemory().getUtilization(endTime)+"\n");
+    myWriter.close();
   }
 
 }
