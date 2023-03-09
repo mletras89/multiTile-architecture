@@ -158,20 +158,17 @@ public class Memory{
   }
 
   // methods for memory managing
-  public double getUtilization(){
+  public double getUtilization(double endTime){
     List<Double> listKeys = new ArrayList<>(memoryUtilization.keySet());
     Collections.sort(listKeys);
-    double last_inserted_key = listKeys.get(listKeys.size()-1);
-    double current_data = memoryUtilization.get(last_inserted_key);
-    double maxUtilization = last_inserted_key * capacity;
+    double maxUtilization = endTime * capacity;
 
     double util = 0;
     for (int i=0;i<listKeys.size()-1;i++) {
       util += (listKeys.get(i+1) - listKeys.get(i)) * memoryUtilization.get(listKeys.get(i));
-      //System.out.println("First square from"+listKeys.get(i)+" to "+listKeys.get(i+1)+" is: "+(listKeys.get(i+1) - listKeys.get(i)) * memoryUtilization.get(listKeys.get(i)));
     }
-    System.out.println("maxUtilization "+maxUtilization);
-    System.out.println("util "+util);
+//    System.out.println("maxUtilization "+maxUtilization);
+//    System.out.println("util "+util);
     return 1 - (maxUtilization - util)/maxUtilization;
   }
 
