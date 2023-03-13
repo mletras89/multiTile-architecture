@@ -1,5 +1,5 @@
-DIR_SRC=./src/multitile/tests
-PACKAGE_TEST=src.multitile.tests
+DIR_SRC=./multitile/tests
+PACKAGE_TEST=multitile.tests
 
 check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check QuadCoreMemoryBound_check ModuloScheduling_check MemoryRelocation_check
 
