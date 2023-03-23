@@ -1,15 +1,27 @@
 DIR_SRC=./multitile/tests
 PACKAGE_TEST=multitile.tests
 
-check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check QuadCoreMemoryBound_check ModuloScheduling_check MemoryRelocation_check
+check_all: all run_all crossbar_check processor_check testWriteReadTransfers_check singleCoreBus_check singleCoreCrossbar2_check singleCoreCrossbar4_check testMemory_check testCompositeChannel_check DualCore_check QuadCore_check QuadCoreMemoryBound_check QuadCoreMemoryBound_check ModuloScheduling_check MemoryRelocation_check ArchitectureWithNoC_check ArchitectureWithNoCMulticast_check
 
-all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound ModuloScheduling MemoryRelocation
+all: crossbar  processor testWriteReadTransfers singleCoreBus singleCoreCrossbar2 singleCoreCrossbar4 testMemory testCompositeChannel DualCore QuadCore QuadCoreMemoryBound ModuloScheduling MemoryRelocation ArchitectureWithNoC ArchitectureWithNoCMulticast
 
-run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run ModuloScheduling_run MemoryRelocation_run
+run_all: crossbar_run processor_run testWriteReadTransfers_run singleCoreBus_run singleCoreCrossbar2_run singleCoreCrossbar4_run testMemory_run testCompositeChannel_run DualCore_run QuadCore_run QuadCoreMemoryBound_run ModuloScheduling_run MemoryRelocation_run ArchitectureWithNoC_run ArchitectureWithNoCMulticast_run
 
 clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCoreBus_clean singleCoreCrossbar2_clean singleCoreCrossbar4_clean testMemory_clean testCompositeChannel_clean DualCore_clean QuadCore_clean
 
 distclean_all: crossbar_distclean 
+
+ArchitectureWithNoCMulticast:
+	javac $(DIR_SRC)/testModuloSchedulingWithNoCMergeMulticast.java
+
+ArchitectureWithNoCMulticast_run:
+	java -ea $(PACKAGE_TEST).testModuloSchedulingWithNoCMergeMulticast;
+	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv processor-utilization-Tile1_Processor1.csv crossbar-utilization-crossbar_Tile1.csv processor-utilization-Tile2_Processor0.csv processor-utilization-Tile2_Processor1.csv crossbar-utilization-crossbar_Tile2.csv NoC-utilization-NoC.csv -o testcase-architecture-with-NoC-Merge-Multicast.csv;
+	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GLOBAL_MEMORY.csv -o testcase-architecture-with-NoC-mem-utilization-Merge-Multicast.csv;
+
+ArchitectureWithNoCMulticast_check:
+	diff testcase-architecture-with-NoC-Merge-Multicast.csv golden-cases/testcase-architecture-with-NoC-Merge-Multicast-golden.csv;
+	diff testcase-architecture-with-NoC-mem-utilization-Merge-Multicast.csv golden-cases/testcase-architecture-with-NoC-mem-utilization-Merge-Multicast-golden.csv
 
 ArchitectureWithNoC:
 	javac $(DIR_SRC)/testModuloSchedulingWithNoC.java
@@ -17,11 +29,11 @@ ArchitectureWithNoC:
 ArchitectureWithNoC_run:
 	java -ea $(PACKAGE_TEST).testModuloSchedulingWithNoC;
 	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv processor-utilization-Tile1_Processor1.csv crossbar-utilization-crossbar_Tile1.csv processor-utilization-Tile2_Processor0.csv processor-utilization-Tile2_Processor1.csv crossbar-utilization-crossbar_Tile2.csv NoC-utilization-NoC.csv -o testcase-architecture-with-NoC.csv;
-	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GlobalMemory.csv -o testcase-architecture-with-NoC-mem-utilization.csv;
+	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GLOBAL_MEMORY.csv -o testcase-architecture-with-NoC-mem-utilization.csv;
 
 ArchitectureWithNoC_check:
-	diff testcase-architecture-with-NoC.csv golden-case/testcase-architecture-with-NoC-golden.csv;
-	diff testcase-architecture-with-NoC-mem-utilization.csv golden-case/testcase-architecture-with-NoC-mem-utilization-golden.csv;
+	diff testcase-architecture-with-NoC.csv golden-cases/testcase-architecture-with-NoC-golden.csv;
+	diff testcase-architecture-with-NoC-mem-utilization.csv golden-cases/testcase-architecture-with-NoC-mem-utilization-golden.csv;
 
 MemoryRelocation:
 	javac $(DIR_SRC)/testModuloSchedulingMemoryRelocation.java
