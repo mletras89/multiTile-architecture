@@ -4,3 +4,4 @@
 *.swp
 *.swo
 *.dat
+!golden_cases/*.csv
