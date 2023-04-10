@@ -17,8 +17,8 @@ ModuloSchedulingRecurrences:
 
 ModuloSchedulingRecurrences_run:
 	java -ea $(PACKAGE_TEST).testModuloSchedulingRecurrences;
-	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv processor-utilization-Tile1_Processor1.csv crossbar-utilization-crossbar_Tile1.csv processor-utilization-Tile2_Processor0.csv processor-utilization-Tile2_Processor1.csv crossbar-utilization-crossbar_Tile2.csv NoC-utilization-NoC.csv -o testcase-architecture-Modulo-Scheduling-Recurrences.csv;
-	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GLOBAL_MEMORY.csv -o testcase-architecture-mem-utilization-Modulo-Scheduling-Recurrences.csv;
+	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv crossbar-utilization-crossbar_Tile1.csv NoC-utilization-NoC.csv -o testcase-architecture-Modulo-Scheduling-Recurrences.csv;
+	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-GLOBAL_MEMORY.csv -o testcase-architecture-mem-utilization-Modulo-Scheduling-Recurrences.csv;
 
 ModuloSchedulingRecurrences_check:
 	diff testcase-architecture-Modulo-Scheduling-Recurrences.csv golden-cases/testcase-architecture-Modulo-Scheduling-Recurrences-golden.csv;
