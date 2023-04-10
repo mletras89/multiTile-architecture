@@ -11,6 +11,10 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+
+ModuloSchedulingRecurrences:
+	javac $(DIR_SRC)/testModuloSchedulingRecurrences.java
+
 ArchitectureWithNoCMulticast:
 	javac $(DIR_SRC)/testModuloSchedulingWithNoCMergeMulticast.java
 
