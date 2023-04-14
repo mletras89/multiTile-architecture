@@ -21,7 +21,10 @@ if __name__ == '__main__':
 
     if len(ARGS) == 0:
         parser.parse_args(["-h"])
-    
+
+
+    #pd.options.display.float_format = '${:,.12f}'.format
+
     #for csv_file in ARGS:
     #    df = pd.read_csv(csv_file,sep='\t')
 
@@ -34,4 +37,4 @@ if __name__ == '__main__':
 
     # save data frame to csv
     #df.reset_index(drop)
-    df.to_csv(options.output, index=False,sep='\t')
+    df.to_csv(options.output, index=False,sep='\t', float_format='%.12f')
