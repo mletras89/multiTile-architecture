@@ -24,11 +24,11 @@ a2	0.121646728516	0.131646728516	ModuloSchedulingQuad_Processor1
 a4	0.131646728516	0.141646728516	ModuloSchedulingQuad_Processor1
 a2	0.149093017578	0.159093017578	ModuloSchedulingQuad_Processor1
 a4	0.159093017578	0.169093017578	ModuloSchedulingQuad_Processor1
-a1	0.000000000000	0.010000000000	ModuloSchedulingQuad_Processor2
-a1	0.039307861328	0.049307861328	ModuloSchedulingQuad_Processor2
-a1	0.066754150391	0.076754150391	ModuloSchedulingQuad_Processor2
-a1	0.094200439453	0.104200439453	ModuloSchedulingQuad_Processor2
-a1	0.121646728516	0.131646728516	ModuloSchedulingQuad_Processor2
+a1	0.020000000000	0.030000000000	ModuloSchedulingQuad_Processor2
+a1	0.049307861328	0.059307861328	ModuloSchedulingQuad_Processor2
+a1	0.076754150391	0.086754150391	ModuloSchedulingQuad_Processor2
+a1	0.104200439453	0.114200439453	ModuloSchedulingQuad_Processor2
+a1	0.131646728516	0.141646728516	ModuloSchedulingQuad_Processor2
 writing_crossbar	0.020000000000	0.021861572266	crossbar_ModuloSchedulingQuad_0
 reading_crossbar	0.021861572266	0.023723144531	crossbar_ModuloSchedulingQuad_0
 writing_crossbar	0.031861572266	0.033723144531	crossbar_ModuloSchedulingQuad_0

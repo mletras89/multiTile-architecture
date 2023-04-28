@@ -24,11 +24,6 @@ a2	0.273293457031	0.283293457031	ModuloSchedulingSingle_Processor0
 a3	0.287016601563	0.297016601563	ModuloSchedulingSingle_Processor0
 a4	0.300739746094	0.310739746094	ModuloSchedulingSingle_Processor0
 a5:sink	0.314462890625	0.324462890625	ModuloSchedulingSingle_Processor0
-a1	0.324462890625	0.334462890625	ModuloSchedulingSingle_Processor0
-a2	0.338186035156	0.348186035156	ModuloSchedulingSingle_Processor0
-a3	0.351909179688	0.361909179688	ModuloSchedulingSingle_Processor0
-a4	0.365632324219	0.375632324219	ModuloSchedulingSingle_Processor0
-a5:sink	0.379355468750	0.389355468750	ModuloSchedulingSingle_Processor0
 writing_crossbar	0.010000000000	0.011861572266	crossbar_ModuloSchedulingSingle_0
 writing_crossbar	0.023723144531	0.025584716797	crossbar_ModuloSchedulingSingle_0
 reading_crossbar	0.025584716797	0.027446289063	crossbar_ModuloSchedulingSingle_0
@@ -54,11 +49,6 @@ writing_crossbar	0.283293457031	0.285155029297	crossbar_ModuloSchedulingSingle_0
 reading_crossbar	0.285155029297	0.287016601563	crossbar_ModuloSchedulingSingle_0
 reading_crossbar	0.298878173828	0.300739746094	crossbar_ModuloSchedulingSingle_0
 reading_crossbar	0.312601318359	0.314462890625	crossbar_ModuloSchedulingSingle_0
-writing_crossbar	0.334462890625	0.336324462891	crossbar_ModuloSchedulingSingle_0
-writing_crossbar	0.348186035156	0.350047607422	crossbar_ModuloSchedulingSingle_0
-reading_crossbar	0.350047607422	0.351909179688	crossbar_ModuloSchedulingSingle_0
-reading_crossbar	0.363770751953	0.365632324219	crossbar_ModuloSchedulingSingle_0
-reading_crossbar	0.377493896484	0.379355468750	crossbar_ModuloSchedulingSingle_0
 reading_crossbar	0.011861572266	0.013723144531	crossbar_ModuloSchedulingSingle_1
 writing_crossbar	0.023723144531	0.025584716797	crossbar_ModuloSchedulingSingle_1
 writing_crossbar	0.037446289063	0.039307861328	crossbar_ModuloSchedulingSingle_1
@@ -84,8 +74,3 @@ writing_crossbar	0.283293457031	0.285155029297	crossbar_ModuloSchedulingSingle_1
 writing_crossbar	0.297016601563	0.298878173828	crossbar_ModuloSchedulingSingle_1
 writing_crossbar	0.310739746094	0.312601318359	crossbar_ModuloSchedulingSingle_1
 reading_crossbar	0.312601318359	0.314462890625	crossbar_ModuloSchedulingSingle_1
-reading_crossbar	0.336324462891	0.338186035156	crossbar_ModuloSchedulingSingle_1
-writing_crossbar	0.348186035156	0.350047607422	crossbar_ModuloSchedulingSingle_1
-writing_crossbar	0.361909179688	0.363770751953	crossbar_ModuloSchedulingSingle_1
-writing_crossbar	0.375632324219	0.377493896484	crossbar_ModuloSchedulingSingle_1
-reading_crossbar	0.377493896484	0.379355468750	crossbar_ModuloSchedulingSingle_1

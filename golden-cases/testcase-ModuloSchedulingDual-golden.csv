@@ -15,9 +15,6 @@ a5:sink	0.159093017578	0.169093017578	ModuloSchedulingDual_Processor0
 a2	0.170954589844	0.180954589844	ModuloSchedulingDual_Processor0
 a3	0.184677734375	0.194677734375	ModuloSchedulingDual_Processor0
 a5:sink	0.198400878906	0.208400878906	ModuloSchedulingDual_Processor0
-a2	0.210262451172	0.220262451172	ModuloSchedulingDual_Processor0
-a3	0.223985595703	0.233985595703	ModuloSchedulingDual_Processor0
-a5:sink	0.237708740234	0.247708740234	ModuloSchedulingDual_Processor0
 a4	0.027446289063	0.037446289063	ModuloSchedulingDual_Processor1
 a1	0.039307861328	0.049307861328	ModuloSchedulingDual_Processor1
 a4	0.066754150391	0.076754150391	ModuloSchedulingDual_Processor1
@@ -27,8 +24,6 @@ a1	0.117923583984	0.127923583984	ModuloSchedulingDual_Processor1
 a4	0.145369873047	0.155369873047	ModuloSchedulingDual_Processor1
 a1	0.157231445313	0.167231445313	ModuloSchedulingDual_Processor1
 a4	0.184677734375	0.194677734375	ModuloSchedulingDual_Processor1
-a1	0.196539306641	0.206539306641	ModuloSchedulingDual_Processor1
-a4	0.223985595703	0.233985595703	ModuloSchedulingDual_Processor1
 writing_crossbar	0.010000000000	0.011861572266	crossbar_ModuloSchedulingDual_0
 writing_crossbar	0.023723144531	0.025584716797	crossbar_ModuloSchedulingDual_0
 reading_crossbar	0.025584716797	0.027446289063	crossbar_ModuloSchedulingDual_0
@@ -54,11 +49,6 @@ writing_crossbar	0.180954589844	0.182816162109	crossbar_ModuloSchedulingDual_0
 reading_crossbar	0.182816162109	0.184677734375	crossbar_ModuloSchedulingDual_0
 writing_crossbar	0.194677734375	0.196539306641	crossbar_ModuloSchedulingDual_0
 reading_crossbar	0.196539306641	0.198400878906	crossbar_ModuloSchedulingDual_0
-writing_crossbar	0.206539306641	0.208400878906	crossbar_ModuloSchedulingDual_0
-writing_crossbar	0.220262451172	0.222124023438	crossbar_ModuloSchedulingDual_0
-reading_crossbar	0.222124023438	0.223985595703	crossbar_ModuloSchedulingDual_0
-writing_crossbar	0.233985595703	0.235847167969	crossbar_ModuloSchedulingDual_0
-reading_crossbar	0.235847167969	0.237708740234	crossbar_ModuloSchedulingDual_0
 reading_crossbar	0.011861572266	0.013723144531	crossbar_ModuloSchedulingDual_1
 writing_crossbar	0.023723144531	0.025584716797	crossbar_ModuloSchedulingDual_1
 reading_crossbar	0.025584716797	0.027446289063	crossbar_ModuloSchedulingDual_1
@@ -84,8 +74,3 @@ writing_crossbar	0.180954589844	0.182816162109	crossbar_ModuloSchedulingDual_1
 reading_crossbar	0.182816162109	0.184677734375	crossbar_ModuloSchedulingDual_1
 writing_crossbar	0.194677734375	0.196539306641	crossbar_ModuloSchedulingDual_1
 reading_crossbar	0.196539306641	0.198400878906	crossbar_ModuloSchedulingDual_1
-reading_crossbar	0.208400878906	0.210262451172	crossbar_ModuloSchedulingDual_1
-writing_crossbar	0.220262451172	0.222124023438	crossbar_ModuloSchedulingDual_1
-reading_crossbar	0.222124023438	0.223985595703	crossbar_ModuloSchedulingDual_1
-writing_crossbar	0.233985595703	0.235847167969	crossbar_ModuloSchedulingDual_1
-reading_crossbar	0.235847167969	0.237708740234	crossbar_ModuloSchedulingDual_1
