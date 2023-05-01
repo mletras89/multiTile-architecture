@@ -11,6 +11,19 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+MultipleOutput:
+	javac $(DIR_SRC)/testModuloSchedulingMultipleOutputs.java
+
+MultipleOutput_run:
+	java -ea $(PACKAGE_TEST).testModuloSchedulingMultipleOutputs;
+	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv processor-utilization-Tile1_Processor1.csv crossbar-utilization-crossbar_Tile1.csv processor-utilization-Tile2_Processor0.csv processor-utilization-Tile2_Processor1.csv crossbar-utilization-crossbar_Tile2.csv NoC-utilization-NoC.csv -o testcase-multiple-outputs.csv;
+	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GLOBAL_MEMORY.csv -o testcase-multiple-outputs-mem-utilization.csv;
+
+MultipleOutput_check:
+	diff testcase-multiple-outputs.csv golden-cases/testcase-multiple-outputs-golden.csv;
+	diff testcase-multiple-outputs-mem-utilization.csv  golden-cases/testcase-multiple-outputs-mem-utilization-golden.csv;
+
+
 
 ModuloSchedulingRecurrences:
 	javac $(DIR_SRC)/testModuloSchedulingRecurrences.java
@@ -80,8 +93,21 @@ ModuloScheduling_check:
 	diff memory-utilization-ModuloSchedulingDual.csv golden-cases/memory-utilization-ModuloSchedulingDual-golden.csv
 	diff memory-utilization-ModuloSchedulingQuad.csv golden-cases/memory-utilization-ModuloSchedulingQuad-golden.csv
 
-#QuadCoreMemoryBound_clean:
-#	echo "Cleaning Test QuadCoreMemoryBound"; ./clean.sh
+
+Penta:
+	javac $(DIR_SRC)/testPentaCoreModuloScheduling.java
+
+Penta_run:
+	java -ea $(PACKAGE_TEST).testPentaCoreModuloScheduling;
+	./python/merge-csv-files.py  processor-utilization-ModuloSchedulingPenta_Processor0.csv processor-utilization-ModuloSchedulingPenta_Processor1.csv processor-utilization-ModuloSchedulingPenta_Processor2.csv processor-utilization-ModuloSchedulingPenta_Processor3.csv processor-utilization-ModuloSchedulingPenta_Processor4.csv crossbar-utilization-crossbar_ModuloSchedulingPenta.csv  -o testPenta-bounded-memory.csv;
+	./python/merge-csv-files.py memory-utilization-ModuloSchedulingPenta_Processor0_localMemory.csv memory-utilization-ModuloSchedulingPenta_Processor1_localMemory.csv memory-utilization-ModuloSchedulingPenta_Processor2_localMemory.csv memory-utilization-ModuloSchedulingPenta_Processor3_localMemory.csv memory-utilization-TileLocalMemory_ModuloSchedulingPenta.csv  -o testPenta-memory-utilization.csv;
+
+Penta_check:
+	diff testQuadCore-bounded-memory.csv golden-cases/testQuadCore-bounded-memory-golden.csv;
+	diff testQuadCore-memory-utilization.csv golden-cases/testQuadCore-memory-utilization-golden.csv
+
+
+
 
 QuadCoreMemoryBound:
 	javac $(DIR_SRC)/testMemoryBoundQuadCore.java
