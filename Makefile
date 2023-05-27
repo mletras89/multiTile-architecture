@@ -15,6 +15,15 @@ clean_all: crossbar_clean  processor_clean testWriteReadTransfers_clean singleCo
 
 distclean_all: crossbar_distclean 
 
+FCFS:
+	javac $(DIR_SRC)/testFCFSWithNoC.java
+
+FCFS_run:
+	java -ea $(PACKAGE_TEST).testFCFSWithNoC;
+	./python/merge-csv-files.py processor-utilization-Tile1_Processor0.csv processor-utilization-Tile1_Processor1.csv crossbar-utilization-crossbar_Tile1.csv processor-utilization-Tile2_Processor0.csv processor-utilization-Tile2_Processor1.csv crossbar-utilization-crossbar_Tile2.csv NoC-utilization-NoC.csv -o testcase-architecture-with-NoC-FCFS.csv;
+	./python/merge-csv-files.py memory-utilization-Tile1_Processor0_localMemory.csv memory-utilization-Tile1_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile1.csv memory-utilization-Tile2_Processor0_localMemory.csv memory-utilization-Tile2_Processor1_localMemory.csv memory-utilization-TileLocalMemory_Tile2.csv memory-utilization-GLOBAL_MEMORY.csv -o testcase-architecture-with-NoC-mem-utilization-FCFS.csv;
+FCFS_check:
+
 MultipleOutput:
 	javac $(DIR_SRC)/testModuloSchedulingMultipleOutputs.java
 
