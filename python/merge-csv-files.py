@@ -35,6 +35,15 @@ if __name__ == '__main__':
     # Concatenate all DataFrames
     df   = pd.concat(df_list, ignore_index=True)
 
+    [rows, cols] = df.shape
+    column_names = df.columns.values.tolist()
+    for col in column_names:
+      for i in range(rows):
+        val = str((df.at[i,col])).replace(',','.')
+        df.at[i,col] = val
+      #print("start "+str(val))
+#    print("rows"+str( rows ))
+
     # save data frame to csv
     #df.reset_index(drop)
     df.to_csv(options.output, index=False,sep='\t', float_format='%.12f')
