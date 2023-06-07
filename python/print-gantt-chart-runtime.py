@@ -41,7 +41,9 @@ if __name__ == '__main__':
     #print(df)
     #assing color
     uniqueJobs = df['Job'].unique()
+    random.seed(1)
     color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+#    color = ["#"+''.join(['0' for j in range(6)])
                  for i in range(len(uniqueJobs))]
     #print(uniqueJobs)
     #print(color)
